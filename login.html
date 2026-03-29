@@ -7,206 +7,49 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap');
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { width: 100%; height: 100%; }
-
-body {
-  font-family: 'Roboto', sans-serif;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #050a12;
-  padding: 20px;
-}
-
-.bg {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
-  background: radial-gradient(ellipse at 20% 50%, #001a0e 0%, transparent 60%),
-              radial-gradient(ellipse at 80% 20%, #00091a 0%, transparent 60%);
-  animation: bgPulse 8s ease-in-out infinite alternate;
-}
-@keyframes bgPulse {
-  0%   { opacity: 0.8; }
-  100% { opacity: 1; }
-}
-
-.container {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 380px;
-}
-
-.logo {
-  text-align: center;
-  margin-bottom: 28px;
-}
-.logo h1 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.6em;
-  color: #00ff99;
-  text-shadow: 0 0 20px #00ff99, 0 0 40px #00ff9955;
-  letter-spacing: 6px;
-  animation: neonPulse 3s ease-in-out infinite;
-}
-.logo h1 span { color: #fff; }
-.logo p {
-  color: rgba(255,255,255,0.3);
-  font-size: 0.75em;
-  margin-top: 6px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-@keyframes neonPulse {
-  0%, 100% { text-shadow: 0 0 20px #00ff99; }
-  50%       { text-shadow: 0 0 35px #00ff99, 0 0 70px #00ff9966; }
-}
-
-.card {
-  background: rgba(5, 15, 30, 0.9);
-  border: 1px solid rgba(0,255,153,0.15);
-  border-radius: 20px;
-  padding: 24px 20px;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 0 40px rgba(0,255,153,0.08);
-  width: 100%;
-}
-
-.tabs {
-  display: flex;
-  background: rgba(0,0,0,0.4);
-  border-radius: 10px;
-  padding: 4px;
-  margin-bottom: 20px;
-  gap: 4px;
-}
-.tab {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: rgba(255,255,255,0.35);
-  font-family: 'Roboto', sans-serif;
-  font-size: 0.9em;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.tab.active {
-  background: rgba(0,255,153,0.15);
-  color: #00ff99;
-}
-
-.form { display: none; flex-direction: column; gap: 14px; }
-.form.active { display: flex; }
-
-.field label {
-  display: block;
-  font-size: 0.72em;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 6px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.field input {
-  width: 100%;
-  padding: 13px 16px;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 10px;
-  color: #fff;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1em;
-  outline: none;
-  transition: border-color 0.2s;
-  -webkit-appearance: none;
-}
-.field input:focus {
-  border-color: rgba(0,255,153,0.5);
-  background: rgba(0,255,153,0.04);
-}
-.field input::placeholder { color: rgba(255,255,255,0.18); }
-
-.btn {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #00cc7a, #00ff99);
-  color: #000;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1em;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 48px;
-}
-.btn:active { transform: scale(0.97); }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.spinner {
-  display: none;
-  width: 18px; height: 18px;
-  border: 2.5px solid rgba(0,0,0,0.3);
-  border-top-color: #000;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: rgba(10,20,40,0.97);
-  border: 1px solid rgba(0,255,153,0.2);
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 12px;
-  font-size: 0.85em;
-  z-index: 100;
-  transition: transform 0.3s ease;
-  max-width: 90%;
-  text-align: center;
-  backdrop-filter: blur(10px);
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-.toast.error { border-color: rgba(255,80,80,0.5); color: #ff8080; }
-.toast.success { border-color: rgba(0,255,153,0.5); color: #00ff99; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100vh}
+body{font-family:'Roboto',sans-serif;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#050a12;padding:20px}
+.bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;background:radial-gradient(ellipse at 20% 50%,#001a0e,transparent 60%),radial-gradient(ellipse at 80% 20%,#00091a,transparent 60%)}
+.container{position:relative;z-index:1;width:100%;max-width:380px}
+.logo{text-align:center;margin-bottom:28px}
+.logo h1{font-family:'Orbitron',sans-serif;font-size:2.6em;color:#00ff99;text-shadow:0 0 20px #00ff99;letter-spacing:6px;animation:neon 3s ease-in-out infinite}
+.logo h1 span{color:#fff}
+.logo p{color:rgba(255,255,255,0.3);font-size:.75em;margin-top:6px;letter-spacing:3px;text-transform:uppercase}
+@keyframes neon{0%,100%{text-shadow:0 0 20px #00ff99}50%{text-shadow:0 0 35px #00ff99,0 0 70px #00ff9966}}
+.card{background:rgba(5,15,30,.9);border:1px solid rgba(0,255,153,.15);border-radius:20px;padding:24px 20px;width:100%}
+.tabs{display:flex;background:rgba(0,0,0,.4);border-radius:10px;padding:4px;margin-bottom:20px;gap:4px}
+.tab{flex:1;padding:10px;border:none;border-radius:8px;background:transparent;color:rgba(255,255,255,.35);font-family:'Roboto',sans-serif;font-size:.9em;font-weight:700;cursor:pointer;transition:all .2s}
+.tab.active{background:rgba(0,255,153,.15);color:#00ff99}
+.form{display:none;flex-direction:column;gap:14px}
+.form.active{display:flex}
+.field label{display:block;font-size:.72em;color:rgba(255,255,255,.45);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase}
+.field input{width:100%;padding:13px 16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.08);border-radius:10px;color:#fff;font-size:1em;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.field input:focus{border-color:rgba(0,255,153,.5)}
+.field input::placeholder{color:rgba(255,255,255,.18)}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,#00cc7a,#00ff99);color:#000;font-family:'Roboto',sans-serif;font-size:1em;font-weight:700;cursor:pointer;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;transition:transform .2s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.6}
+.spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(10,20,40,.97);border:1px solid rgba(0,255,153,.2);color:#fff;padding:12px 20px;border-radius:12px;font-size:.85em;z-index:100;transition:transform .3s;max-width:90%;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.error{border-color:rgba(255,80,80,.5);color:#ff8080}
+.toast.success{border-color:rgba(0,255,153,.5);color:#00ff99}
 </style>
 </head>
 <body>
-
 <div class="bg"></div>
-
 <div class="container">
   <div class="logo">
     <h1>9<span>A</span></h1>
     <p>Sistema da Turma</p>
   </div>
-
   <div class="card">
     <div class="tabs">
       <button class="tab active" onclick="switchTab('login')">Entrar</button>
       <button class="tab" onclick="switchTab('signup')">Criar Conta</button>
     </div>
-
-    <!-- LOGIN -->
     <div class="form active" id="form-login">
       <div class="field">
         <label>Email</label>
@@ -221,24 +64,22 @@ body {
         <div class="spinner" id="spin-login"></div>
       </button>
     </div>
-
-    <!-- SIGNUP -->
     <div class="form" id="form-signup">
       <div class="field">
         <label>Nome completo</label>
-        <input type="text" id="signup-nome" placeholder="Seu nome completo" autocomplete="name">
+        <input type="text" id="signup-nome" placeholder="Seu nome completo">
       </div>
       <div class="field">
         <label>Email</label>
-        <input type="email" id="signup-email" placeholder="seu@email.com" autocomplete="email">
+        <input type="email" id="signup-email" placeholder="seu@email.com">
       </div>
       <div class="field">
         <label>Senha</label>
-        <input type="password" id="signup-senha" placeholder="Minimo 6 caracteres" autocomplete="new-password">
+        <input type="password" id="signup-senha" placeholder="Minimo 6 caracteres">
       </div>
       <div class="field">
         <label>Confirmar Senha</label>
-        <input type="password" id="signup-confirm" placeholder="Repita a senha" autocomplete="new-password">
+        <input type="password" id="signup-confirm" placeholder="Repita a senha">
       </div>
       <button class="btn" id="btn-signup" onclick="signUp()">
         <span class="btn-text">Criar Conta</span>
@@ -247,86 +88,65 @@ body {
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <script>
-const SUPABASE_URL = 'https://hhiynhqsmikecreqnqbt.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
-
+const SUPABASE_URL='https://hhiynhqsmikecreqnqbt.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
 let sb;
-
-window.addEventListener('load', async () => {
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const { data } = await sb.auth.getSession();
-  if (data.session) window.location.href = 'index.html';
+window.addEventListener('load',async()=>{
+  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  const{data}=await sb.auth.getSession();
+  if(data.session)window.location.href='index.html';
 });
-
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup'));
-  });
-  document.getElementById('form-login').classList.toggle('active', tab === 'login');
-  document.getElementById('form-signup').classList.toggle('active', tab === 'signup');
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='signup')));
+  document.getElementById('form-login').classList.toggle('active',tab==='login');
+  document.getElementById('form-signup').classList.toggle('active',tab==='signup');
 }
-
-function toast(msg, type = 'error') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast ' + type + ' show';
-  setTimeout(() => el.classList.remove('show'), 3500);
+function toast(msg,type='error'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className='toast '+type+' show';
+  setTimeout(()=>el.classList.remove('show'),3500);
 }
-
-function setLoading(btnId, spinId, loading) {
-  const btn = document.getElementById(btnId);
-  btn.disabled = loading;
-  btn.querySelector('.btn-text').style.display = loading ? 'none' : 'inline';
-  document.getElementById(spinId).style.display = loading ? 'block' : 'none';
+function setLoading(btnId,spinId,loading){
+  const btn=document.getElementById(btnId);
+  btn.disabled=loading;
+  btn.querySelector('.btn-text').style.display=loading?'none':'inline';
+  document.getElementById(spinId).style.display=loading?'block':'none';
 }
-
-async function signIn() {
-  const email = document.getElementById('login-email').value.trim();
-  const senha = document.getElementById('login-senha').value;
-  if (!email || !senha) return toast('Preencha todos os campos');
-
-  setLoading('btn-login', 'spin-login', true);
-  const { error } = await sb.auth.signInWithPassword({ email, password: senha });
-  setLoading('btn-login', 'spin-login', false);
-
-  if (error) return toast('Email ou senha incorretos');
-  toast('Bem-vindo!', 'success');
-  setTimeout(() => window.location.href = 'index.html', 1000);
+async function signIn(){
+  const email=document.getElementById('login-email').value.trim();
+  const senha=document.getElementById('login-senha').value;
+  if(!email||!senha)return toast('Preencha todos os campos');
+  setLoading('btn-login','spin-login',true);
+  const{error}=await sb.auth.signInWithPassword({email,password:senha});
+  setLoading('btn-login','spin-login',false);
+  if(error)return toast('Email ou senha incorretos');
+  toast('Bem-vindo!','success');
+  setTimeout(()=>window.location.href='index.html',1000);
 }
-
-async function signUp() {
-  const nome = document.getElementById('signup-nome').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const senha = document.getElementById('signup-senha').value;
-  const confirm = document.getElementById('signup-confirm').value;
-
-  if (!nome || !email || !senha || !confirm) return toast('Preencha todos os campos');
-  if (senha.length < 6) return toast('Senha deve ter pelo menos 6 caracteres');
-  if (senha !== confirm) return toast('As senhas nao coincidem');
-
-  setLoading('btn-signup', 'spin-signup', true);
-  const { data, error } = await sb.auth.signUp({ email, password: senha });
-  if (error) { setLoading('btn-signup', 'spin-signup', false); return toast(error.message); }
-
-  if (data.user) {
-    await sb.from('users').insert([{ id: data.user.id, email, nome }]);
+async function signUp(){
+  const nome=document.getElementById('signup-nome').value.trim();
+  const email=document.getElementById('signup-email').value.trim();
+  const senha=document.getElementById('signup-senha').value;
+  const confirm=document.getElementById('signup-confirm').value;
+  if(!nome||!email||!senha||!confirm)return toast('Preencha todos os campos');
+  if(senha.length<6)return toast('Senha deve ter pelo menos 6 caracteres');
+  if(senha!==confirm)return toast('As senhas nao coincidem');
+  setLoading('btn-signup','spin-signup',true);
+  const{data,error}=await sb.auth.signUp({email,password:senha});
+  if(error){setLoading('btn-signup','spin-signup',false);return toast(error.message);}
+  if(data.user){
+    await sb.from('users').upsert([{id:data.user.id,email,nome}],{onConflict:'id'});
   }
-  setLoading('btn-signup', 'spin-signup', false);
-  toast('Conta criada com sucesso!', 'success');
-  setTimeout(() => {
-    switchTab('login');
-    document.getElementById('login-email').value = email;
-  }, 1500);
+  setLoading('btn-signup','spin-signup',false);
+  toast('Conta criada!','success');
+  setTimeout(()=>switchTab('login'),1500);
 }
-
-document.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  const loginAtivo = document.getElementById('form-login').classList.contains('active');
-  if (loginAtivo) signIn(); else signUp();
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  document.getElementById('form-login').classList.contains('active')?signIn():signUp();
 });
 </script>
 </body>
