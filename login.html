@@ -137,7 +137,11 @@ async function signUp(){
   if(senha.length<6)return toast('Senha deve ter pelo menos 6 caracteres');
   if(senha!==confirm)return toast('As senhas nao coincidem');
   setLoading('btn-signup','spin-signup',true);
-  const{data,error}=await sb.auth.signUp({email,password:senha});
+  const{data,error}=await sb.auth.signUp({
+    email,
+    password:senha,
+    options:{ data:{ nome } }
+  });
   if(error){setLoading('btn-signup','spin-signup',false);return toast(error.message);}
   if(data.user){
     await sb.from('users').upsert([{id:data.user.id,email,nome}],{onConflict:'id'});
