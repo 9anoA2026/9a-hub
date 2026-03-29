@@ -2,225 +2,197 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Login - 9 Ano A</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Login - 9A Hub</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap');
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: 'Roboto', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #050a12;
-    overflow: hidden;
-    padding: 20px;
-  }
+html { width: 100%; height: 100%; }
 
-  /* Fundo animado */
-  .bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    background: radial-gradient(ellipse at 20% 50%, #001a0e 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, #00091a 0%, transparent 60%),
-                #050a12;
-    animation: bgPulse 8s ease-in-out infinite alternate;
-  }
-  @keyframes bgPulse {
-    0%   { filter: brightness(1); }
-    100% { filter: brightness(1.3); }
-  }
+body {
+  font-family: 'Roboto', sans-serif;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #050a12;
+  padding: 20px;
+}
 
-  /* Particulas */
-  .particles {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: #00ff99;
-    border-radius: 50%;
-    animation: float linear infinite;
-    opacity: 0;
-  }
-  @keyframes float {
-    0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
-    10%  { opacity: 0.6; }
-    90%  { opacity: 0.3; }
-    100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
-  }
+.bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  background: radial-gradient(ellipse at 20% 50%, #001a0e 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, #00091a 0%, transparent 60%);
+  animation: bgPulse 8s ease-in-out infinite alternate;
+}
+@keyframes bgPulse {
+  0%   { opacity: 0.8; }
+  100% { opacity: 1; }
+}
 
-  .container {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 380px;
-  }
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 380px;
+}
 
-  /* Logo */
-  .logo {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  .logo h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.4em;
-    color: #00ff99;
-    text-shadow: 0 0 20px #00ff99, 0 0 40px #00ff9955, 0 0 80px #00ff9922;
-    letter-spacing: 4px;
-    animation: neonPulse 3s ease-in-out infinite;
-  }
-  .logo h1 span { color: #fff; }
-  .logo p {
-    color: rgba(255,255,255,0.35);
-    font-size: 0.8em;
-    margin-top: 4px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  @keyframes neonPulse {
-    0%, 100% { text-shadow: 0 0 20px #00ff99, 0 0 40px #00ff9955; }
-    50%       { text-shadow: 0 0 30px #00ff99, 0 0 60px #00ff9977, 0 0 100px #00ff9933; }
-  }
+.logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.logo h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.6em;
+  color: #00ff99;
+  text-shadow: 0 0 20px #00ff99, 0 0 40px #00ff9955;
+  letter-spacing: 6px;
+  animation: neonPulse 3s ease-in-out infinite;
+}
+.logo h1 span { color: #fff; }
+.logo p {
+  color: rgba(255,255,255,0.3);
+  font-size: 0.75em;
+  margin-top: 6px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+@keyframes neonPulse {
+  0%, 100% { text-shadow: 0 0 20px #00ff99; }
+  50%       { text-shadow: 0 0 35px #00ff99, 0 0 70px #00ff9966; }
+}
 
-  /* Card */
-  .card {
-    background: rgba(5, 15, 30, 0.85);
-    border: 1px solid rgba(0,255,153,0.15);
-    border-radius: 20px;
-    padding: 28px 24px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 40px rgba(0,255,153,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
-  }
+.card {
+  background: rgba(5, 15, 30, 0.9);
+  border: 1px solid rgba(0,255,153,0.15);
+  border-radius: 20px;
+  padding: 24px 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 40px rgba(0,255,153,0.08);
+  width: 100%;
+}
 
-  /* Tabs */
-  .tabs {
-    display: flex;
-    background: rgba(0,0,0,0.3);
-    border-radius: 10px;
-    padding: 4px;
-    margin-bottom: 24px;
-    gap: 4px;
-  }
-  .tab {
-    flex: 1;
-    padding: 9px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    color: rgba(255,255,255,0.4);
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.85em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-  }
-  .tab.active {
-    background: rgba(0,255,153,0.12);
-    color: #00ff99;
-    box-shadow: 0 0 12px rgba(0,255,153,0.15);
-  }
+.tabs {
+  display: flex;
+  background: rgba(0,0,0,0.4);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+  gap: 4px;
+}
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.35);
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tab.active {
+  background: rgba(0,255,153,0.15);
+  color: #00ff99;
+}
 
-  /* Forms */
-  .form { display: none; flex-direction: column; gap: 14px; }
-  .form.active { display: flex; }
+.form { display: none; flex-direction: column; gap: 14px; }
+.form.active { display: flex; }
 
-  .field label {
-    display: block;
-    font-size: 0.75em;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 6px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-  .field input {
-    width: 100%;
-    padding: 13px 16px;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    color: #fff;
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.95em;
-    outline: none;
-    transition: all 0.2s;
-    -webkit-appearance: none;
-  }
-  .field input:focus {
-    border-color: rgba(0,255,153,0.5);
-    background: rgba(0,255,153,0.04);
-    box-shadow: 0 0 0 3px rgba(0,255,153,0.08);
-  }
-  .field input::placeholder { color: rgba(255,255,255,0.2); }
+.field label {
+  display: block;
+  font-size: 0.72em;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.field input {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.field input:focus {
+  border-color: rgba(0,255,153,0.5);
+  background: rgba(0,255,153,0.04);
+}
+.field input::placeholder { color: rgba(255,255,255,0.18); }
 
-  /* Button */
-  .btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #00cc7a, #00ff99);
-    color: #000;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-    margin-top: 4px;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn:active { transform: scale(0.97); }
-  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .btn .spinner {
-    display: none;
-    width: 18px; height: 18px;
-    border: 2px solid rgba(0,0,0,0.3);
-    border-top-color: #000;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #00cc7a, #00ff99);
+  color: #000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-  /* Toast */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: rgba(10,20,40,0.95);
-    border: 1px solid rgba(0,255,153,0.2);
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-size: 0.85em;
-    z-index: 100;
-    transition: transform 0.3s ease;
-    max-width: 300px;
-    text-align: center;
-    backdrop-filter: blur(10px);
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.error { border-color: rgba(255,80,80,0.4); color: #ff8080; }
-  .toast.success { border-color: rgba(0,255,153,0.4); color: #00ff99; }
+.spinner {
+  display: none;
+  width: 18px; height: 18px;
+  border: 2.5px solid rgba(0,0,0,0.3);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(10,20,40,0.97);
+  border: 1px solid rgba(0,255,153,0.2);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  max-width: 90%;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.error { border-color: rgba(255,80,80,0.5); color: #ff8080; }
+.toast.success { border-color: rgba(0,255,153,0.5); color: #00ff99; }
 </style>
 </head>
 <body>
 
 <div class="bg"></div>
-<div class="particles" id="particles"></div>
 
 <div class="container">
   <div class="logo">
@@ -281,31 +253,14 @@
 <script>
 const SUPABASE_URL = 'https://hhiynhqsmikecreqnqbt.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Partículas
-(function() {
-  const container = document.getElementById('particles');
-  for (let i = 0; i < 25; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.cssText = `
-      left: ${Math.random() * 100}%;
-      animation-duration: ${6 + Math.random() * 10}s;
-      animation-delay: ${Math.random() * 8}s;
-      width: ${1 + Math.random() * 2}px;
-      height: ${1 + Math.random() * 2}px;
-      opacity: ${0.2 + Math.random() * 0.5};
-    `;
-    container.appendChild(p);
-  }
-})();
+let sb;
 
-// Checar se ja esta logado
-(async function() {
+window.addEventListener('load', async () => {
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const { data } = await sb.auth.getSession();
   if (data.session) window.location.href = 'index.html';
-})();
+});
 
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t, i) => {
@@ -318,16 +273,15 @@ function switchTab(tab) {
 function toast(msg, type = 'error') {
   const el = document.getElementById('toast');
   el.textContent = msg;
-  el.className = `toast ${type} show`;
-  setTimeout(() => el.classList.remove('show'), 3000);
+  el.className = 'toast ' + type + ' show';
+  setTimeout(() => el.classList.remove('show'), 3500);
 }
 
 function setLoading(btnId, spinId, loading) {
   const btn = document.getElementById(btnId);
-  const spin = document.getElementById(spinId);
   btn.disabled = loading;
-  btn.querySelector('.btn-text').style.display = loading ? 'none' : 'block';
-  spin.style.display = loading ? 'block' : 'none';
+  btn.querySelector('.btn-text').style.display = loading ? 'none' : 'inline';
+  document.getElementById(spinId).style.display = loading ? 'block' : 'none';
 }
 
 async function signIn() {
@@ -339,11 +293,8 @@ async function signIn() {
   const { error } = await sb.auth.signInWithPassword({ email, password: senha });
   setLoading('btn-login', 'spin-login', false);
 
-  if (error) {
-    if (error.message.includes('Invalid')) return toast('Email ou senha incorretos');
-    return toast(error.message);
-  }
-  toast('Bem-vindo! Redirecionando...', 'success');
+  if (error) return toast('Email ou senha incorretos');
+  toast('Bem-vindo!', 'success');
   setTimeout(() => window.location.href = 'index.html', 1000);
 }
 
@@ -365,428 +316,13 @@ async function signUp() {
     await sb.from('users').insert([{ id: data.user.id, email, nome }]);
   }
   setLoading('btn-signup', 'spin-signup', false);
-  toast('Conta criada! Verifique seu email para confirmar.', 'success');
-  setTimeout(() => switchTab('login'), 2000);
+  toast('Conta criada com sucesso!', 'success');
+  setTimeout(() => {
+    switchTab('login');
+    document.getElementById('login-email').value = email;
+  }, 1500);
 }
 
-// Enter para enviar
-document.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  const loginAtivo = document.getElementById('form-login').classList.contains('active');
-  if (loginAtivo) signIn(); else signUp();
-});
-</script>
-</body>
-</html>
-urn toast('Email ou senha incorretos');
-    return toast(error.message);
-  }
-  toast('Bem-vindo! Redirecionando...', 'success');
-  setTimeout(() => window.location.href = 'index.html', 1000);
-}
-
-async function signUp() {
-  const nome = document.getElementById('signup-nome').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const senha = document.getElementById('signup-senha').value;
-  const confirm = document.getElementById('signup-confirm').value;
-
-  if (!nome || !email || !senha || !confirm) return toast('Preencha todos os campos');
-  if (senha.length < 6) return toast('Senha deve ter pelo menos 6 caracteres');
-  if (senha !== confirm) return toast('As senhas nao coincidem');
-
-  setLoading('btn-signup', 'spin-signup', true);
-  const { data, error } = await sb.auth.signUp({ email, password: senha });
-  if (error) { setLoading('btn-signup', 'spin-signup', false); return toast(error.message); }
-
-  if (data.user) {
-    await sb.from('users').insert([{ id: data.user.id, email, nome }]);
-  }
-  setLoading('btn-signup', 'spin-signup', false);
-  toast('Conta criada! Verifique seu email para confirmar.', 'success');
-  setTimeout(() => switchTab('login'), 2000);
-}
-
-// Enter para enviar
-document.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  const loginAtivo = document.getElementById('form-login').classList.contains('active');
-  if (loginAtivo) signIn(); else signUp();
-});
-</script>
-</body>
-  </html>
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Login - 9 Ano A</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@300;400;700&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Roboto', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #050a12;
-    overflow: hidden;
-    padding: 20px;
-  }
-
-  /* Fundo animado */
-  .bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    background: radial-gradient(ellipse at 20% 50%, #001a0e 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, #00091a 0%, transparent 60%),
-                #050a12;
-    animation: bgPulse 8s ease-in-out infinite alternate;
-  }
-  @keyframes bgPulse {
-    0%   { filter: brightness(1); }
-    100% { filter: brightness(1.3); }
-  }
-
-  /* Particulas */
-  .particles {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: #00ff99;
-    border-radius: 50%;
-    animation: float linear infinite;
-    opacity: 0;
-  }
-  @keyframes float {
-    0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
-    10%  { opacity: 0.6; }
-    90%  { opacity: 0.3; }
-    100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 380px;
-  }
-
-  /* Logo */
-  .logo {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  .logo h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.4em;
-    color: #00ff99;
-    text-shadow: 0 0 20px #00ff99, 0 0 40px #00ff9955, 0 0 80px #00ff9922;
-    letter-spacing: 4px;
-    animation: neonPulse 3s ease-in-out infinite;
-  }
-  .logo h1 span { color: #fff; }
-  .logo p {
-    color: rgba(255,255,255,0.35);
-    font-size: 0.8em;
-    margin-top: 4px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  @keyframes neonPulse {
-    0%, 100% { text-shadow: 0 0 20px #00ff99, 0 0 40px #00ff9955; }
-    50%       { text-shadow: 0 0 30px #00ff99, 0 0 60px #00ff9977, 0 0 100px #00ff9933; }
-  }
-
-  /* Card */
-  .card {
-    background: rgba(5, 15, 30, 0.85);
-    border: 1px solid rgba(0,255,153,0.15);
-    border-radius: 20px;
-    padding: 28px 24px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 40px rgba(0,255,153,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-
-  /* Tabs */
-  .tabs {
-    display: flex;
-    background: rgba(0,0,0,0.3);
-    border-radius: 10px;
-    padding: 4px;
-    margin-bottom: 24px;
-    gap: 4px;
-  }
-  .tab {
-    flex: 1;
-    padding: 9px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    color: rgba(255,255,255,0.4);
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.85em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-  }
-  .tab.active {
-    background: rgba(0,255,153,0.12);
-    color: #00ff99;
-    box-shadow: 0 0 12px rgba(0,255,153,0.15);
-  }
-
-  /* Forms */
-  .form { display: none; flex-direction: column; gap: 14px; }
-  .form.active { display: flex; }
-
-  .field label {
-    display: block;
-    font-size: 0.75em;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 6px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-  .field input {
-    width: 100%;
-    padding: 13px 16px;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    color: #fff;
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.95em;
-    outline: none;
-    transition: all 0.2s;
-    -webkit-appearance: none;
-  }
-  .field input:focus {
-    border-color: rgba(0,255,153,0.5);
-    background: rgba(0,255,153,0.04);
-    box-shadow: 0 0 0 3px rgba(0,255,153,0.08);
-  }
-  .field input::placeholder { color: rgba(255,255,255,0.2); }
-
-  /* Button */
-  .btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #00cc7a, #00ff99);
-    color: #000;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-    margin-top: 4px;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn:active { transform: scale(0.97); }
-  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .btn .spinner {
-    display: none;
-    width: 18px; height: 18px;
-    border: 2px solid rgba(0,0,0,0.3);
-    border-top-color: #000;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Toast */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: rgba(10,20,40,0.95);
-    border: 1px solid rgba(0,255,153,0.2);
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-size: 0.85em;
-    z-index: 100;
-    transition: transform 0.3s ease;
-    max-width: 300px;
-    text-align: center;
-    backdrop-filter: blur(10px);
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.error { border-color: rgba(255,80,80,0.4); color: #ff8080; }
-  .toast.success { border-color: rgba(0,255,153,0.4); color: #00ff99; }
-</style>
-</head>
-<body>
-
-<div class="bg"></div>
-<div class="particles" id="particles"></div>
-
-<div class="container">
-  <div class="logo">
-    <h1>9<span>A</span></h1>
-    <p>Sistema da Turma</p>
-  </div>
-
-  <div class="card">
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('login')">Entrar</button>
-      <button class="tab" onclick="switchTab('signup')">Criar Conta</button>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="form active" id="form-login">
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input type="password" id="login-senha" placeholder="Sua senha" autocomplete="current-password">
-      </div>
-      <button class="btn" id="btn-login" onclick="signIn()">
-        <span class="btn-text">Entrar</span>
-        <div class="spinner" id="spin-login"></div>
-      </button>
-    </div>
-
-    <!-- SIGNUP -->
-    <div class="form" id="form-signup">
-      <div class="field">
-        <label>Nome completo</label>
-        <input type="text" id="signup-nome" placeholder="Seu nome completo" autocomplete="name">
-      </div>
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="signup-email" placeholder="seu@email.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input type="password" id="signup-senha" placeholder="Minimo 6 caracteres" autocomplete="new-password">
-      </div>
-      <div class="field">
-        <label>Confirmar Senha</label>
-        <input type="password" id="signup-confirm" placeholder="Repita a senha" autocomplete="new-password">
-      </div>
-      <button class="btn" id="btn-signup" onclick="signUp()">
-        <span class="btn-text">Criar Conta</span>
-        <div class="spinner" id="spin-signup"></div>
-      </button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-const SUPABASE_URL = 'https://uprkspyvwlombajcfzme.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_Op9NqjHQFrENyliU77vUCA_Bz1oUvTP';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Partículas
-(function() {
-  const container = document.getElementById('particles');
-  for (let i = 0; i < 25; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.cssText = `
-      left: ${Math.random() * 100}%;
-      animation-duration: ${6 + Math.random() * 10}s;
-      animation-delay: ${Math.random() * 8}s;
-      width: ${1 + Math.random() * 2}px;
-      height: ${1 + Math.random() * 2}px;
-      opacity: ${0.2 + Math.random() * 0.5};
-    `;
-    container.appendChild(p);
-  }
-})();
-
-// Checar se ja esta logado
-(async function() {
-  const { data } = await sb.auth.getSession();
-  if (data.session) window.location.href = 'index.html';
-})();
-
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup'));
-  });
-  document.getElementById('form-login').classList.toggle('active', tab === 'login');
-  document.getElementById('form-signup').classList.toggle('active', tab === 'signup');
-}
-
-function toast(msg, type = 'error') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `toast ${type} show`;
-  setTimeout(() => el.classList.remove('show'), 3000);
-}
-
-function setLoading(btnId, spinId, loading) {
-  const btn = document.getElementById(btnId);
-  const spin = document.getElementById(spinId);
-  btn.disabled = loading;
-  btn.querySelector('.btn-text').style.display = loading ? 'none' : 'block';
-  spin.style.display = loading ? 'block' : 'none';
-}
-
-async function signIn() {
-  const email = document.getElementById('login-email').value.trim();
-  const senha = document.getElementById('login-senha').value;
-  if (!email || !senha) return toast('Preencha todos os campos');
-
-  setLoading('btn-login', 'spin-login', true);
-  const { error } = await sb.auth.signInWithPassword({ email, password: senha });
-  setLoading('btn-login', 'spin-login', false);
-
-  if (error) {
-    if (error.message.includes('Invalid')) return toast('Email ou senha incorretos');
-    return toast(error.message);
-  }
-  toast('Bem-vindo! Redirecionando...', 'success');
-  setTimeout(() => window.location.href = 'index.html', 1000);
-}
-
-async function signUp() {
-  const nome = document.getElementById('signup-nome').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const senha = document.getElementById('signup-senha').value;
-  const confirm = document.getElementById('signup-confirm').value;
-
-  if (!nome || !email || !senha || !confirm) return toast('Preencha todos os campos');
-  if (senha.length < 6) return toast('Senha deve ter pelo menos 6 caracteres');
-  if (senha !== confirm) return toast('As senhas nao coincidem');
-
-  setLoading('btn-signup', 'spin-signup', true);
-  const { data, error } = await sb.auth.signUp({ email, password: senha });
-  if (error) { setLoading('btn-signup', 'spin-signup', false); return toast(error.message); }
-
-  if (data.user) {
-    await sb.from('users').insert([{ id: data.user.id, email, nome }]);
-  }
-  setLoading('btn-signup', 'spin-signup', false);
-  toast('Conta criada! Verifique seu email para confirmar.', 'success');
-  setTimeout(() => switchTab('login'), 2000);
-}
-
-// Enter para enviar
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   const loginAtivo = document.getElementById('form-login').classList.contains('active');
