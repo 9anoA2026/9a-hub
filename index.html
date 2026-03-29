@@ -3,151 +3,390 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Login - 9A Hub</title>
+<title>9A Hub</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@300;400;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100vh}
-body{font-family:'Roboto',sans-serif;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#050a12;padding:20px}
-.bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;background:radial-gradient(ellipse at 20% 50%,#001a0e,transparent 60%),radial-gradient(ellipse at 80% 20%,#00091a,transparent 60%)}
-.container{position:relative;z-index:1;width:100%;max-width:380px}
-.logo{text-align:center;margin-bottom:28px}
-.logo h1{font-family:'Orbitron',sans-serif;font-size:2.6em;color:#00ff99;text-shadow:0 0 20px #00ff99;letter-spacing:6px;animation:neon 3s ease-in-out infinite}
-.logo h1 span{color:#fff}
-.logo p{color:rgba(255,255,255,0.3);font-size:.75em;margin-top:6px;letter-spacing:3px;text-transform:uppercase}
-@keyframes neon{0%,100%{text-shadow:0 0 20px #00ff99}50%{text-shadow:0 0 35px #00ff99,0 0 70px #00ff9966}}
-.card{background:rgba(5,15,30,.9);border:1px solid rgba(0,255,153,.15);border-radius:20px;padding:24px 20px;width:100%}
-.tabs{display:flex;background:rgba(0,0,0,.4);border-radius:10px;padding:4px;margin-bottom:20px;gap:4px}
-.tab{flex:1;padding:10px;border:none;border-radius:8px;background:transparent;color:rgba(255,255,255,.35);font-family:'Roboto',sans-serif;font-size:.9em;font-weight:700;cursor:pointer;transition:all .2s}
-.tab.active{background:rgba(0,255,153,.15);color:#00ff99}
-.form{display:none;flex-direction:column;gap:14px}
-.form.active{display:flex}
-.field label{display:block;font-size:.72em;color:rgba(255,255,255,.45);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase}
-.field input{width:100%;padding:13px 16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.08);border-radius:10px;color:#fff;font-size:1em;outline:none;transition:border-color .2s;-webkit-appearance:none}
-.field input:focus{border-color:rgba(0,255,153,.5)}
-.field input::placeholder{color:rgba(255,255,255,.18)}
-.btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,#00cc7a,#00ff99);color:#000;font-family:'Roboto',sans-serif;font-size:1em;font-weight:700;cursor:pointer;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;transition:transform .2s}
-.btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.6}
-.spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(10,20,40,.97);border:1px solid rgba(0,255,153,.2);color:#fff;padding:12px 20px;border-radius:12px;font-size:.85em;z-index:100;transition:transform .3s;max-width:90%;text-align:center}
+html,body{width:100%;min-height:100vh;overflow-x:hidden}
+body{font-family:'Roboto',sans-serif;background:#050a12;color:#fff}
+
+/* BG */
+.bg-anim{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:#050a12;overflow:hidden}
+.bg-anim::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,153,0.07) 0%,transparent 70%);top:-200px;left:-200px;animation:drift1 12s ease-in-out infinite alternate}
+.bg-anim::after{content:'';position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(0,200,255,0.05) 0%,transparent 70%);bottom:-150px;right:-150px;animation:drift2 15s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(80px,60px)}}
+@keyframes drift2{to{transform:translate(-60px,-50px)}}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(5,10,18,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,255,153,0.1)}
+.logo-txt{font-family:'Orbitron',sans-serif;font-size:1.3em;color:#00ff99;text-shadow:0 0 15px #00ff99;letter-spacing:3px}
+.logo-txt span{color:#fff}
+.menu-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:6px;width:36px;height:36px}
+.menu-btn span{display:block;height:2px;background:#fff;border-radius:2px;transition:all 0.25s;transform-origin:center}
+.menu-btn.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.menu-btn.open span:nth-child(2){opacity:0}
+.menu-btn.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.avatar-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.9em;cursor:pointer;flex-shrink:0}
+
+/* SIDEBAR */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;backdrop-filter:blur(4px)}
+.overlay.open{display:block}
+.sidebar{position:fixed;top:0;left:-280px;width:268px;height:100%;background:rgba(5,12,25,0.99);border-right:1px solid rgba(0,255,153,0.12);z-index:201;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;padding-top:56px}
+.sidebar.open{left:0}
+.sidebar-user{padding:16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px}
+.sidebar-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:1.1em;flex-shrink:0}
+.sidebar-name{font-weight:700;font-size:.95em}
+.sidebar-role{font-size:.72em;color:rgba(255,255,255,0.4);margin-top:2px}
+.nav-items{flex:1;overflow-y:auto;padding:8px 0}
+.nav-item{display:flex;align-items:center;gap:12px;padding:13px 16px;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.2s;font-size:.92em;border-left:3px solid transparent;text-decoration:none}
+.nav-item:hover,.nav-item.active{color:#00ff99;background:rgba(0,255,153,0.05);border-left-color:#00ff99}
+.nav-item .icon{font-size:1.2em;width:26px;text-align:center}
+.nav-sep{height:1px;background:rgba(255,255,255,0.06);margin:6px 16px}
+.logout-btn{padding:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;color:#ff6b6b;cursor:pointer;font-size:.9em;transition:background 0.2s}
+.logout-btn:hover{background:rgba(255,107,107,0.08)}
+
+/* MAIN */
+main{margin-top:56px;padding:16px;max-width:680px;margin-left:auto;margin-right:auto}
+.section{display:none;animation:fadeIn 0.3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-size:1.25em;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title .accent{color:#00ff99}
+
+/* DASHBOARD GRID */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dash-card{background:rgba(8,16,30,0.9);border:1px solid rgba(0,255,153,0.1);border-radius:18px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;overflow:hidden}
+.dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);opacity:0;transition:opacity 0.3s}
+.dash-card:hover,.dash-card:active{transform:translateY(-2px);border-color:rgba(0,255,153,0.25)}
+.dash-card:hover::before,.dash-card:active::before{opacity:1}
+.dash-card .icon{font-size:2em}
+.dash-card .label{font-size:.8em;font-weight:600;color:rgba(255,255,255,0.7)}
+.dash-card .desc{font-size:.68em;color:rgba(255,255,255,0.35)}
+
+/* CARDS NEON COLORS */
+.c-green{--c:#00ff99}.c-blue{--c:#00ccff}.c-purple{--c:#a855f7}.c-yellow{--c:#fbbf24}.c-pink{--c:#f472b6}.c-orange{--c:#fb923c}.c-teal{--c:#2dd4bf}.c-red{--c:#f87171}.c-indigo{--c:#818cf8}
+
+/* BANNER */
+.banner{background:linear-gradient(135deg,rgba(0,255,153,0.08),rgba(0,200,255,0.08));border:1px solid rgba(0,255,153,0.15);border-radius:18px;padding:18px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.banner-icon{font-size:2.5em}
+.banner-text h2{font-size:1.1em;font-weight:700}
+.banner-text p{font-size:.78em;color:rgba(255,255,255,0.4);margin-top:3px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(5,12,25,.97);border:1px solid rgba(0,255,153,.2);color:#fff;padding:10px 20px;border-radius:20px;font-size:.82em;z-index:999;transition:transform 0.3s;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.toast.error{border-color:rgba(255,80,80,.5);color:#ff8080}
 .toast.success{border-color:rgba(0,255,153,.5);color:#00ff99}
+.toast.error{border-color:rgba(255,80,80,.5);color:#ff8080}
+
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:12px;height:80px;margin-bottom:10px}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 16px;color:rgba(255,255,255,0.3)}
+.empty .icon{font-size:3em;margin-bottom:12px}
 </style>
 </head>
 <body>
-<div class="bg"></div>
-<div class="container">
-  <div class="logo">
-    <h1>9<span>A</span></h1>
-    <p>Sistema da Turma</p>
+<div class="bg-anim"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
   </div>
-  <div class="card">
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('login')">Entrar</button>
-      <button class="tab" onclick="switchTab('signup')">Criar Conta</button>
-    </div>
-    <div class="form active" id="form-login">
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input type="password" id="login-senha" placeholder="Sua senha" autocomplete="current-password">
-      </div>
-      <button class="btn" id="btn-login" onclick="signIn()">
-        <span class="btn-text">Entrar</span>
-        <div class="spinner" id="spin-login"></div>
-      </button>
-    </div>
-    <div class="form" id="form-signup">
-      <div class="field">
-        <label>Nome completo</label>
-        <input type="text" id="signup-nome" placeholder="Seu nome completo">
-      </div>
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="signup-email" placeholder="seu@email.com">
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input type="password" id="signup-senha" placeholder="Minimo 6 caracteres">
-      </div>
-      <div class="field">
-        <label>Confirmar Senha</label>
-        <input type="password" id="signup-confirm" placeholder="Repita a senha">
-      </div>
-      <button class="btn" id="btn-signup" onclick="signUp()">
-        <span class="btn-text">Criar Conta</span>
-        <div class="spinner" id="spin-signup"></div>
-      </button>
+  <div class="logo-txt">9<span>A</span></div>
+  <div class="avatar-btn" id="headerAvatar">?</div>
+</header>
+
+<!-- OVERLAY + SIDEBAR -->
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-user">
+    <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+    <div>
+      <div class="sidebar-name" id="sidebarName">Carregando...</div>
+      <div class="sidebar-role" id="sidebarRole">Aluno</div>
     </div>
   </div>
-</div>
+  <div class="nav-items">
+    <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="icon">⊞</span> Inicio</div>
+    <div class="nav-item" onclick="showSection('chat',this)"><span class="icon">💬</span> Chat Privado</div>
+    <div class="nav-item" onclick="showSection('assistente',this)"><span class="icon">🤖</span> Assistente 9A</div>
+    <div class="nav-item" onclick="showSection('ia',this)"><span class="icon">🧠</span> IA Groq</div>
+    <div class="nav-item" onclick="showSection('simulado',this)"><span class="icon">📝</span> Simulado</div>
+    <div class="nav-item" onclick="showSection('ranking',this)"><span class="icon">🏆</span> Ranking</div>
+    <div class="nav-sep"></div>
+    <div class="nav-item" onclick="showSection('eventos',this)"><span class="icon">📅</span> Eventos</div>
+    <div class="nav-item" onclick="showSection('comida',this)"><span class="icon">🍔</span> Comida</div>
+    <div class="nav-item" onclick="showSection('regras',this)"><span class="icon">📏</span> Regras</div>
+    <div class="nav-item" onclick="showSection('mensalidade',this)"><span class="icon">💰</span> Mensalidade</div>
+    <div class="nav-item" onclick="showSection('avisos',this)"><span class="icon">📢</span> Avisos</div>
+    <div class="nav-item" onclick="showSection('livros',this)"><span class="icon">📚</span> Livros Digitais</div>
+    <div class="nav-sep"></div>
+    <div class="nav-item" id="adminNav" style="display:none" onclick="window.location.href='admin.html'"><span class="icon">⚙️</span> Painel Admin</div>
+  </div>
+  <div class="logout-btn" onclick="logout()"><span>🚪</span> Sair da conta</div>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- DASHBOARD -->
+  <section class="section active" id="section-dashboard">
+    <div class="banner">
+      <div class="banner-icon">🎓</div>
+      <div class="banner-text">
+        <h2 id="greetingText">Ola!</h2>
+        <p id="greetingDate"></p>
+      </div>
+    </div>
+
+    <!-- MENSALIDADE STATUS -->
+    <div id="dash-mensalidade" style="margin-bottom:16px"></div>
+
+    <!-- AVISOS -->
+    <div class="section-title">📢 <span class="accent">Avisos</span></div>
+    <div id="dash-avisos" style="margin-bottom:20px">
+      <div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+
+    <!-- EVENTOS -->
+    <div class="section-title">📅 <span class="accent">Proximos Eventos</span></div>
+    <div id="dash-eventos">
+      <div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section class="section" id="section-chat">
+    <div class="section-title">💬 <span class="accent">Chat Privado</span></div>
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    <p style="color:rgba(255,255,255,0.3);text-align:center;margin-top:8px;font-size:.85em">Em breve...</p>
+  </section>
+
+  <!-- ASSISTENTE -->
+  <section class="section" id="section-assistente">
+    <div class="section-title">🤖 <span class="accent">Assistente 9A</span></div>
+    <div class="empty"><div class="icon">🤖</div><p>Nenhum aviso por enquanto</p></div>
+  </section>
+
+  <!-- IA -->
+  <section class="section" id="section-ia">
+    <div class="section-title">🧠 <span class="accent">IA Groq</span></div>
+    <div class="empty"><div class="icon">🧠</div><p>Em breve...</p></div>
+  </section>
+
+  <!-- SIMULADO -->
+  <section class="section" id="section-simulado">
+    <div class="section-title">📝 <span class="accent">Simulado</span></div>
+    <div class="empty"><div class="icon">📝</div><p>Em breve...</p></div>
+  </section>
+
+  <!-- RANKING -->
+  <section class="section" id="section-ranking">
+    <div class="section-title">🏆 <span class="accent">Ranking</span></div>
+    <div class="empty"><div class="icon">🏆</div><p>Em breve...</p></div>
+  </section>
+
+  <!-- EVENTOS -->
+  <section class="section" id="section-eventos">
+    <div class="section-title">📅 <span class="accent">Eventos</span></div>
+    <div id="lista-eventos"><div class="skeleton"></div><div class="skeleton"></div></div>
+  </section>
+
+  <!-- COMIDA -->
+  <section class="section" id="section-comida">
+    <div class="section-title">🍔 <span class="accent">Comida</span></div>
+    <div class="empty"><div class="icon">🍔</div><p>Em breve...</p></div>
+  </section>
+
+  <!-- REGRAS -->
+  <section class="section" id="section-regras">
+    <div class="section-title">📏 <span class="accent">Regras</span></div>
+    <div id="lista-regras"><div class="skeleton"></div><div class="skeleton"></div></div>
+  </section>
+
+  <!-- MENSALIDADE -->
+  <section class="section" id="section-mensalidade">
+    <div class="section-title">💰 <span class="accent">Mensalidade</span></div>
+    <div class="empty"><div class="icon">💰</div><p>Em breve...</p></div>
+  </section>
+
+  <!-- AVISOS -->
+  <section class="section" id="section-avisos">
+    <div class="section-title">📢 <span class="accent">Avisos</span></div>
+    <div id="lista-avisos"><div class="skeleton"></div><div class="skeleton"></div></div>
+  </section>
+
+  <!-- LIVROS -->
+  <section class="section" id="section-livros">
+    <div class="section-title">📚 <span class="accent">Livros Digitais</span></div>
+    <div id="lista-livros"><div class="skeleton"></div><div class="skeleton"></div></div>
+  </section>
+
+</main>
+
 <div class="toast" id="toast"></div>
+
 <script>
 const SUPABASE_URL='https://hhiynhqsmikecreqnqbt.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
-let sb;
-window.addEventListener('load',async()=>{
-  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-  const{data}=await sb.auth.getSession();
-  if(data.session)window.location.href='index.html';
-});
-function switchTab(tab){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='signup')));
-  document.getElementById('form-login').classList.toggle('active',tab==='login');
-  document.getElementById('form-signup').classList.toggle('active',tab==='signup');
-}
-function toast(msg,type='error'){
-  const el=document.getElementById('toast');
-  el.textContent=msg;
-  el.className='toast '+type+' show';
-  setTimeout(()=>el.classList.remove('show'),3500);
-}
-function setLoading(btnId,spinId,loading){
-  const btn=document.getElementById(btnId);
-  btn.disabled=loading;
-  btn.querySelector('.btn-text').style.display=loading?'none':'inline';
-  document.getElementById(spinId).style.display=loading?'block':'none';
-}
-async function signIn(){
-  const email=document.getElementById('login-email').value.trim();
-  const senha=document.getElementById('login-senha').value;
-  if(!email||!senha)return toast('Preencha todos os campos');
-  setLoading('btn-login','spin-login',true);
-  const{error}=await sb.auth.signInWithPassword({email,password:senha});
-  setLoading('btn-login','spin-login',false);
-  if(error)return toast('Email ou senha incorretos');
-  toast('Bem-vindo!','success');
-  setTimeout(()=>window.location.href='index.html',1000);
-}
-async function signUp(){
-  const nome=document.getElementById('signup-nome').value.trim();
-  const email=document.getElementById('signup-email').value.trim();
-  const senha=document.getElementById('signup-senha').value;
-  const confirm=document.getElementById('signup-confirm').value;
-  if(!nome||!email||!senha||!confirm)return toast('Preencha todos os campos');
-  if(senha.length<6)return toast('Senha deve ter pelo menos 6 caracteres');
-  if(senha!==confirm)return toast('As senhas nao coincidem');
-  setLoading('btn-signup','spin-signup',true);
-  const{data,error}=await sb.auth.signUp({email,password:senha});
-  if(error){setLoading('btn-signup','spin-signup',false);return toast(error.message);}
-  if(data.user){
-    await sb.from('users').upsert([{id:data.user.id,email,nome}],{onConflict:'id'});
+let sb, currentUser;
+
+window.addEventListener('load', async () => {
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  
+  // Evitar loop - verificar se ja veio do login
+  const { data } = await sb.auth.getSession();
+  if (!data.session) {
+    if (!window.location.href.includes('login.html')) {
+      window.location.replace('login.html');
+    }
+    return;
   }
-  setLoading('btn-signup','spin-signup',false);
-  toast('Conta criada!','success');
-  setTimeout(()=>switchTab('login'),1500);
-}
-document.addEventListener('keydown',e=>{
-  if(e.key!=='Enter')return;
-  document.getElementById('form-login').classList.contains('active')?signIn():signUp();
+  currentUser = data.session.user;
+
+  const { data: userData } = await sb.from('users').select('nome,is_admin').eq('id', currentUser.id).single();
+  const nomeCompleto = userData?.nome || currentUser.email.split('@')[0];
+  const isAdmin = userData?.is_admin || false;
+  
+  // Pegar primeiro e segundo nome
+  const partes = nomeCompleto.trim().split(' ');
+  const nomeExibir = partes.length >= 2 ? partes[0] + ' ' + partes[1] : partes[0];
+  const inicial = partes[0][0].toUpperCase();
+
+  document.getElementById('headerAvatar').textContent = inicial;
+  document.getElementById('sidebarAvatar').textContent = inicial;
+  document.getElementById('sidebarName').textContent = nomeExibir;
+  document.getElementById('sidebarRole').textContent = isAdmin ? '👑 Admin' : 'Aluno';
+  if (isAdmin) document.getElementById('adminNav').style.display = 'flex';
+
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  document.getElementById('greetingText').textContent = greet + ', ' + partes[0] + '! 👋';
+  document.getElementById('greetingDate').textContent = new Date().toLocaleDateString('pt-BR', {weekday:'long',day:'2-digit',month:'long'});
+
+  carregarEventos();
+  carregarRegras();
+  carregarAvisos();
+  carregarLivros();
+  carregarDashboard();
 });
+
+function toggleMenu() {
+  const open = document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open', open);
+  document.getElementById('menuBtn').classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeMenu() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('menuBtn').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function showSection(name, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  if (el) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+  }
+  closeMenu();
+}
+async function logout() {
+  await sb.auth.signOut();
+  window.location.href = 'login.html';
+}
+function toast(msg, type='info') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + type + ' show';
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+async function carregarEventos() {
+  const { data } = await sb.from('eventos').select('*').order('data', { ascending: true });
+  const el = document.getElementById('lista-eventos');
+  if (!data?.length) { el.innerHTML = '<div class="empty"><div class="icon">📅</div><p>Nenhum evento por enquanto</p></div>'; return; }
+  el.innerHTML = data.map(ev => `
+    <div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px">
+      <div style="font-weight:700;margin-bottom:4px">${ev.titulo}</div>
+      <div style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:6px">${ev.descricao||''}</div>
+      ${ev.data ? `<div style="font-size:.75em;color:#00ff99">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>` : ''}
+      ${ev.local ? `<div style="font-size:.75em;color:rgba(255,255,255,.4)">📍 ${ev.local}</div>` : ''}
+    </div>`).join('');
+}
+
+async function carregarRegras() {
+  const { data } = await sb.from('regras').select('*');
+  const el = document.getElementById('lista-regras');
+  if (!data?.length) { el.innerHTML = '<div class="empty"><div class="icon">📏</div><p>Nenhuma regra cadastrada</p></div>'; return; }
+  el.innerHTML = data.map(r => `
+    <div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-left:3px solid #00ff99;border-radius:14px;padding:14px;margin-bottom:10px">
+      <div style="font-weight:700;color:#00ff99;margin-bottom:4px">${r.titulo}</div>
+      <div style="font-size:.85em;color:rgba(255,255,255,.6)">${r.conteudo}</div>
+    </div>`).join('');
+}
+
+async function carregarAvisos() {
+  const { data } = await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('created_at', { ascending: false });
+  const el = document.getElementById('lista-avisos');
+  if (!data?.length) { el.innerHTML = '<div class="empty"><div class="icon">📢</div><p>Nenhum aviso por enquanto</p></div>'; return; }
+  el.innerHTML = data.map(a => `
+    <div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px">
+      ${a.target_user_id ? '<span style="font-size:.7em;background:rgba(0,255,153,.15);color:#00ff99;padding:2px 8px;border-radius:20px;margin-bottom:6px;display:inline-block">Aviso individual</span>' : ''}
+      <div style="font-weight:700;margin-bottom:4px">${a.title}</div>
+      <div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div>
+      <div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.created_at).toLocaleDateString('pt-BR')}</div>
+    </div>`).join('');
+}
+
+async function carregarDashboard() {
+  // Mensalidade status
+  const mesAtual = new Date().toLocaleString('pt-BR',{month:'long'});
+  const anoAtual = new Date().getFullYear();
+  const { data: pagamento } = await sb.from('payments').select('status').eq('user_id', currentUser.id).eq('year', anoAtual).single();
+  const statusEl = document.getElementById('dash-mensalidade');
+  if (pagamento) {
+    const cores = { approved: ['rgba(0,255,153,0.08)','rgba(0,255,153,0.2)','#00ff99','✅ Mensalidade paga'], pending: ['rgba(251,191,36,0.08)','rgba(251,191,36,0.2)','#fbbf24','⏳ Mensalidade pendente'], rejected: ['rgba(248,113,113,0.08)','rgba(248,113,113,0.2)','#f87171','❌ Mensalidade reprovada'] };
+    const [bg, border, color, txt] = cores[pagamento.status] || cores.pending;
+    statusEl.innerHTML = `<div style="background:${bg};border:1px solid ${border};border-radius:14px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showSection('mensalidade',null)"><span style="font-size:1.5em">💰</span><div><div style="font-weight:700;color:${color}">${txt}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${mesAtual} de ${anoAtual}</div></div></div>`;
+  } else {
+    statusEl.innerHTML = `<div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:14px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showSection('mensalidade',null)"><span style="font-size:1.5em">💰</span><div><div style="font-weight:700;color:#f87171">⚠️ Mensalidade em aberto</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">Clique para pagar</div></div></div>`;
+  }
+
+  // Avisos no dashboard
+  const { data: avisos } = await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('created_at',{ascending:false}).limit(3);
+  const avisosEl = document.getElementById('dash-avisos');
+  if (!avisos?.length) { avisosEl.innerHTML = '<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>'; }
+  else { avisosEl.innerHTML = avisos.map(a => `<div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px">${a.target_user_id?'<span style="font-size:.7em;background:rgba(0,255,153,.15);color:#00ff99;padding:2px 8px;border-radius:20px;margin-bottom:6px;display:inline-block">Individual</span>':''}<div style="font-weight:700;margin-bottom:4px">${a.title}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.created_at).toLocaleDateString('pt-BR')}</div></div>`).join(''); }
+
+  // Eventos no dashboard
+  const { data: eventos } = await sb.from('eventos').select('*').gte('data', new Date().toISOString()).order('data',{ascending:true}).limit(3);
+  const eventosEl = document.getElementById('dash-eventos');
+  if (!eventos?.length) { eventosEl.innerHTML = '<div class="empty"><div class="icon">📅</div><p>Nenhum evento proximo</p></div>'; }
+  else { eventosEl.innerHTML = eventos.map(ev => `<div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px"><div style="font-weight:700;margin-bottom:4px">${ev.titulo}</div><div style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:6px">${ev.descricao||''}</div>${ev.data?`<div style="font-size:.75em;color:#00ff99">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>`:''}</div>`).join(''); }
+}
+
+async function carregarLivros() {
+  const { data } = await sb.from('livros').select('*').order('materia');
+  const el = document.getElementById('lista-livros');
+  if (!data?.length) { el.innerHTML = '<div class="empty"><div class="icon">📚</div><p>Nenhum livro disponivel ainda</p></div>'; return; }
+  const materias = ['Portugues','Matematica','Historia','Geografia','Ingles','Artes','Ciencias'];
+  const icons = {'Portugues':'📖','Matematica':'📐','Historia':'🏛️','Geografia':'🌍','Ingles':'🇬🇧','Artes':'🎨','Ciencias':'🔬'};
+  el.innerHTML = data.map(l => `
+    <a href="${l.url}" target="_blank" style="display:flex;align-items:center;gap:14px;background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px;text-decoration:none;color:#fff">
+      <span style="font-size:2em">${icons[l.materia]||'📚'}</span>
+      <div style="flex:1">
+        <div style="font-weight:700">${l.materia}</div>
+        <div style="font-size:.78em;color:rgba(255,255,255,.4)">${l.descricao||'Livro digital'}</div>
+      </div>
+      <span style="color:#00ff99;font-size:1.3em">⬇</span>
+    </a>`).join('');
+}
 </script>
 </body>
 </html>
