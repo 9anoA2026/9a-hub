@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>9 Ano A</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@300;400;700&display=swap');
 
@@ -538,16 +538,17 @@
 
 <script>
 // ===================== CONFIG =====================
-const SUPABASE_URL = 'https://hhiynhqsmikecreqnqbt.supabase.co';
+const SUPABASE_URL = 'https://uprkspyvwlombajcfzme.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Op9NqjHQFrENyliU77vUCA_Bz1oUvTP';
 const GROQ_API_KEY = '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';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+let sb = null;
 let currentUser = null;
 let chatHistory = [];
 
 // ===================== INIT =====================
 window.addEventListener('load', async () => {
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const { data } = await sb.auth.getSession();
   if (!data.session) return window.location.href = 'login.html';
 
