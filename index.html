@@ -142,19 +142,20 @@ main{margin-top:56px;padding:16px;max-width:680px;margin-left:auto;margin-right:
         <p id="greetingDate"></p>
       </div>
     </div>
-    <div class="section-title">Menu <span class="accent">Principal</span></div>
-    <div class="dash-grid">
-      <div class="dash-card c-blue" onclick="showSection('chat',null)"><div class="icon">💬</div><div class="label">Chat Privado</div><div class="desc">Converse com colegas</div></div>
-      <div class="dash-card c-purple" onclick="showSection('assistente',null)"><div class="icon">🤖</div><div class="label">Assistente</div><div class="desc">Avisos do sistema</div></div>
-      <div class="dash-card c-green" onclick="showSection('ia',null)"><div class="icon">🧠</div><div class="label">IA Groq</div><div class="desc">Tire suas duvidas</div></div>
-      <div class="dash-card c-yellow" onclick="showSection('simulado',null)"><div class="icon">📝</div><div class="label">Simulado</div><div class="desc">Teste seus conhecimentos</div></div>
-      <div class="dash-card c-orange" onclick="showSection('ranking',null)"><div class="icon">🏆</div><div class="label">Ranking</div><div class="desc">Veja sua posicao</div></div>
-      <div class="dash-card c-pink" onclick="showSection('eventos',null)"><div class="icon">📅</div><div class="label">Eventos</div><div class="desc">Proximos eventos</div></div>
-      <div class="dash-card c-teal" onclick="showSection('comida',null)"><div class="icon">🍔</div><div class="label">Comida</div><div class="desc">Pedido do dia</div></div>
-      <div class="dash-card c-red" onclick="showSection('regras',null)"><div class="icon">📏</div><div class="label">Regras</div><div class="desc">Regras da turma</div></div>
-      <div class="dash-card c-indigo" onclick="showSection('mensalidade',null)"><div class="icon">💰</div><div class="label">Mensalidade</div><div class="desc">Pagamentos</div></div>
-      <div class="dash-card c-green" onclick="showSection('avisos',null)"><div class="icon">📢</div><div class="label">Avisos</div><div class="desc">Recados da turma</div></div>
-      <div class="dash-card c-blue" onclick="showSection('livros',null)" style="grid-column:span 2"><div class="icon">📚</div><div class="label">Livros Digitais</div><div class="desc">Materiais de estudo por materia</div></div>
+
+    <!-- MENSALIDADE STATUS -->
+    <div id="dash-mensalidade" style="margin-bottom:16px"></div>
+
+    <!-- AVISOS -->
+    <div class="section-title">📢 <span class="accent">Avisos</span></div>
+    <div id="dash-avisos" style="margin-bottom:20px">
+      <div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+
+    <!-- EVENTOS -->
+    <div class="section-title">📅 <span class="accent">Proximos Eventos</span></div>
+    <div id="dash-eventos">
+      <div class="skeleton"></div><div class="skeleton"></div>
     </div>
   </section>
 
@@ -260,6 +261,7 @@ window.addEventListener('load', async () => {
   carregarRegras();
   carregarAvisos();
   carregarLivros();
+  carregarDashboard();
 });
 
 function toggleMenu() {
@@ -329,6 +331,33 @@ async function carregarAvisos() {
       <div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div>
       <div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.created_at).toLocaleDateString('pt-BR')}</div>
     </div>`).join('');
+}
+
+async function carregarDashboard() {
+  // Mensalidade status
+  const mesAtual = new Date().toLocaleString('pt-BR',{month:'long'});
+  const anoAtual = new Date().getFullYear();
+  const { data: pagamento } = await sb.from('payments').select('status').eq('user_id', currentUser.id).eq('year', anoAtual).single();
+  const statusEl = document.getElementById('dash-mensalidade');
+  if (pagamento) {
+    const cores = { approved: ['rgba(0,255,153,0.08)','rgba(0,255,153,0.2)','#00ff99','✅ Mensalidade paga'], pending: ['rgba(251,191,36,0.08)','rgba(251,191,36,0.2)','#fbbf24','⏳ Mensalidade pendente'], rejected: ['rgba(248,113,113,0.08)','rgba(248,113,113,0.2)','#f87171','❌ Mensalidade reprovada'] };
+    const [bg, border, color, txt] = cores[pagamento.status] || cores.pending;
+    statusEl.innerHTML = `<div style="background:${bg};border:1px solid ${border};border-radius:14px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showSection('mensalidade',null)"><span style="font-size:1.5em">💰</span><div><div style="font-weight:700;color:${color}">${txt}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${mesAtual} de ${anoAtual}</div></div></div>`;
+  } else {
+    statusEl.innerHTML = `<div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:14px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showSection('mensalidade',null)"><span style="font-size:1.5em">💰</span><div><div style="font-weight:700;color:#f87171">⚠️ Mensalidade em aberto</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">Clique para pagar</div></div></div>`;
+  }
+
+  // Avisos no dashboard
+  const { data: avisos } = await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('created_at',{ascending:false}).limit(3);
+  const avisosEl = document.getElementById('dash-avisos');
+  if (!avisos?.length) { avisosEl.innerHTML = '<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>'; }
+  else { avisosEl.innerHTML = avisos.map(a => `<div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px">${a.target_user_id?'<span style="font-size:.7em;background:rgba(0,255,153,.15);color:#00ff99;padding:2px 8px;border-radius:20px;margin-bottom:6px;display:inline-block">Individual</span>':''}<div style="font-weight:700;margin-bottom:4px">${a.title}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.created_at).toLocaleDateString('pt-BR')}</div></div>`).join(''); }
+
+  // Eventos no dashboard
+  const { data: eventos } = await sb.from('eventos').select('*').gte('data', new Date().toISOString()).order('data',{ascending:true}).limit(3);
+  const eventosEl = document.getElementById('dash-eventos');
+  if (!eventos?.length) { eventosEl.innerHTML = '<div class="empty"><div class="icon">📅</div><p>Nenhum evento proximo</p></div>'; }
+  else { eventosEl.innerHTML = eventos.map(ev => `<div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px"><div style="font-weight:700;margin-bottom:4px">${ev.titulo}</div><div style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:6px">${ev.descricao||''}</div>${ev.data?`<div style="font-size:.75em;color:#00ff99">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>`:''}</div>`).join(''); }
 }
 
 async function carregarLivros() {
