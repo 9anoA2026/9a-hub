@@ -96,7 +96,9 @@ let sb;
 window.addEventListener('load',async()=>{
   sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
   const{data}=await sb.auth.getSession();
-  if(data.session)window.location.href='index.html';
+  if(data.session && !window.location.href.includes('index.html')){
+    window.location.replace('index.html');
+  }
 });
 function switchTab(tab){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='signup')));
