@@ -599,7 +599,7 @@ select.input{-webkit-appearance:none}
 // ===== CONFIG =====
 const SB_URL='https://hhiynhqsmikecreqnqbt.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
-const GROQ='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';
+const GROQ='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';
 const ADMIN_EMAIL='miqueiasasaf890@gmail.com';
 
 let sb,cu,isAdmin=false,nomeUser='',xpTotal=0;
@@ -1103,7 +1103,7 @@ async function enviarIA(){
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body:JSON.stringify({
-        model:'llama3-8b-8192',
+        model:'llama3-70b-8192',
         messages:[
           {role:'system',content:'Voce e a IA assistente do 9A Hub, um app escolar para alunos do 9 ano. Responda SEMPRE em portugues brasileiro. NUNCA resolva exercicios diretamente. Sempre explique o RACIOCINIO passo a passo para o aluno aprender. Seja didatico, amigavel e motivador. Use emojis com moderacao.'},
           ...iaHistory.slice(-8)
@@ -1149,7 +1149,7 @@ async function iniciarSimulado(){
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body:JSON.stringify({
-        model:'llama3-8b-8192',
+        model:'llama3-70b-8192',
         messages:[{role:'user',content:`Crie 5 perguntas de multipla escolha sobre ${materia} - ${assunto} para alunos do 9 ano brasileiro. Nivel: ${dif}. Responda SOMENTE com JSON valido, sem texto antes ou depois, no formato: {"questions":[{"question":"pergunta aqui","options":["A) opcao1","B) opcao2","C) opcao3","D) opcao4"],"correct":0,"explanation":"explicacao detalhada passo a passo aqui"}]}`}],
         max_tokens:2000,temperature:0.7
       })
@@ -1379,7 +1379,7 @@ async function gerarPerguntasCopa(){
     const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
-      body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:'Gere 3 perguntas desafiadoras para uma copa escolar do 9 ano, cobrindo materias variadas (matematica, portugues, historia, ciencias). Para cada pergunta, inclua 4 opcoes e a resposta. Formato: JSON com array "perguntas". Responda apenas JSON valido.'}],max_tokens:1000,temperature:0.8})
+      body:JSON.stringify({model:'llama3-70b-8192',messages:[{role:'user',content:'Gere 3 perguntas desafiadoras para uma copa escolar do 9 ano, cobrindo materias variadas (matematica, portugues, historia, ciencias). Para cada pergunta, inclua 4 opcoes e a resposta. Formato: JSON com array "perguntas". Responda apenas JSON valido.'}],max_tokens:1000,temperature:0.8})
     });
     const d=await res.json();
     const txt=d.choices?.[0]?.message?.content||'';
@@ -1403,7 +1403,7 @@ async function iniciarDuelo(){
     const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
-      body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:`Crie 5 perguntas rapidas de multipla escolha sobre ${materia} para alunos do 9 ano. Responda SOMENTE JSON: {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}`}],max_tokens:1500,temperature:0.7})
+      body:JSON.stringify({model:'llama3-70b-8192',messages:[{role:'user',content:`Crie 5 perguntas rapidas de multipla escolha sobre ${materia} para alunos do 9 ano. Responda SOMENTE JSON: {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}`}],max_tokens:1500,temperature:0.7})
     });
     const d=await res.json();
     const txt=d.choices?.[0]?.message?.content||'{}';
