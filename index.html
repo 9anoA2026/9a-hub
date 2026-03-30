@@ -10,114 +10,203 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;min-height:100vh;overflow-x:hidden}
 body{font-family:'Roboto',sans-serif;background:#050a12;color:#fff}
-.bg-anim{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:#050a12;overflow:hidden}
-.bg-anim::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,153,0.07) 0%,transparent 70%);top:-200px;left:-200px;animation:drift1 12s ease-in-out infinite alternate}
-.bg-anim::after{content:'';position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(0,200,255,0.05) 0%,transparent 70%);bottom:-150px;right:-150px;animation:drift2 15s ease-in-out infinite alternate}
+
+/* BG */
+.bg-anim{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:#050a12}
+.bg-anim::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,153,0.07),transparent 70%);top:-200px;left:-200px;animation:drift1 12s ease-in-out infinite alternate}
+.bg-anim::after{content:'';position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(0,200,255,0.05),transparent 70%);bottom:-150px;right:-150px;animation:drift2 15s ease-in-out infinite alternate}
 @keyframes drift1{to{transform:translate(80px,60px)}}
 @keyframes drift2{to{transform:translate(-60px,-50px)}}
-header{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(5,10,18,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,255,153,0.1)}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(5,10,18,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,255,153,0.1)}
 .logo-txt{font-family:'Orbitron',sans-serif;font-size:1.3em;color:#00ff99;text-shadow:0 0 15px #00ff99;letter-spacing:3px;animation:neon 3s ease-in-out infinite}
 .logo-txt span{color:#fff}
-@keyframes neon{0%,100%{text-shadow:0 0 15px #00ff99}50%{text-shadow:0 0 25px #00ff99,0 0 50px rgba(0,255,153,0.4)}}
+@keyframes neon{0%,100%{text-shadow:0 0 15px #00ff99}50%{text-shadow:0 0 30px #00ff99,0 0 60px rgba(0,255,153,0.4)}}
 .menu-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:6px;width:36px;height:36px}
-.menu-btn span{display:block;height:2px;background:#fff;border-radius:2px;transition:all 0.25s;transform-origin:center}
+.menu-btn span{display:block;height:2px;background:#fff;border-radius:2px;transition:all 0.25s}
 .menu-btn.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .menu-btn.open span:nth-child(2){opacity:0}
 .menu-btn.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.header-right{display:flex;align-items:center;gap:10px}
+.xp-badge{font-size:.75em;color:#00ff99;font-weight:700;background:rgba(0,255,153,0.1);padding:4px 10px;border-radius:20px;border:1px solid rgba(0,255,153,0.2)}
 .avatar-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.9em;cursor:pointer;flex-shrink:0}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;backdrop-filter:blur(4px)}
+
+/* SIDEBAR */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;backdrop-filter:blur(4px)}
 .overlay.open{display:block}
-.sidebar{position:fixed;top:0;left:-280px;width:268px;height:100%;background:rgba(5,12,25,0.99);border-right:1px solid rgba(0,255,153,0.12);z-index:201;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;padding-top:56px;overflow-y:auto}
+.sidebar{position:fixed;top:0;left:-290px;width:272px;height:100%;background:rgba(4,10,20,0.99);border-right:1px solid rgba(0,255,153,0.08);z-index:201;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;padding-top:56px;overflow-y:auto}
 .sidebar.open{left:0}
-.sidebar-user{padding:16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px}
-.sidebar-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:1.1em;flex-shrink:0}
-.sidebar-name{font-weight:700;font-size:.95em}
-.sidebar-role{font-size:.72em;color:rgba(255,255,255,0.4);margin-top:2px}
-.nav-items{flex:1;padding:8px 0}
-.nav-item{display:flex;align-items:center;gap:12px;padding:13px 16px;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.2s;font-size:.92em;border-left:3px solid transparent}
-.nav-item:hover,.nav-item.active{color:#00ff99;background:rgba(0,255,153,0.05);border-left-color:#00ff99}
-.nav-item .icon{font-size:1.2em;width:26px;text-align:center}
-.nav-sep{height:1px;background:rgba(255,255,255,0.06);margin:6px 16px}
-.logout-btn{padding:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;color:#ff6b6b;cursor:pointer;font-size:.9em}
-.logout-btn:hover{background:rgba(255,107,107,0.08)}
-main{margin-top:56px;padding:16px;max-width:680px;margin-left:auto;margin-right:auto}
-.section{display:none;animation:fadeIn 0.3s ease}
-.section.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.section-title{font-size:1.25em;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sidebar-user{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px}
+.sidebar-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:1.1em;flex-shrink:0;box-shadow:0 0 12px rgba(0,255,153,0.3)}
+.sidebar-name{font-weight:700;font-size:.92em}
+.sidebar-role{font-size:.7em;color:rgba(255,255,255,0.4);margin-top:2px}
+.sidebar-xp{font-size:.7em;color:#00ff99;margin-top:2px}
+
+/* DISCORD MENU */
+.cat-header{display:flex;align-items:center;padding:14px 16px 6px;cursor:pointer;user-select:none}
+.cat-tag{width:3px;height:16px;background:#00ff99;border-radius:2px;margin-right:10px;box-shadow:0 0 8px #00ff99;transition:all 0.3s;flex-shrink:0}
+.cat-header.active .cat-tag{height:22px;box-shadow:0 0 14px #00ff99}
+.cat-label{font-size:.7em;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;transition:color 0.2s}
+.cat-header.active .cat-label{color:rgba(255,255,255,0.7)}
+.cat-canais{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1)}
+.cat-canais.open{max-height:500px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px 9px 28px;color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.15s;font-size:.88em;border-radius:6px;margin:1px 8px;position:relative}
+.nav-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:0;height:60%;background:#00ff99;border-radius:0 3px 3px 0;box-shadow:0 0 8px #00ff99;transition:width 0.2s}
+.nav-item:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.04)}
+.nav-item.active{color:#fff;background:rgba(0,255,153,0.08)}
+.nav-item.active::before{width:3px}
+.nav-icon{font-size:1em;width:20px;text-align:center;flex-shrink:0}
+.nav-sep{height:1px;background:rgba(255,255,255,0.05);margin:6px 16px}
+.logout-btn{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:10px;color:#f87171;cursor:pointer;font-size:.88em;transition:background 0.2s}
+.logout-btn:hover{background:rgba(248,113,113,0.08)}
+
+/* MAIN + TRANSIÇÕES */
+main{margin-top:56px;padding:16px;max-width:680px;margin-left:auto;margin-right:auto;position:relative;overflow:hidden}
+.section{display:none;position:relative}
+.section.active{display:block;animation:slideIn 0.25s ease}
+.section.saindo{animation:slideOut 0.2s ease forwards}
+@keyframes slideIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-18px)}}
+.section-title{font-size:1.2em;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .accent{color:#00ff99}
-.banner{background:linear-gradient(135deg,rgba(0,255,153,0.08),rgba(0,200,255,0.08));border:1px solid rgba(0,255,153,0.15);border-radius:18px;padding:18px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+
+/* CARDS */
+.card-item{background:rgba(8,16,30,0.92);border:1px solid rgba(0,255,153,0.08);border-radius:14px;padding:14px;margin-bottom:10px;transition:all 0.2s}
+.card-item:hover{border-color:rgba(0,255,153,0.2);transform:translateY(-1px)}
+.banner{background:linear-gradient(135deg,rgba(0,255,153,0.07),rgba(0,200,255,0.07));border:1px solid rgba(0,255,153,0.12);border-radius:18px;padding:18px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
 .banner-icon{font-size:2.5em}
-.banner-text h2{font-size:1.1em;font-weight:700}
-.banner-text p{font-size:.78em;color:rgba(255,255,255,0.4);margin-top:3px}
-.card-item{background:rgba(8,16,30,0.9);border:1px solid rgba(0,255,153,0.1);border-radius:14px;padding:14px;margin-bottom:10px;transition:all 0.2s}
-.card-item:hover{border-color:rgba(0,255,153,0.25)}
-.skeleton{background:linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:12px;height:70px;margin-bottom:10px}
+.skeleton{background:linear-gradient(90deg,rgba(255,255,255,0.03) 25%,rgba(255,255,255,0.07) 50%,rgba(255,255,255,0.03) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:12px;height:65px;margin-bottom:10px}
 @keyframes shimmer{to{background-position:-200% 0}}
-.empty{text-align:center;padding:48px 16px;color:rgba(255,255,255,0.3)}
-.empty .icon{font-size:3em;margin-bottom:12px}
-.btn{padding:12px 20px;border:none;border-radius:10px;font-family:'Roboto',sans-serif;font-size:.9em;font-weight:700;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px}
-.btn:active{transform:scale(0.97)}
+.empty{text-align:center;padding:40px 16px;color:rgba(255,255,255,0.25)}
+.empty .icon{font-size:2.5em;margin-bottom:10px}
+
+/* BOTOES */
+.btn{padding:11px 18px;border:none;border-radius:10px;font-family:'Roboto',sans-serif;font-size:.88em;font-weight:700;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;justify-content:center;gap:6px;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(0.94)}
 .btn-primary{background:linear-gradient(135deg,#00cc7a,#00ff99);color:#000}
-.btn-danger{background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.3)}
-.btn-success{background:rgba(0,255,153,0.15);color:#00ff99;border:1px solid rgba(0,255,153,0.3)}
-.btn-ghost{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1)}
-.input{width:100%;padding:12px 16px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#fff;font-family:'Roboto',sans-serif;font-size:.9em;outline:none;transition:border-color 0.2s;margin-bottom:10px}
-.input:focus{border-color:rgba(0,255,153,0.5)}
-.input::placeholder{color:rgba(255,255,255,0.2)}
+.btn-danger{background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.25)}
+.btn-success{background:rgba(0,255,153,0.12);color:#00ff99;border:1px solid rgba(0,255,153,0.25)}
+.btn-ghost{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.08)}
+.btn-sm{padding:7px 12px;font-size:.78em}
+.btn.acerto-glow{animation:glowGreen 0.5s ease}
+.btn.erro-shake{animation:shake 0.4s ease}
+@keyframes glowGreen{0%,100%{box-shadow:none}50%{box-shadow:0 0 20px rgba(0,255,153,0.6)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* INPUT */
+.input{width:100%;padding:11px 15px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.07);border-radius:10px;color:#fff;font-family:'Roboto',sans-serif;font-size:.9em;outline:none;transition:border-color 0.2s;margin-bottom:10px}
+.input:focus{border-color:rgba(0,255,153,0.4)}
+.input::placeholder{color:rgba(255,255,255,0.18)}
 select.input{-webkit-appearance:none}
-.badge{display:inline-block;font-size:.72em;padding:3px 10px;border-radius:20px;font-weight:700}
+
+/* BADGES */
+.badge{display:inline-block;font-size:.7em;padding:3px 9px;border-radius:20px;font-weight:700}
 .badge-green{background:rgba(0,255,153,0.1);color:#00ff99;border:1px solid rgba(0,255,153,0.2)}
 .badge-yellow{background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.2)}
 .badge-red{background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.2)}
-.modal{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:20px;overflow-y:auto}
-.modal.open{display:flex;align-items:flex-start;justify-content:center}
-.modal-box{background:#0a1525;border:1px solid rgba(0,255,153,0.15);border-radius:20px;padding:24px;width:100%;max-width:480px;margin-top:20px}
-.modal-title{font-size:1.1em;font-weight:700;margin-bottom:16px;color:#00ff99}
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 130px)}
-.chat-msgs{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:10px}
-.msg{display:flex;gap:8px;max-width:85%}
+.badge-blue{background:rgba(96,165,250,0.1);color:#60a5fa;border:1px solid rgba(96,165,250,0.2)}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);padding:16px;overflow-y:auto;align-items:flex-start;justify-content:center}
+.modal.open{display:flex}
+.modal-box{background:#080f1e;border:1px solid rgba(0,255,153,0.12);border-radius:18px;padding:20px;width:100%;max-width:480px;margin-top:16px;animation:slideIn 0.2s ease}
+.modal-title{font-size:1.05em;font-weight:700;margin-bottom:14px;color:#00ff99;display:flex;justify-content:space-between;align-items:center}
+.modal-close{cursor:pointer;color:rgba(255,255,255,0.4);font-size:1.2em;padding:4px}
+
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 130px);max-height:650px}
+.chat-msgs{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth}
+.chat-msgs::-webkit-scrollbar{width:3px}
+.chat-msgs::-webkit-scrollbar-thumb{background:rgba(0,255,153,0.2);border-radius:2px}
+.msg{display:flex;gap:8px;max-width:86%;animation:slideIn 0.2s ease}
 .msg.user{align-self:flex-end;flex-direction:row-reverse}
-.msg-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8em;font-weight:700;margin-top:2px}
+.msg.ai,.msg.other{align-self:flex-start}
+.msg-av{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75em;font-weight:700;margin-top:2px}
 .msg.user .msg-av{background:linear-gradient(135deg,#00ff99,#00ccff);color:#000}
-.msg.ai .msg-av{background:rgba(0,255,153,0.15);color:#00ff99}
-.msg-bubble{padding:10px 14px;border-radius:18px;font-size:.88em;line-height:1.55;word-break:break-word}
+.msg.ai .msg-av,.msg.other .msg-av{background:rgba(0,255,153,0.12);color:#00ff99}
+.msg-bubble{padding:9px 13px;border-radius:16px;font-size:.86em;line-height:1.55;word-break:break-word}
 .msg.user .msg-bubble{background:linear-gradient(135deg,#006644,#00a366);color:#fff;border-bottom-right-radius:4px}
-.msg.ai .msg-bubble{background:rgba(0,255,153,0.07);border:1px solid rgba(0,255,153,0.12);color:rgba(255,255,255,0.9);border-bottom-left-radius:4px}
-.msg-time{font-size:.7em;color:rgba(255,255,255,0.3);margin-top:4px;text-align:right}
-.chat-input-area{display:flex;gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
-.chat-input{flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:11px 16px;color:#fff;font-family:'Roboto',sans-serif;font-size:.9em;outline:none;resize:none;max-height:100px;min-height:44px}
-.chat-input:focus{border-color:rgba(0,255,153,0.4)}
-.send-btn{width:44px;height:44px;border-radius:50%;border:none;background:linear-gradient(135deg,#00cc7a,#00ff99);color:#000;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;align-self:flex-end}
-.send-btn:disabled{opacity:0.4}
-.typing-indicator{display:flex;gap:4px;align-items:center;padding:6px 2px}
-.typing-dot{width:6px;height:6px;background:#00ff99;border-radius:50%;animation:typing 1.2s ease-in-out infinite}
+.msg.ai .msg-bubble,.msg.other .msg-bubble{background:rgba(0,255,153,0.06);border:1px solid rgba(0,255,153,0.1);color:rgba(255,255,255,0.88);border-bottom-left-radius:4px}
+.msg-time{font-size:.65em;color:rgba(255,255,255,0.28);margin-top:3px;text-align:right}
+.chat-input-area{display:flex;gap:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05)}
+.chat-input{flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:10px 15px;color:#fff;font-family:'Roboto',sans-serif;font-size:.88em;outline:none;resize:none;max-height:90px;min-height:40px;transition:border-color 0.2s}
+.chat-input:focus{border-color:rgba(0,255,153,0.35)}
+.send-btn{width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,#00cc7a,#00ff99);color:#000;font-size:1.2em;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;align-self:flex-end}
+.send-btn:disabled{opacity:0.35}
+.typing{display:flex;gap:4px;align-items:center;padding:5px 2px}
+.typing-dot{width:5px;height:5px;background:#00ff99;border-radius:50%;animation:typing 1.2s ease-in-out infinite}
 .typing-dot:nth-child(2){animation-delay:0.2s}
 .typing-dot:nth-child(3){animation-delay:0.4s}
-@keyframes typing{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
-.timer-bar{width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin-bottom:12px}
+@keyframes typing{0%,80%,100%{transform:scale(0.5);opacity:0.3}40%{transform:scale(1);opacity:1}}
+
+/* SIMULADO */
+.timer-bar{width:100%;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-bottom:10px}
 .timer-fill{height:100%;background:linear-gradient(90deg,#00ff99,#00ccff);border-radius:3px;transition:width 1s linear}
 .timer-fill.danger{background:linear-gradient(90deg,#f87171,#ef4444)}
-.ranking-item{display:flex;align-items:center;gap:12px;background:rgba(8,16,30,0.9);border:1px solid rgba(0,255,153,0.1);border-radius:12px;padding:12px 16px;margin-bottom:8px}
-.rank-pos{font-family:'Orbitron',sans-serif;font-size:1.1em;font-weight:700;width:36px;text-align:center;flex-shrink:0}
-.rank-pos.gold{color:#ffd700}
+.opcao-btn{width:100%;text-align:left;padding:12px 16px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.07);border-radius:10px;color:rgba(255,255,255,0.8);font-size:.88em;cursor:pointer;transition:all 0.15s;margin-bottom:8px;font-family:'Roboto',sans-serif}
+.opcao-btn:hover{border-color:rgba(0,255,153,0.3);background:rgba(0,255,153,0.05)}
+.opcao-btn:active{transform:scale(0.97)}
+.opcao-btn.correta{background:rgba(0,255,153,0.12);border-color:#00ff99;color:#00ff99}
+.opcao-btn.errada{background:rgba(248,113,113,0.12);border-color:#f87171;color:#f87171}
+
+/* XP FLOAT */
+.xp-float{position:fixed;font-size:1.4em;font-weight:700;color:#00ff99;text-shadow:0 0 10px #00ff99;pointer-events:none;z-index:9999;animation:xpFloat 1.5s ease forwards}
+@keyframes xpFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(0.7)}}
+
+/* MISSOES */
+.missao-item{background:rgba(8,16,30,0.92);border:1px solid rgba(0,255,153,0.08);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.missao-icon{font-size:1.5em;flex-shrink:0}
+.missao-info{flex:1}
+.missao-titulo{font-size:.88em;font-weight:700}
+.missao-desc{font-size:.75em;color:rgba(255,255,255,0.4);margin-top:2px}
+.missao-xp{font-size:.75em;color:#00ff99;font-weight:700;flex-shrink:0}
+.progress-bar{width:100%;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;margin-top:5px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#00ff99,#00ccff);border-radius:2px;transition:width 0.5s ease}
+
+/* RANKING */
+.ranking-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(8,16,30,0.92);border:1px solid rgba(0,255,153,0.08);border-radius:12px;margin-bottom:8px}
+.rank-pos{font-family:'Orbitron',sans-serif;font-size:1em;font-weight:700;width:32px;text-align:center;flex-shrink:0}
+.rank-pos.gold{color:#ffd700;text-shadow:0 0 8px rgba(255,215,0,0.4)}
 .rank-pos.silver{color:#c0c0c0}
 .rank-pos.bronze{color:#cd7f32}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(5,12,25,.97);border:1px solid rgba(0,255,153,.2);color:#fff;padding:10px 20px;border-radius:20px;font-size:.82em;z-index:999;transition:transform 0.3s;white-space:nowrap;max-width:90%;text-align:center}
+
+/* DUELO */
+.duelo-placar{display:flex;justify-content:space-between;align-items:center;background:rgba(8,16,30,0.92);border:1px solid rgba(0,255,153,0.1);border-radius:14px;padding:14px;margin-bottom:14px}
+.duelo-jogador{text-align:center;flex:1}
+.duelo-pts{font-size:2em;font-weight:700;color:#00ff99;font-family:'Orbitron',sans-serif}
+.duelo-vs{font-size:1.2em;color:rgba(255,255,255,0.3);font-weight:700}
+
+/* COPA */
+.copa-banner{background:linear-gradient(135deg,rgba(251,191,36,0.1),rgba(249,115,22,0.1));border:1px solid rgba(251,191,36,0.2);border-radius:16px;padding:18px;margin-bottom:16px;text-align:center}
+.copa-titulo{font-size:1.3em;font-weight:700;color:#fbbf24}
+.copa-sub{font-size:.8em;color:rgba(255,255,255,0.4);margin-top:4px}
+
+/* DIALOGO */
+.dialogo-box{background:rgba(8,16,30,0.95);border:1px solid rgba(0,255,153,0.15);border-radius:16px;padding:16px;margin-bottom:12px}
+.dialogo-personagem{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dialogo-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:1.5em;border:2px solid rgba(0,255,153,0.3)}
+.dialogo-nome{font-size:.75em;color:rgba(255,255,255,0.4);margin-bottom:2px}
+.dialogo-fala{font-size:.9em;line-height:1.5;color:rgba(255,255,255,0.9)}
+.dialogo-cenario{font-size:.8em;color:#00ff99;margin-bottom:12px;font-style:italic}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(5,12,25,.97);border:1px solid rgba(0,255,153,.15);color:#fff;padding:9px 18px;border-radius:20px;font-size:.8em;z-index:999;transition:transform 0.28s;white-space:nowrap;max-width:90%;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.toast.success{border-color:rgba(0,255,153,.5);color:#00ff99}
-.toast.error{border-color:rgba(255,80,80,.5);color:#ff8080}
+.toast.success{border-color:rgba(0,255,153,.4);color:#00ff99}
+.toast.error{border-color:rgba(255,80,80,.4);color:#ff8080}
 </style>
 </head>
 <body>
 <div class="bg-anim"></div>
 
 <header>
-  <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="menu-btn" id="menuBtn" onclick="toggleMenu()"><span></span><span></span><span></span></div>
   <div class="logo-txt">9<span>A</span></div>
-  <div class="avatar-btn" id="headerAvatar">?</div>
+  <div class="header-right">
+    <div class="xp-badge" id="xpBadge">⚡ 0 XP</div>
+    <div class="avatar-btn" id="headerAvatar">?</div>
+  </div>
 </header>
 
 <div class="overlay" id="overlay" onclick="closeMenu()"></div>
@@ -127,23 +216,68 @@ select.input{-webkit-appearance:none}
     <div>
       <div class="sidebar-name" id="sidebarName">...</div>
       <div class="sidebar-role" id="sidebarRole">Aluno</div>
+      <div class="sidebar-xp" id="sidebarXp">⚡ 0 XP</div>
     </div>
   </div>
-  <div class="nav-items">
-    <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="icon">🏠</span> Inicio</div>
-    <div class="nav-item" onclick="showSection('chat',this)"><span class="icon">💬</span> Chat Privado</div>
-    <div class="nav-item" onclick="showSection('ia',this)"><span class="icon">🧠</span> IA Groq</div>
-    <div class="nav-item" onclick="showSection('simulado',this)"><span class="icon">📝</span> Simulado</div>
-    <div class="nav-item" onclick="showSection('ranking',this)"><span class="icon">🏆</span> Ranking</div>
-    <div class="nav-sep"></div>
-    <div class="nav-item" onclick="showSection('eventos',this)"><span class="icon">📅</span> Eventos</div>
-    <div class="nav-item" onclick="showSection('mensalidade',this)"><span class="icon">💰</span> Mensalidade</div>
-    <div class="nav-item" onclick="showSection('avisos',this)"><span class="icon">📢</span> Avisos</div>
-    <div class="nav-item" onclick="showSection('regras',this)"><span class="icon">📏</span> Regras</div>
-    <div class="nav-sep"></div>
-    <div class="nav-item admin-only" style="display:none" onclick="showSection('admin',this)"><span class="icon">⚙️</span> Painel Admin</div>
+
+  <!-- CATEGORIA: INICIO -->
+  <div class="cat-header active" onclick="toggleCat(this)">
+    <div class="cat-tag"></div>
+    <span class="cat-label">Geral</span>
   </div>
-  <div class="logout-btn" onclick="logout()"><span>🚪</span> Sair</div>
+  <div class="cat-canais open">
+    <div class="nav-item active" onclick="nav('dashboard',this)"><span class="nav-icon">🏠</span>inicio</div>
+    <div class="nav-item" onclick="nav('avisos',this)"><span class="nav-icon">📢</span>avisos</div>
+    <div class="nav-item" onclick="nav('eventos',this)"><span class="nav-icon">📅</span>eventos</div>
+    <div class="nav-item" onclick="nav('regras',this)"><span class="nav-icon">📏</span>regras</div>
+    <div class="nav-item" onclick="nav('mensalidade',this)"><span class="nav-icon">💰</span>mensalidade</div>
+  </div>
+
+  <!-- CATEGORIA: ESTUDOS -->
+  <div class="cat-header" onclick="toggleCat(this)">
+    <div class="cat-tag"></div>
+    <span class="cat-label">Estudos</span>
+  </div>
+  <div class="cat-canais">
+    <div class="nav-item" onclick="nav('ia',this)"><span class="nav-icon">🧠</span>assistente-ia</div>
+    <div class="nav-item" onclick="nav('simulado',this)"><span class="nav-icon">📝</span>simulado</div>
+    <div class="nav-item" onclick="nav('dialogo',this)"><span class="nav-icon">🎭</span>dialogos</div>
+    <div class="nav-item" onclick="nav('plano',this)"><span class="nav-icon">📋</span>plano-de-estudo</div>
+  </div>
+
+  <!-- CATEGORIA: SOCIAL -->
+  <div class="cat-header" onclick="toggleCat(this)">
+    <div class="cat-tag"></div>
+    <span class="cat-label">Social</span>
+  </div>
+  <div class="cat-canais">
+    <div class="nav-item" onclick="nav('chat',this)"><span class="nav-icon">💬</span>chat-privado</div>
+    <div class="nav-item" onclick="nav('ranking',this)"><span class="nav-icon">🏆</span>ranking</div>
+    <div class="nav-item" onclick="nav('duelo',this)"><span class="nav-icon">⚔️</span>duelo-1v1</div>
+    <div class="nav-item" onclick="nav('missoes',this)"><span class="nav-icon">🎯</span>missoes</div>
+  </div>
+
+  <!-- CATEGORIA: COPA -->
+  <div class="cat-header" onclick="toggleCat(this)">
+    <div class="cat-tag"></div>
+    <span class="cat-label">Competicao</span>
+  </div>
+  <div class="cat-canais">
+    <div class="nav-item" onclick="nav('copa',this)"><span class="nav-icon">🏆</span>copa-do-mes</div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="cat-header admin-only" onclick="toggleCat(this)" style="display:none">
+    <div class="cat-tag"></div>
+    <span class="cat-label">Admin</span>
+  </div>
+  <div class="cat-canais admin-only" style="display:none">
+    <div class="nav-item" onclick="nav('admin',this)"><span class="nav-icon">⚙️</span>painel-admin</div>
+    <div class="nav-item" onclick="nav('logs',this)"><span class="nav-icon">📊</span>logs</div>
+  </div>
+
+  <div class="nav-sep"></div>
+  <div class="logout-btn" onclick="logout()"><span>🚪</span> Sair da conta</div>
 </nav>
 
 <main>
@@ -153,42 +287,82 @@ select.input{-webkit-appearance:none}
   <div class="banner">
     <div class="banner-icon">🎓</div>
     <div class="banner-text">
-      <h2 id="greetingText">Ola!</h2>
-      <p id="greetingDate"></p>
+      <h2 id="greetingText" style="font-size:1.1em;font-weight:700">Ola!</h2>
+      <p id="greetingDate" style="font-size:.75em;color:rgba(255,255,255,0.4);margin-top:3px"></p>
     </div>
   </div>
-  <div id="dash-mensalidade" style="margin-bottom:16px"></div>
+  <div id="dash-mensalidade" style="margin-bottom:14px"></div>
   <div class="section-title">📢 <span class="accent">Avisos</span></div>
   <div id="dash-avisos"><div class="skeleton"></div><div class="skeleton"></div></div>
-  <div class="section-title" style="margin-top:20px">📅 <span class="accent">Proximos Eventos</span></div>
+  <div class="section-title" style="margin-top:18px">📅 <span class="accent">Proximos Eventos</span></div>
   <div id="dash-eventos"><div class="skeleton"></div></div>
+  <div class="section-title" style="margin-top:18px">🎯 <span class="accent">Missoes do Dia</span></div>
+  <div id="dash-missoes"><div class="skeleton"></div></div>
 </section>
 
-<!-- CHAT PRIVADO -->
-<section class="section" id="section-chat">
-  <div class="section-title">💬 <span class="accent">Chat Privado</span></div>
-  <input class="input" id="chatSearch" placeholder="Buscar aluno..." oninput="filtrarUsuarios()">
-  <div id="lista-usuarios"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
-</section>
-
-<!-- CONVERSA -->
-<section class="section" id="section-conversa">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-    <button class="btn btn-ghost" style="padding:8px 12px" onclick="showSection('chat',null)">← Voltar</button>
-    <div class="section-title" style="margin:0" id="conversa-title">Conversa</div>
+<!-- AVISOS -->
+<section class="section" id="section-avisos">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div class="section-title" style="margin:0">📢 <span class="accent">Avisos</span></div>
+    <button class="btn btn-primary btn-sm admin-only" style="display:none" onclick="abrirModal('modal-aviso')">+ Criar</button>
   </div>
-  <div class="chat-wrap">
-    <div class="chat-msgs" id="chat-msgs"></div>
-    <div class="chat-input-area">
-      <textarea class="chat-input" id="chat-msg-input" placeholder="Digite uma mensagem..." rows="1" onkeydown="chatKeydown(event)"></textarea>
-      <button class="send-btn" id="chat-send-btn" onclick="enviarMensagem()">➤</button>
+  <div id="lista-avisos"><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
+
+<!-- EVENTOS -->
+<section class="section" id="section-eventos">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div class="section-title" style="margin:0">📅 <span class="accent">Eventos</span></div>
+    <button class="btn btn-primary btn-sm admin-only" style="display:none" onclick="abrirModal('modal-evento')">+ Criar</button>
+  </div>
+  <div id="lista-eventos"><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
+
+<!-- EVENTO DETALHE -->
+<section class="section" id="section-evento-detalhe">
+  <button class="btn btn-ghost btn-sm" style="margin-bottom:14px" onclick="nav('eventos',null)">← Voltar</button>
+  <div id="evento-detalhe-content"></div>
+</section>
+
+<!-- REGRAS -->
+<section class="section" id="section-regras">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div class="section-title" style="margin:0">📏 <span class="accent">Regras</span></div>
+    <button class="btn btn-primary btn-sm admin-only" style="display:none" onclick="abrirModal('modal-regra')">+ Criar</button>
+  </div>
+  <div id="lista-regras"><div class="skeleton"></div></div>
+</section>
+
+<!-- MENSALIDADE -->
+<section class="section" id="section-mensalidade">
+  <div class="section-title">💰 <span class="accent">Mensalidade</span></div>
+  <div class="card-item" style="text-align:center;padding:20px;margin-bottom:12px">
+    <img src="https://www.advocacianunes.com.br/wp-content/uploads/2022/04/logo-pix-icone-1024.png" style="width:70px;margin-bottom:10px" onerror="this.style.display='none'">
+    <div id="pix-info" style="font-size:.88em;color:rgba(255,255,255,0.5);line-height:1.8">Carregando...</div>
+    <div id="meu-status-pag" style="margin-top:10px"></div>
+  </div>
+  <div class="card-item">
+    <p style="font-size:.82em;color:rgba(255,255,255,0.45);margin-bottom:10px">Enviar comprovante:</p>
+    <input class="input" id="pag-nome" placeholder="Seu nome completo">
+    <input type="file" id="pag-comprovante" accept="image/*" style="color:rgba(255,255,255,0.6);margin-bottom:10px;width:100%;font-size:.85em">
+    <button class="btn btn-primary" style="width:100%" onclick="enviarComprovante()">📤 Enviar Comprovante</button>
+  </div>
+  <div class="admin-only" id="admin-pagamentos" style="display:none;margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="section-title" style="margin:0;font-size:1em">👑 <span class="accent">Pagamentos</span></div>
     </div>
+    <div style="margin-bottom:10px">
+      <input class="input" id="pix-key-input" placeholder="Chave Pix" style="margin-bottom:6px">
+      <input class="input" id="pix-name-input" placeholder="Nome do recebedor" style="margin-bottom:6px">
+      <button class="btn btn-success btn-sm" onclick="salvarPix()">💾 Salvar Pix</button>
+    </div>
+    <div id="lista-pagamentos"><div class="skeleton"></div></div>
   </div>
 </section>
 
 <!-- IA -->
 <section class="section" id="section-ia">
-  <div class="section-title">🧠 <span class="accent">IA Groq</span></div>
+  <div class="section-title">🧠 <span class="accent">Assistente IA</span></div>
   <div class="chat-wrap">
     <div class="chat-msgs" id="ia-msgs"></div>
     <div class="chat-input-area">
@@ -201,27 +375,80 @@ select.input{-webkit-appearance:none}
 <!-- SIMULADO -->
 <section class="section" id="section-simulado">
   <div class="section-title">📝 <span class="accent">Simulado</span></div>
-  <div id="simulado-config">
+  <div id="sim-config">
     <select class="input" id="sim-materia">
       <option value="">Selecione a materia</option>
-      <option>Portugues</option>
-      <option>Matematica</option>
-      <option>Historia</option>
-      <option>Geografia</option>
-      <option>Ingles</option>
-      <option>Artes</option>
-      <option>Ciencias</option>
+      <option>Portugues</option><option>Matematica</option><option>Historia</option>
+      <option>Geografia</option><option>Ingles</option><option>Artes</option><option>Ciencias</option>
     </select>
-    <input class="input" id="sim-assunto" placeholder="Assunto especifico (ex: Frações)">
-    <select class="input" id="sim-dificuldade">
-      <option value="facil">Facil (30s por pergunta)</option>
-      <option value="medio" selected>Medio (60s por pergunta)</option>
-      <option value="dificil">Dificil (90s por pergunta)</option>
+    <input class="input" id="sim-assunto" placeholder="Assunto (ex: Frações, Revolução Francesa)">
+    <select class="input" id="sim-dif">
+      <option value="facil">Facil — 30s por pergunta</option>
+      <option value="medio" selected>Medio — 60s por pergunta</option>
+      <option value="dificil">Dificil — 90s por pergunta</option>
     </select>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="iniciarSimulado()">🚀 Iniciar Simulado</button>
+    <button class="btn btn-primary" style="width:100%;padding:14px" onclick="iniciarSimulado()">🚀 Iniciar Simulado</button>
   </div>
-  <div id="simulado-perguntas" style="display:none"></div>
-  <div id="simulado-resultado" style="display:none"></div>
+  <div id="sim-perguntas" style="display:none"></div>
+  <div id="sim-resultado" style="display:none"></div>
+</section>
+
+<!-- DIALOGOS -->
+<section class="section" id="section-dialogo">
+  <div class="section-title">🎭 <span class="accent">Dialogos Interativos</span></div>
+  <div id="dialogo-container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="card-item" style="cursor:pointer;text-align:center;padding:20px" onclick="iniciarDialogo('mercado')">
+        <div style="font-size:2em;margin-bottom:6px">🛒</div>
+        <div style="font-weight:700;font-size:.9em">No Mercado</div>
+        <div style="font-size:.72em;color:rgba(255,255,255,.4);margin-top:3px">Matematica</div>
+      </div>
+      <div class="card-item" style="cursor:pointer;text-align:center;padding:20px" onclick="iniciarDialogo('historia')">
+        <div style="font-size:2em;margin-bottom:6px">🏛️</div>
+        <div style="font-weight:700;font-size:.9em">Viagem no Tempo</div>
+        <div style="font-size:.72em;color:rgba(255,255,255,.4);margin-top:3px">Historia</div>
+      </div>
+      <div class="card-item" style="cursor:pointer;text-align:center;padding:20px" onclick="iniciarDialogo('ciencias')">
+        <div style="font-size:2em;margin-bottom:6px">🔬</div>
+        <div style="font-weight:700;font-size:.9em">Laboratorio</div>
+        <div style="font-size:.72em;color:rgba(255,255,255,.4);margin-top:3px">Ciencias</div>
+      </div>
+      <div class="card-item" style="cursor:pointer;text-align:center;padding:20px" onclick="iniciarDialogo('ingles')">
+        <div style="font-size:2em;margin-bottom:6px">🇬🇧</div>
+        <div style="font-weight:700;font-size:.9em">Cafe em Londres</div>
+        <div style="font-size:.72em;color:rgba(255,255,255,.4);margin-top:3px">Ingles</div>
+      </div>
+    </div>
+  </div>
+  <div id="dialogo-ativo" style="display:none"></div>
+</section>
+
+<!-- PLANO DE ESTUDO -->
+<section class="section" id="section-plano">
+  <div class="section-title">📋 <span class="accent">Plano de Estudo</span></div>
+  <div id="plano-content"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
+
+<!-- CHAT -->
+<section class="section" id="section-chat">
+  <div class="section-title">💬 <span class="accent">Chat Privado</span></div>
+  <input class="input" id="chat-search" placeholder="Buscar aluno..." oninput="filtrarUsuarios()">
+  <div id="lista-usuarios"><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
+
+<!-- CONVERSA -->
+<section class="section" id="section-conversa">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <button class="btn btn-ghost btn-sm" onclick="nav('chat',null)">←</button>
+    <div class="section-title" style="margin:0" id="conversa-title">Conversa</div>
+  </div>
+  <div class="chat-wrap">
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chat-msg-input" placeholder="Mensagem..." rows="1" onkeydown="chatKeydown(event)"></textarea>
+      <button class="send-btn" onclick="enviarMensagem()">➤</button>
+    </div>
+  </div>
 </section>
 
 <!-- RANKING -->
@@ -230,150 +457,138 @@ select.input{-webkit-appearance:none}
   <div id="lista-ranking"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
 </section>
 
-<!-- EVENTOS -->
-<section class="section" id="section-eventos">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <div class="section-title" style="margin:0">📅 <span class="accent">Eventos</span></div>
-    <button class="btn btn-primary admin-only" style="display:none;padding:8px 14px;font-size:.8em" onclick="abrirModalEvento()">+ Criar</button>
-  </div>
-  <div id="lista-eventos"><div class="skeleton"></div><div class="skeleton"></div></div>
-</section>
-
-<!-- EVENTO DETALHE -->
-<section class="section" id="section-evento-detalhe">
-  <button class="btn btn-ghost" style="padding:8px 12px;margin-bottom:16px" onclick="showSection('eventos',null)">← Voltar</button>
-  <div id="evento-detalhe-content"></div>
-</section>
-
-<!-- MENSALIDADE -->
-<section class="section" id="section-mensalidade">
-  <div class="section-title">💰 <span class="accent">Mensalidade</span></div>
-  <div id="mensalidade-aluno">
-    <div class="card-item" style="text-align:center;padding:20px">
-      <img src="https://www.advocacianunes.com.br/wp-content/uploads/2022/04/logo-pix-icone-1024.png" style="width:80px;margin-bottom:12px">
-      <div id="pix-info" style="margin-bottom:16px;color:rgba(255,255,255,0.6);font-size:.9em">Carregando chave Pix...</div>
-      <div id="meu-status-pagamento" style="margin-bottom:16px"></div>
+<!-- DUELO -->
+<section class="section" id="section-duelo">
+  <div class="section-title">⚔️ <span class="accent">Duelo 1v1</span></div>
+  <div id="duelo-lobby">
+    <div class="card-item" style="text-align:center;padding:24px;margin-bottom:14px">
+      <div style="font-size:2.5em;margin-bottom:8px">⚔️</div>
+      <p style="color:rgba(255,255,255,.5);font-size:.88em">Desafie um colega para um duelo de perguntas!</p>
     </div>
-    <div class="card-item">
-      <p style="font-size:.85em;color:rgba(255,255,255,0.5);margin-bottom:12px">Enviar comprovante:</p>
-      <input class="input" id="pag-nome" placeholder="Seu nome completo">
-      <input type="file" id="pag-comprovante" accept="image/*" style="color:#fff;margin-bottom:10px;width:100%">
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="enviarComprovante()">📤 Enviar Comprovante</button>
-    </div>
+    <p style="font-size:.8em;color:rgba(255,255,255,.4);margin-bottom:10px">Selecione o oponente:</p>
+    <select class="input" id="duelo-oponente"><option value="">Selecionar aluno...</option></select>
+    <select class="input" id="duelo-materia">
+      <option value="">Selecione a materia</option>
+      <option>Portugues</option><option>Matematica</option><option>Historia</option>
+      <option>Geografia</option><option>Ingles</option><option>Artes</option><option>Ciencias</option>
+    </select>
+    <button class="btn btn-primary" style="width:100%;padding:13px" onclick="iniciarDuelo()">⚔️ Iniciar Duelo</button>
   </div>
-  <div class="admin-only" id="mensalidade-admin" style="display:none">
-    <div class="section-title" style="margin-top:20px">👑 <span class="accent">Gerenciar Pagamentos</span></div>
-    <div style="margin-bottom:12px">
-      <input class="input" id="pix-key-input" placeholder="Chave Pix">
-      <input class="input" id="pix-name-input" placeholder="Nome do recebedor">
-      <button class="btn btn-primary" onclick="salvarPix()">💾 Salvar Pix</button>
+  <div id="duelo-ativo" style="display:none"></div>
+</section>
+
+<!-- MISSOES -->
+<section class="section" id="section-missoes">
+  <div class="section-title">🎯 <span class="accent">Missoes</span></div>
+  <div style="margin-bottom:14px">
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="btn btn-primary btn-sm" onclick="filtrarMissoes('diaria')">Diarias</button>
+      <button class="btn btn-ghost btn-sm" onclick="filtrarMissoes('semanal')">Semanais</button>
     </div>
-    <div id="lista-pagamentos"><div class="skeleton"></div></div>
+    <div id="lista-missoes"></div>
   </div>
 </section>
 
-<!-- AVISOS -->
-<section class="section" id="section-avisos">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <div class="section-title" style="margin:0">📢 <span class="accent">Avisos</span></div>
-    <button class="btn btn-primary admin-only" style="display:none;padding:8px 14px;font-size:.8em" onclick="abrirModalAviso()">+ Criar</button>
+<!-- COPA -->
+<section class="section" id="section-copa">
+  <div class="copa-banner">
+    <div style="font-size:2em;margin-bottom:6px">🏆</div>
+    <div class="copa-titulo">Copa do Mes</div>
+    <div class="copa-sub" id="copa-mes-label">Carregando...</div>
   </div>
-  <div id="lista-avisos"><div class="skeleton"></div><div class="skeleton"></div></div>
-</section>
-
-<!-- REGRAS -->
-<section class="section" id="section-regras">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <div class="section-title" style="margin:0">📏 <span class="accent">Regras</span></div>
-    <button class="btn btn-primary admin-only" style="display:none;padding:8px 14px;font-size:.8em" onclick="abrirModalRegra()">+ Criar</button>
-  </div>
-  <div id="lista-regras"><div class="skeleton"></div><div class="skeleton"></div></div>
+  <div id="copa-content"><div class="skeleton"></div></div>
 </section>
 
 <!-- ADMIN -->
 <section class="section admin-only" id="section-admin" style="display:none">
   <div class="section-title">⚙️ <span class="accent">Painel Admin</span></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
-    <div class="card-item" style="cursor:pointer;text-align:center" onclick="showSection('eventos',null)">📅<br><small>Eventos</small></div>
-    <div class="card-item" style="cursor:pointer;text-align:center" onclick="showSection('mensalidade',null)">💰<br><small>Pagamentos</small></div>
-    <div class="card-item" style="cursor:pointer;text-align:center" onclick="showSection('avisos',null)">📢<br><small>Avisos</small></div>
-    <div class="card-item" style="cursor:pointer;text-align:center" onclick="showSection('regras',null)">📏<br><small>Regras</small></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
+    <div class="card-item" style="cursor:pointer;text-align:center;padding:16px" onclick="nav('eventos',null)">📅<br><small style="font-size:.75em">Eventos</small></div>
+    <div class="card-item" style="cursor:pointer;text-align:center;padding:16px" onclick="nav('mensalidade',null)">💰<br><small style="font-size:.75em">Pagamentos</small></div>
+    <div class="card-item" style="cursor:pointer;text-align:center;padding:16px" onclick="nav('avisos',null)">📢<br><small style="font-size:.75em">Avisos</small></div>
+    <div class="card-item" style="cursor:pointer;text-align:center;padding:16px" onclick="nav('copa',null)">🏆<br><small style="font-size:.75em">Copa</small></div>
   </div>
-  <div class="section-title">👥 <span class="accent">Usuarios</span></div>
-  <div id="lista-usuarios-admin"><div class="skeleton"></div></div>
+  <div class="section-title" style="font-size:1em">👥 <span class="accent">Usuarios</span></div>
+  <div id="lista-users-admin"><div class="skeleton"></div></div>
+</section>
+
+<!-- LOGS -->
+<section class="section admin-only" id="section-logs" style="display:none">
+  <div class="section-title">📊 <span class="accent">Logs do Sistema</span></div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <button class="btn btn-primary btn-sm" onclick="carregarLogs('logs_ia')">IA</button>
+    <button class="btn btn-ghost btn-sm" onclick="carregarLogs('logs_perguntas')">Perguntas</button>
+    <button class="btn btn-ghost btn-sm" onclick="carregarLogs('logs_sistema')">Sistema</button>
+    <button class="btn btn-ghost btn-sm" onclick="carregarLogs('logs_usuario')">Usuarios</button>
+  </div>
+  <div id="logs-content"><div class="skeleton"></div></div>
 </section>
 
 </main>
 
-<!-- MODAL EVENTO -->
+<!-- MODAIS -->
 <div class="modal" id="modal-evento">
   <div class="modal-box">
-    <div class="modal-title">📅 Criar Evento</div>
-    <input class="input" id="ev-titulo" placeholder="Titulo do evento">
-    <textarea class="input" id="ev-descricao" placeholder="Descricao" rows="3"></textarea>
+    <div class="modal-title">📅 Criar Evento <span class="modal-close" onclick="fecharModal('modal-evento')">✕</span></div>
+    <input class="input" id="ev-titulo" placeholder="Titulo">
+    <textarea class="input" id="ev-descricao" placeholder="Descricao" rows="2"></textarea>
     <input class="input" type="datetime-local" id="ev-data">
     <input class="input" id="ev-local" placeholder="Local">
     <input class="input" type="number" id="ev-custo" placeholder="Custo (R$)" value="0">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
       <input type="checkbox" id="ev-ativar-regras" style="width:auto;margin:0">
-      <label style="font-size:.85em;color:rgba(255,255,255,0.7)">Ativar regras do evento</label>
+      <label style="font-size:.82em;color:rgba(255,255,255,.65)">Ativar regras do evento</label>
     </div>
-    <div id="ev-regras-box" style="display:none">
-      <div id="ev-regras-lista"></div>
-      <div style="display:flex;gap:8px">
-        <input class="input" id="ev-regra-input" placeholder="Ex: Limite de Coca: 4" style="margin:0;flex:1">
-        <button class="btn btn-ghost" onclick="addRegra()">+</button>
+    <div id="ev-regras-box" style="display:none;margin-bottom:10px">
+      <div id="ev-regras-lista" style="margin-bottom:6px"></div>
+      <div style="display:flex;gap:6px">
+        <input class="input" id="ev-regra-input" placeholder="Ex: Limite de Coca: 1" style="margin:0;flex:1">
+        <button class="btn btn-ghost btn-sm" onclick="addRegra()">+</button>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;margin:10px 0">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
       <input type="checkbox" id="ev-ativar-comida" style="width:auto;margin:0">
-      <label style="font-size:.85em;color:rgba(255,255,255,0.7)">Ativar lista de comida</label>
+      <label style="font-size:.82em;color:rgba(255,255,255,.65)">Ativar lista de comida</label>
     </div>
-    <div id="ev-comida-box" style="display:none">
-      <div id="ev-comida-lista"></div>
-      <div style="display:flex;gap:8px">
-        <input class="input" id="ev-comida-input" placeholder="Ex: Coca-Cola" style="margin:0;flex:1">
-        <button class="btn btn-ghost" onclick="addComida()">+</button>
+    <div id="ev-comida-box" style="display:none;margin-bottom:10px">
+      <div id="ev-comida-lista" style="margin-bottom:6px"></div>
+      <div style="display:flex;gap:6px;margin-bottom:4px">
+        <input class="input" id="ev-comida-input" placeholder="Item (ex: Coca-Cola)" style="margin:0;flex:1">
+        <input class="input" type="number" id="ev-comida-limite" placeholder="Limite" style="margin:0;width:70px" value="1">
+        <button class="btn btn-ghost btn-sm" onclick="addComida()">+</button>
       </div>
     </div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fecharModal('modal-evento')">Cancelar</button>
-      <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="criarEvento()">Criar</button>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-ghost" style="flex:1" onclick="fecharModal('modal-evento')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1" onclick="criarEvento()">Criar</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL AVISO -->
 <div class="modal" id="modal-aviso">
   <div class="modal-box">
-    <div class="modal-title">📢 Criar Aviso</div>
+    <div class="modal-title">📢 Criar Aviso <span class="modal-close" onclick="fecharModal('modal-aviso')">✕</span></div>
     <input class="input" id="av-titulo" placeholder="Titulo">
-    <textarea class="input" id="av-conteudo" placeholder="Conteudo" rows="4"></textarea>
-    <select class="input" id="av-destinatario">
-      <option value="">Todos os alunos</option>
-    </select>
-    <div style="display:flex;gap:10px;margin-top:8px">
-      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fecharModal('modal-aviso')">Cancelar</button>
-      <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="criarAviso()">Enviar</button>
+    <textarea class="input" id="av-conteudo" placeholder="Conteudo" rows="3"></textarea>
+    <select class="input" id="av-dest"><option value="">Para todos</option></select>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost" style="flex:1" onclick="fecharModal('modal-aviso')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1" onclick="criarAviso()">Enviar</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL REGRA -->
 <div class="modal" id="modal-regra">
   <div class="modal-box">
-    <div class="modal-title">📏 Criar Regra</div>
-    <input class="input" id="rg-titulo" placeholder="Titulo da regra">
-    <textarea class="input" id="rg-conteudo" placeholder="Descricao" rows="4"></textarea>
-    <select class="input" id="rg-categoria">
-      <option>Comportamento</option>
-      <option>Vestimenta</option>
-      <option>Celular</option>
-      <option>Geral</option>
+    <div class="modal-title">📏 Criar Regra <span class="modal-close" onclick="fecharModal('modal-regra')">✕</span></div>
+    <input class="input" id="rg-titulo" placeholder="Titulo">
+    <textarea class="input" id="rg-conteudo" placeholder="Descricao" rows="3"></textarea>
+    <select class="input" id="rg-cat">
+      <option>Comportamento</option><option>Vestimenta</option><option>Celular</option><option>Geral</option>
     </select>
-    <div style="display:flex;gap:10px;margin-top:8px">
-      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fecharModal('modal-regra')">Cancelar</button>
-      <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="criarRegra()">Salvar</button>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost" style="flex:1" onclick="fecharModal('modal-regra')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1" onclick="criarRegra()">Salvar</button>
     </div>
   </div>
 </div>
@@ -381,132 +596,458 @@ select.input{-webkit-appearance:none}
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL='https://hhiynhqsmikecreqnqbt.supabase.co';
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
-const GROQ_KEY='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';
+// ===== CONFIG =====
+const SB_URL='https://hhiynhqsmikecreqnqbt.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
+const GROQ='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';
 const ADMIN_EMAIL='miqueiasasaf890@gmail.com';
 
-let sb,currentUser,isAdmin=false,currentChatUser=null,simPerguntas=[],simAtual=0,simTimer=null,simRespostas=[],evRegras=[],evComidas=[];
+let sb,cu,isAdmin=false,nomeUser='',xpTotal=0;
+let simPerguntas=[],simIdx=0,simTimer=null,simRespostas=[],simTempo=60;
+let evRegras=[],evComidas=[],todosUsers=[],currentChatUser=null;
+let dueloPerguntas=[],dueloIdx=0,dueloMinhaPts=0,dueloOponentePts=0,dueloTimer=null;
+let iaHistory=[];
 
+// ===== INIT =====
 window.addEventListener('load',async()=>{
-  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-  const{data}=await sb.auth.getSession();
-  if(!data.session){window.location.replace('login.html');return;}
-  currentUser=data.session.user;
-  isAdmin=currentUser.email===ADMIN_EMAIL;
+  sb=window.supabase.createClient(SB_URL,SB_KEY);
+  const{data:sess}=await sb.auth.getSession();
+  if(!sess.session){window.location.replace('login.html');return;}
+  cu=sess.session.user;
+  isAdmin=cu.email===ADMIN_EMAIL;
 
-  const{data:ud}=await sb.from('users').select('nome').eq('id',currentUser.id).single();
-  const nome=ud?.nome||currentUser.email.split('@')[0];
+  const{data:ud}=await sb.from('users').select('nome,xp').eq('id',cu.id).single();
+  const nome=ud?.nome||cu.email.split('@')[0];
+  xpTotal=ud?.xp||0;
   const partes=nome.trim().split(' ');
-  const nomeExibir=partes.length>=2?partes[0]+' '+partes[1]:partes[0];
-  const inicial=partes[0][0].toUpperCase();
+  nomeUser=partes.length>=2?partes[0]+' '+partes[1]:partes[0];
+  const ini=partes[0][0].toUpperCase();
 
-  document.getElementById('headerAvatar').textContent=inicial;
-  document.getElementById('sidebarAvatar').textContent=inicial;
-  document.getElementById('sidebarName').textContent=nomeExibir;
+  document.getElementById('headerAvatar').textContent=ini;
+  document.getElementById('sidebarAvatar').textContent=ini;
+  document.getElementById('sidebarName').textContent=nomeUser;
   document.getElementById('sidebarRole').textContent=isAdmin?'👑 Admin':'Aluno';
+  atualizarXP(0);
 
   if(isAdmin){
-    document.querySelectorAll('.admin-only').forEach(el=>el.style.display='flex');
+    document.querySelectorAll('.admin-only').forEach(el=>el.style.removeProperty('display'));
     document.getElementById('section-admin').style.display='block';
-    document.getElementById('mensalidade-admin').style.display='block';
+    document.getElementById('section-logs').style.display='block';
+    document.getElementById('admin-pagamentos').style.display='block';
     carregarPagamentos();
-    carregarUsuariosAdmin();
+    carregarUsersAdmin();
+    carregarPix();
   }
 
   const h=new Date().getHours();
-  const greet=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
-  document.getElementById('greetingText').textContent=greet+', '+partes[0]+'! 👋';
+  document.getElementById('greetingText').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+partes[0]+'! 👋';
   document.getElementById('greetingDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
 
   if(Notification.permission==='default')Notification.requestPermission();
 
+  adicionarMsgIA('Ola! Sou a IA do 9A Hub 🧠 Pode me perguntar qualquer coisa sobre as materias. Vou te ajudar a ENTENDER, nao so dar a resposta!');
+
   carregarDashboard();
-  carregarChat();
   carregarEventos();
-  carregarRanking();
   carregarAvisos();
   carregarRegras();
+  carregarChat();
+  carregarRanking();
+  carregarMissoes();
+  carregarCopa();
+  carregarPlanoEstudo();
   carregarMensalidade();
-  carregarUsuariosAviso();
-  adicionarMsgIA('Oi! Sou a IA do 9A Hub. Posso te ajudar com duvidas de qualquer materia. O que quer saber?');
+  carregarUsersParaListas();
 });
 
-// ===== UI =====
-function toggleMenu(){const o=document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open',o);document.getElementById('menuBtn').classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';}
-function closeMenu(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open');document.getElementById('menuBtn').classList.remove('open');document.body.style.overflow='';}
-function showSection(name,el){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  const sec=document.getElementById('section-'+name);
-  if(sec){sec.classList.add('active');sec.style.display='block';}
+// ===== XP =====
+function atualizarXP(ganhou){
+  xpTotal+=ganhou;
+  document.getElementById('xpBadge').textContent='⚡ '+xpTotal+' XP';
+  document.getElementById('sidebarXp').textContent='⚡ '+xpTotal+' XP';
+  if(ganhou>0){
+    mostrarXPFloat('+'+ganhou+' XP');
+    sb.from('users').update({xp:xpTotal}).eq('id',cu.id).then(()=>{});
+    registrarLog('logs_usuario','xp_ganho',{xp:ganhou,total:xpTotal});
+  }
+}
+function mostrarXPFloat(txt){
+  const el=document.createElement('div');
+  el.className='xp-float';
+  el.textContent=txt;
+  el.style.left=Math.random()*60+20+'%';
+  el.style.top='40%';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1600);
+}
+
+// ===== NAV =====
+function toggleMenu(){
+  const o=document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open',o);
+  document.getElementById('menuBtn').classList.toggle('open',o);
+  document.body.style.overflow=o?'hidden':'';
+}
+function closeMenu(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('menuBtn').classList.remove('open');
+  document.body.style.overflow='';
+}
+function toggleCat(header){
+  const canais=header.nextElementSibling;
+  const isOpen=canais.classList.contains('open');
+  document.querySelectorAll('.cat-canais').forEach(c=>c.classList.remove('open'));
+  document.querySelectorAll('.cat-header').forEach(h=>h.classList.remove('active'));
+  if(!isOpen){canais.classList.add('open');header.classList.add('active');}
+}
+function nav(name,el){
+  const atual=document.querySelector('.section.active');
+  if(atual){atual.classList.add('saindo');setTimeout(()=>{atual.classList.remove('active','saindo');},200);}
+  setTimeout(()=>{
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    const sec=document.getElementById('section-'+name);
+    if(sec){sec.classList.add('active');}
+  },200);
   if(el){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
   closeMenu();
 }
+function abrirModal(id){document.getElementById(id).classList.add('open');}
 function fecharModal(id){document.getElementById(id).classList.remove('open');}
-function toast(msg,type='info'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast '+type+' show';setTimeout(()=>el.classList.remove('show'),3000);}
+function toast(msg,type='info'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast '+type+' show';
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
 async function logout(){await sb.auth.signOut();window.location.replace('login.html');}
+
+// ===== LOGS =====
+async function registrarLog(tabela,acao,dados={}){
+  try{await sb.from(tabela).insert({user_id:cu.id,acao,dados:JSON.stringify(dados),criado_em:new Date().toISOString()});}
+  catch(e){console.log('Log err:',e);}
+}
 
 // ===== DASHBOARD =====
 async function carregarDashboard(){
-  const mesAtual=new Date().toLocaleString('pt-BR',{month:'long'});
+  // Status mensalidade
   const ano=new Date().getFullYear();
-  const{data:pag}=await sb.from('payments').select('status').eq('user_id',currentUser.id).eq('year',ano).maybeSingle();
-  const statusEl=document.getElementById('dash-mensalidade');
-  const cfg={approved:['rgba(0,255,153,0.08)','rgba(0,255,153,0.2)','#00ff99','✅ Mensalidade paga'],pending:['rgba(251,191,36,0.08)','rgba(251,191,36,0.2)','#fbbf24','⏳ Aguardando aprovacao'],rejected:['rgba(248,113,113,0.08)','rgba(248,113,113,0.2)','#f87171','❌ Comprovante reprovado']};
-  const[bg,border,color,txt]=pag?cfg[pag.status]||cfg.pending:['rgba(248,113,113,0.08)','rgba(248,113,113,0.2)','#f87171','⚠️ Mensalidade em aberto'];
-  statusEl.innerHTML=`<div style="background:${bg};border:1px solid ${border};border-radius:14px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px" onclick="showSection('mensalidade',null)"><span style="font-size:1.5em">💰</span><div><div style="font-weight:700;color:${color}">${txt}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${mesAtual} ${ano}</div></div></div>`;
+  const{data:pag}=await sb.from('payments').select('status').eq('user_id',cu.id).eq('year',ano).maybeSingle();
+  const el=document.getElementById('dash-mensalidade');
+  const cfg={approved:['rgba(0,255,153,0.07)','rgba(0,255,153,0.18)','#00ff99','✅ Mensalidade paga'],pending:['rgba(251,191,36,0.07)','rgba(251,191,36,0.18)','#fbbf24','⏳ Aguardando aprovacao'],rejected:['rgba(248,113,113,0.07)','rgba(248,113,113,0.18)','#f87171','❌ Comprovante reprovado']};
+  const[bg,brd,clr,txt]=pag?cfg[pag.status]||cfg.pending:['rgba(248,113,113,0.07)','rgba(248,113,113,0.18)','#f87171','⚠️ Mensalidade em aberto'];
+  el.innerHTML=`<div style="background:${bg};border:1px solid ${brd};border-radius:12px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px" onclick="nav('mensalidade',null)"><span style="font-size:1.4em">💰</span><div><div style="font-weight:700;color:${clr};font-size:.9em">${txt}</div><div style="font-size:.72em;color:rgba(255,255,255,.35)">${new Date().toLocaleString('pt-BR',{month:'long'})} ${ano}</div></div></div>`;
 
-  const{data:avisos}=await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('criado_em',{ascending:false}).limit(3);
+  // Avisos
+  const{data:avs}=await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${cu.id}`).order('criado_em',{ascending:false}).limit(3);
   const ae=document.getElementById('dash-avisos');
-  ae.innerHTML=avisos?.length?avisos.map(a=>`<div class="card-item"><div style="font-weight:700;margin-bottom:4px">${a.title}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.criado_em).toLocaleDateString('pt-BR')}</div></div>`).join(''):'<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>';
+  ae.innerHTML=avs?.length?avs.map(a=>`<div class="card-item"><div style="font-weight:700;font-size:.9em;margin-bottom:3px">${a.title}</div><div style="font-size:.8em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.68em;color:rgba(255,255,255,.28);margin-top:5px">${new Date(a.criado_em).toLocaleDateString('pt-BR')}</div></div>`).join(''):'<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>';
 
-  const hoje=new Date().toISOString();
-  const{data:evs}=await sb.from('eventos').select('*').gte('data',hoje).order('data',{ascending:true}).limit(3);
+  // Eventos
+  const{data:evs}=await sb.from('eventos').select('*').gte('data',new Date().toISOString()).order('data',{ascending:true}).limit(2);
   const ee=document.getElementById('dash-eventos');
-  ee.innerHTML=evs?.length?evs.map(e=>`<div class="card-item" style="cursor:pointer" onclick="abrirEvento('${e.id}')"><div style="font-weight:700">${e.titulo}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${e.descricao||''}</div>${e.data?`<div style="font-size:.75em;color:#00ff99;margin-top:6px">📆 ${new Date(e.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long'})}</div>`:''}</div>`).join(''):'<div class="empty"><div class="icon">📅</div><p>Nenhum evento proximo</p></div>';
+  ee.innerHTML=evs?.length?evs.map(e=>`<div class="card-item" style="cursor:pointer" onclick="abrirEvento('${e.id}')"><div style="font-weight:700;font-size:.9em">${e.titulo}</div>${e.data?`<div style="font-size:.72em;color:#00ff99;margin-top:4px">📆 ${new Date(e.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long'})}</div>`:''}</div>`).join(''):'<div class="empty"><div class="icon">📅</div><p>Nenhum evento</p></div>';
+
+  // Missoes resumo
+  const{data:miss}=await sb.from('missoes').select('*').eq('tipo','diaria').limit(2);
+  const me=document.getElementById('dash-missoes');
+  me.innerHTML=miss?.length?miss.map(m=>`<div class="missao-item"><div class="missao-icon">${m.icone||'🎯'}</div><div class="missao-info"><div class="missao-titulo">${m.titulo}</div><div class="missao-desc">${m.descricao}</div><div class="progress-bar"><div class="progress-fill" style="width:${m.progresso||0}%"></div></div></div><div class="missao-xp">+${m.xp} XP</div></div>`).join(''):'<div style="text-align:center;padding:16px;color:rgba(255,255,255,.3);font-size:.85em">Missoes carregando...</div>';
 }
 
-// ===== CHAT PRIVADO =====
-let todosUsuarios=[];
-async function carregarChat(){
-  const{data}=await sb.from('users').select('id,nome').neq('id',currentUser.id).order('nome');
-  todosUsuarios=data||[];
-  renderUsuarios(todosUsuarios);
-  if(isAdmin){
-    const label=document.querySelector('#section-chat .section-title');
-    if(label)label.innerHTML='💬 <span class="accent">Chat Privado</span> <small style="font-size:.6em;color:#fbbf24">(Admin)</small>';
+// ===== EVENTOS =====
+async function carregarEventos(){
+  const{data}=await sb.from('eventos').select('*').order('data',{ascending:true});
+  const el=document.getElementById('lista-eventos');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📅</div><p>Nenhum evento</p></div>';return;}
+  el.innerHTML=data.map(e=>`<div class="card-item" style="cursor:pointer" onclick="abrirEvento('${e.id}')">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+      <div style="font-weight:700">${e.titulo}</div>
+      ${e.custo>0?`<span class="badge badge-yellow">R$ ${parseFloat(e.custo).toFixed(2)}</span>`:''}
+    </div>
+    <div style="font-size:.8em;color:rgba(255,255,255,.5);margin-bottom:5px">${e.descricao||''}</div>
+    ${e.data?`<div style="font-size:.75em;color:#00ff99">📆 ${new Date(e.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>`:''}
+    ${e.local?`<div style="font-size:.72em;color:rgba(255,255,255,.38)">📍 ${e.local}</div>`:''}
+    ${isAdmin?`<div style="display:flex;gap:6px;margin-top:8px">
+      <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deletarEvento('${e.id}')">🗑 Apagar</button>
+    </div>`:''}
+  </div>`).join('');
+}
+
+async function abrirEvento(id){
+  const{data:ev}=await sb.from('eventos').select('*').eq('id',id).single();
+  if(!ev)return;
+  const{data:regras}=await sb.from('regras_evento').select('*').eq('evento_id',id);
+  const{data:alimentos}=await sb.from('alimentos_evento').select('*').eq('evento_id',id);
+  const{data:escolhidos}=await sb.from('comida_escolhida').select('item,user_id,nome_aluno').eq('evento_id',id);
+  const{data:confirmados}=await sb.from('event_attendees').select('user_id,users(nome)').eq('event_id',id);
+  const{data:minha}=await sb.from('comida_escolhida').select('item').eq('evento_id',id).eq('user_id',cu.id).maybeSingle();
+  const{data:confirmei}=await sb.from('event_attendees').select('id').eq('event_id',id).eq('user_id',cu.id).maybeSingle();
+
+  const itensSelecionados=(escolhidos||[]).map(c=>c.item);
+
+  let html=`<div class="card-item" style="margin-bottom:12px">
+    <h2 style="font-size:1.15em;margin-bottom:6px">${ev.titulo}</h2>
+    <p style="font-size:.83em;color:rgba(255,255,255,.5);margin-bottom:8px">${ev.descricao||''}</p>
+    ${ev.data?`<div style="font-size:.78em;color:#00ff99;margin-bottom:3px">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}</div>`:''}
+    ${ev.local?`<div style="font-size:.78em;color:rgba(255,255,255,.38)">📍 ${ev.local}</div>`:''}
+    ${ev.custo>0?`<div style="font-size:.78em;color:#fbbf24;margin-top:3px">💰 R$ ${parseFloat(ev.custo).toFixed(2)}</div>`:''}
+    <div style="margin-top:12px">
+      ${confirmei?`<span class="badge badge-green">✅ Presenca confirmada</span>`:
+      `<button class="btn btn-primary btn-sm" onclick="confirmarPresenca('${id}')">✅ Confirmar Presenca</button>`}
+    </div>
+  </div>`;
+
+  // Confirmados
+  if(confirmados?.length){
+    html+=`<div class="card-item" style="margin-bottom:12px">
+      <div style="font-size:.8em;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:8px">👥 CONFIRMADOS (${confirmados.length})</div>
+      ${confirmados.map(c=>`<div style="font-size:.82em;color:rgba(255,255,255,.7);padding:3px 0">• ${c.users?.nome||'?'}</div>`).join('')}
+    </div>`;
+  }
+
+  // Regras do evento
+  if(ev.ativar_regras&&regras?.length){
+    html+=`<div class="card-item" style="margin-bottom:12px;border-left:3px solid #fbbf24">
+      <div style="font-size:.82em;font-weight:700;color:#fbbf24;margin-bottom:8px">📏 REGRAS DO EVENTO</div>
+      ${regras.map(r=>`<div style="font-size:.82em;color:rgba(255,255,255,.7);padding:3px 0">• ${r.descricao}</div>`).join('')}
+    </div>`;
+  }
+
+  // Comida
+  if(ev.ativar_comida&&alimentos?.length){
+    html+=`<div class="card-item" style="margin-bottom:12px">
+      <div style="font-size:.82em;font-weight:700;color:#00ff99;margin-bottom:10px">🍔 LISTA DE COMIDA</div>`;
+    if(minha){
+      html+=`<div class="badge badge-green" style="margin-bottom:8px;display:inline-block">✅ Voce escolheu: ${minha.item}</div>`;
+    }else{
+      html+=alimentos.map(a=>{
+        const qtdEscolhida=itensSelecionados.filter(i=>i===a.nome_item).length;
+        const limite=a.limite||1;
+        const cheio=qtdEscolhida>=limite;
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <div>
+            <span style="font-size:.85em">${a.nome_item}</span>
+            <span style="font-size:.7em;color:rgba(255,255,255,.35);margin-left:8px">${qtdEscolhida}/${limite} escolhidos</span>
+          </div>
+          ${cheio?`<span class="badge badge-red">Esgotado</span>`:
+          `<button class="btn btn-success btn-sm" onclick="escolherComida('${id}','${a.nome_item}')">Escolher</button>`}
+        </div>`;
+      }).join('');
+    }
+
+    // Lista de quem escolheu o que
+    if(escolhidos?.length&&isAdmin){
+      html+=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)">
+        <div style="font-size:.72em;color:rgba(255,255,255,.35);margin-bottom:6px">PEDIDOS:</div>
+        ${escolhidos.map(c=>`<div style="font-size:.78em;color:rgba(255,255,255,.6);padding:2px 0">${c.nome_aluno}: ${c.item}</div>`).join('')}
+      </div>`;
+    }
+    html+='</div>';
+  }
+
+  document.getElementById('evento-detalhe-content').innerHTML=html;
+  nav('evento-detalhe',null);
+}
+
+async function confirmarPresenca(evId){
+  await sb.from('event_attendees').upsert({event_id:evId,user_id:cu.id},{onConflict:'event_id,user_id'});
+  atualizarXP(10);
+  toast('Presenca confirmada! +10 XP','success');
+  abrirEvento(evId);
+  registrarLog('logs_usuario','confirmar_presenca',{evento_id:evId});
+}
+
+async function escolherComida(evId,item){
+  const{data:ud}=await sb.from('users').select('nome').eq('id',cu.id).single();
+  const{error}=await sb.from('comida_escolhida').insert({evento_id:evId,user_id:cu.id,nome_aluno:ud?.nome||nomeUser,item});
+  if(error){toast('Erro ao escolher item','error');return;}
+  atualizarXP(5);
+  toast('Escolhido: '+item+' ✅','success');
+  abrirEvento(evId);
+}
+
+async function deletarEvento(id){
+  if(!isAdmin)return;
+  if(!confirm('Apagar este evento?'))return;
+  await sb.from('eventos').delete().eq('id',id);
+  toast('Evento apagado','success');
+  carregarEventos();
+  nav('eventos',null);
+  registrarLog('logs_sistema','deletar_evento',{evento_id:id});
+}
+
+// CRIAR EVENTO
+document.getElementById('ev-ativar-regras')?.addEventListener('change',function(){document.getElementById('ev-regras-box').style.display=this.checked?'block':'none';});
+document.getElementById('ev-ativar-comida')?.addEventListener('change',function(){document.getElementById('ev-comida-box').style.display=this.checked?'block':'none';});
+
+function addRegra(){
+  const v=document.getElementById('ev-regra-input').value.trim();
+  if(!v)return;
+  evRegras.push(v);
+  document.getElementById('ev-regra-input').value='';
+  renderEvRegras();
+}
+function renderEvRegras(){
+  document.getElementById('ev-regras-lista').innerHTML=evRegras.map((r,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.82em;border-bottom:1px solid rgba(255,255,255,.05)"><span>${r}</span><button onclick="evRegras.splice(${i},1);renderEvRegras()" style="background:none;border:none;color:#f87171;cursor:pointer;padding:2px 6px">✕</button></div>`).join('');
+}
+function addComida(){
+  const item=document.getElementById('ev-comida-input').value.trim();
+  const limite=parseInt(document.getElementById('ev-comida-limite').value)||1;
+  if(!item)return;
+  evComidas.push({item,limite});
+  document.getElementById('ev-comida-input').value='';
+  document.getElementById('ev-comida-limite').value='1';
+  renderEvComidas();
+}
+function renderEvComidas(){
+  document.getElementById('ev-comida-lista').innerHTML=evComidas.map((c,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.82em;border-bottom:1px solid rgba(255,255,255,.05)"><span>${c.item} <span style="color:rgba(255,255,255,.35)">(limite: ${c.limite})</span></span><button onclick="evComidas.splice(${i},1);renderEvComidas()" style="background:none;border:none;color:#f87171;cursor:pointer;padding:2px 6px">✕</button></div>`).join('');
+}
+async function criarEvento(){
+  if(!isAdmin){toast('Sem permissao','error');return;}
+  const titulo=document.getElementById('ev-titulo').value.trim();
+  if(!titulo){toast('Informe o titulo','error');return;}
+  const{data:ev,error}=await sb.from('eventos').insert({titulo,descricao:document.getElementById('ev-descricao').value,data:document.getElementById('ev-data').value||null,local:document.getElementById('ev-local').value,custo:parseFloat(document.getElementById('ev-custo').value)||0,ativar_regras:document.getElementById('ev-ativar-regras').checked,ativar_comida:document.getElementById('ev-ativar-comida').checked,criado_por:cu.id}).select().single();
+  if(error){toast('Erro ao criar evento','error');console.error(error);return;}
+  for(const r of evRegras)await sb.from('regras_evento').insert({evento_id:ev.id,descricao:r});
+  for(const c of evComidas)await sb.from('alimentos_evento').insert({evento_id:ev.id,nome_item:c.item,limite:c.limite});
+  evRegras=[];evComidas=[];
+  fecharModal('modal-evento');
+  toast('Evento criado! 🎉','success');
+  carregarEventos();
+  carregarDashboard();
+  registrarLog('logs_sistema','criar_evento',{titulo,id:ev.id});
+}
+
+// ===== AVISOS =====
+async function carregarAvisos(){
+  const{data}=await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${cu.id}`).order('criado_em',{ascending:false});
+  const el=document.getElementById('lista-avisos');
+  el.innerHTML=data?.length?data.map(a=>`<div class="card-item">${a.target_user_id?'<span class="badge badge-blue" style="margin-bottom:6px;display:inline-block">Individual</span>':''}<div style="font-weight:700;margin-bottom:4px">${a.title}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.7em;color:rgba(255,255,255,.28);margin-top:5px">${new Date(a.criado_em).toLocaleDateString('pt-BR')}</div></div>`).join(''):'<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>';
+}
+async function carregarUsersParaListas(){
+  const{data}=await sb.from('users').select('id,nome').neq('id',cu.id).order('nome');
+  todosUsers=data||[];
+  // Popular selects
+  const sel=document.getElementById('av-dest');
+  if(sel){(data||[]).forEach(u=>{const op=document.createElement('option');op.value=u.id;op.textContent=u.nome;sel.appendChild(op);});}
+  const sel2=document.getElementById('duelo-oponente');
+  if(sel2){(data||[]).forEach(u=>{const op=document.createElement('option');op.value=u.id;op.textContent=u.nome;sel2.appendChild(op);});}
+  renderUsuarios(todosUsers);
+}
+async function criarAviso(){
+  if(!isAdmin)return;
+  const titulo=document.getElementById('av-titulo').value.trim();
+  const content=document.getElementById('av-conteudo').value.trim();
+  const dest=document.getElementById('av-dest').value;
+  if(!titulo||!content){toast('Preencha os campos','error');return;}
+  await sb.from('announcements').insert({title:titulo,content,target_user_id:dest||null,criado_por:cu.id});
+  fecharModal('modal-aviso');
+  toast('Aviso enviado!','success');
+  carregarAvisos();carregarDashboard();
+}
+
+// ===== REGRAS =====
+async function carregarRegras(){
+  const{data}=await sb.from('regras').select('*').order('categoria');
+  const el=document.getElementById('lista-regras');
+  el.innerHTML=data?.length?data.map(r=>`<div class="card-item" style="border-left:3px solid #00ff99"><span class="badge badge-green" style="margin-bottom:6px;display:inline-block">${r.categoria}</span><div style="font-weight:700;color:#00ff99;margin-bottom:4px;font-size:.92em">${r.titulo}</div><div style="font-size:.82em;color:rgba(255,255,255,.6)">${r.conteudo}</div></div>`).join(''):'<div class="empty"><div class="icon">📏</div><p>Nenhuma regra</p></div>';
+}
+async function criarRegra(){
+  if(!isAdmin)return;
+  const titulo=document.getElementById('rg-titulo').value.trim();
+  const conteudo=document.getElementById('rg-conteudo').value.trim();
+  if(!titulo||!conteudo){toast('Preencha os campos','error');return;}
+  await sb.from('regras').insert({titulo,conteudo,categoria:document.getElementById('rg-cat').value,criado_por:cu.id});
+  fecharModal('modal-regra');toast('Regra criada!','success');carregarRegras();
+}
+
+// ===== MENSALIDADE =====
+async function carregarMensalidade(){
+  const{data:cfg}=await sb.from('settings').select('*');
+  const pix=cfg?.find(c=>c.key==='pix_key')?.value||'';
+  const pixNome=cfg?.find(c=>c.key==='pix_name')?.value||'';
+  const fee=cfg?.find(c=>c.key==='monthly_fee')?.value||'0';
+  document.getElementById('pix-info').innerHTML=`<strong style="color:#00ff99">Chave Pix:</strong> ${pix||'Nao configurado'}<br><strong>Nome:</strong> ${pixNome}<br><strong>Valor:</strong> R$ ${fee}`;
+  const ano=new Date().getFullYear();
+  const{data:pag}=await sb.from('payments').select('*').eq('user_id',cu.id).eq('year',ano).maybeSingle();
+  const el=document.getElementById('meu-status-pag');
+  if(pag){
+    const c={approved:['badge-green','✅ Pago'],pending:['badge-yellow','⏳ Aguardando'],rejected:['badge-red','❌ Reprovado']};
+    const[cls,txt]=c[pag.status]||c.pending;
+    el.innerHTML=`<span class="badge ${cls}">${txt}</span>${pag.admin_note?`<p style="font-size:.78em;color:rgba(255,255,255,.4);margin-top:5px">${pag.admin_note}</p>`:''}`;
   }
 }
+async function carregarPix(){
+  const{data}=await sb.from('settings').select('*');
+  document.getElementById('pix-key-input').value=data?.find(c=>c.key==='pix_key')?.value||'';
+  document.getElementById('pix-name-input').value=data?.find(c=>c.key==='pix_name')?.value||'';
+}
+async function salvarPix(){
+  await sb.from('settings').upsert({key:'pix_key',value:document.getElementById('pix-key-input').value},{onConflict:'key'});
+  await sb.from('settings').upsert({key:'pix_name',value:document.getElementById('pix-name-input').value},{onConflict:'key'});
+  toast('Pix salvo!','success');
+}
+async function enviarComprovante(){
+  const nome=document.getElementById('pag-nome').value.trim();
+  const file=document.getElementById('pag-comprovante').files[0];
+  if(!nome||!file){toast('Preencha nome e comprovante','error');return;}
+  const path=cu.id+'_'+Date.now()+'.'+file.name.split('.').pop();
+  const{error:upErr}=await sb.storage.from('comprovantes').upload(path,file);
+  if(upErr){toast('Erro no upload da imagem','error');console.error(upErr);return;}
+  const{data:urlData}=sb.storage.from('comprovantes').getPublicUrl(path);
+  const ano=new Date().getFullYear();
+  const mes=new Date().toLocaleString('pt-BR',{month:'long'});
+  const{error}=await sb.from('payments').upsert({user_id:cu.id,nome,comprovante_url:urlData.publicUrl,status:'pending',month:mes,year:ano,amount:0},{onConflict:'user_id,year'});
+  if(error){toast('Erro ao enviar','error');console.error(error);return;}
+  toast('Comprovante enviado!','success');
+  carregarMensalidade();carregarDashboard();
+}
+async function carregarPagamentos(){
+  const{data}=await sb.from('payments').select('*,users(nome)').order('criado_em',{ascending:false});
+  const el=document.getElementById('lista-pagamentos');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">💰</div><p>Nenhum pagamento</p></div>';return;}
+  const c={approved:['badge-green','Pago'],pending:['badge-yellow','Pendente'],rejected:['badge-red','Reprovado']};
+  el.innerHTML=data.map(p=>`<div class="card-item" style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-weight:700;font-size:.9em">${p.users?.nome||p.nome||'?'}</div>
+      <span class="badge ${c[p.status]?.[0]||'badge-yellow'}">${c[p.status]?.[1]||'Pendente'}</span>
+    </div>
+    ${p.comprovante_url?`<img src="${p.comprovante_url}" style="width:100%;border-radius:8px;max-height:180px;object-fit:cover;margin-bottom:8px" loading="lazy">`:''}
+    ${p.status==='pending'?`<div style="display:flex;gap:6px">
+      <button class="btn btn-success btn-sm" style="flex:1" onclick="atualizarPag('${p.id}','approved','${p.user_id}')">✅ Aprovar</button>
+      <button class="btn btn-danger btn-sm" style="flex:1" onclick="atualizarPag('${p.id}','rejected','${p.user_id}')">❌ Recusar</button>
+    </div>`:''}
+  </div>`).join('');
+}
+async function atualizarPag(id,status,userId){
+  if(!isAdmin)return;
+  await sb.from('payments').update({status}).eq('id',id);
+  await sb.from('notifications').insert({user_id:userId,title:status==='approved'?'Pagamento aprovado!':'Pagamento recusado',message:status==='approved'?'Seu comprovante foi aprovado! ✅':'Seu comprovante foi recusado. Entre em contato com o admin.',type:'payment'});
+  if(status==='approved'&&Notification.permission==='granted')new Notification('9A Hub',{body:'Pagamento aprovado!'});
+  toast(status==='approved'?'Aprovado!':'Recusado!',status==='approved'?'success':'error');
+  carregarPagamentos();
+  registrarLog('logs_sistema','pagamento_'+status,{payment_id:id});
+}
+
+// ===== CHAT =====
 function renderUsuarios(lista){
   const el=document.getElementById('lista-usuarios');
-  el.innerHTML=lista.length?lista.map(u=>`<div class="card-item" style="display:flex;align-items:center;gap:12px;cursor:pointer" onclick="abrirConversa('${u.id}','${u.nome}')"><div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;flex-shrink:0">${u.nome[0].toUpperCase()}</div><div><div style="font-weight:700;font-size:.9em">${u.nome}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">Toque para conversar</div></div></div>`).join(''):'<div class="empty"><div class="icon">👥</div><p>Nenhum aluno encontrado</p></div>';
+  el.innerHTML=lista.length?lista.map(u=>`<div class="card-item" style="display:flex;align-items:center;gap:12px;cursor:pointer;active:transform:scale(0.98)" onclick="abrirConversa('${u.id}','${u.nome}')"><div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;flex-shrink:0">${u.nome[0].toUpperCase()}</div><div><div style="font-weight:700;font-size:.88em">${u.nome}</div><div style="font-size:.72em;color:rgba(255,255,255,.35)">Toque para conversar</div></div></div>`).join(''):'<div class="empty"><div class="icon">👥</div><p>Nenhum aluno</p></div>';
 }
+async function carregarChat(){/* usuarios carregados em carregarUsersParaListas */}
 function filtrarUsuarios(){
-  const q=document.getElementById('chatSearch').value.toLowerCase();
-  renderUsuarios(todosUsuarios.filter(u=>u.nome.toLowerCase().includes(q)));
+  const q=document.getElementById('chat-search').value.toLowerCase();
+  renderUsuarios(todosUsers.filter(u=>u.nome.toLowerCase().includes(q)));
 }
 async function abrirConversa(userId,nome){
   currentChatUser={id:userId,nome};
   document.getElementById('conversa-title').textContent=nome;
-  showSection('conversa',null);
+  nav('conversa',null);
   const msgs=document.getElementById('chat-msgs');
   msgs.innerHTML='';
-  let query=sb.from('messages').select('*').order('criado_em');
-  if(!isAdmin)query=query.or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${currentUser.id})`);
-  else query=query.or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${currentUser.id})`);
-  const{data}=await query;
-  (data||[]).forEach(m=>addChatMsg(m.sender_id===currentUser.id?'user':'other',m.content,false));
+  const{data}=await sb.from('messages').select('*').or(`and(sender_id.eq.${cu.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${cu.id})`).order('criado_em');
+  (data||[]).forEach(m=>addChatMsg(m.sender_id===cu.id?'user':'other',m.content,false));
   msgs.scrollTop=msgs.scrollHeight;
 }
-async function enviarMensagem(){
-  const input=document.getElementById('chat-msg-input');
-  const txt=input.value.trim();
-  if(!txt||!currentChatUser)return;
-  input.value='';
-  addChatMsg('user',txt);
-  await sb.from('messages').insert({sender_id:currentUser.id,receiver_id:currentChatUser.id,content:txt});
-}
-function chatKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensagem();}}
 function addChatMsg(role,txt,scroll=true){
   const el=document.getElementById('chat-msgs');
   const time=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
@@ -516,16 +1057,26 @@ function addChatMsg(role,txt,scroll=true){
   el.appendChild(div);
   if(scroll)el.scrollTop=el.scrollHeight;
 }
+async function enviarMensagem(){
+  const input=document.getElementById('chat-msg-input');
+  const txt=input.value.trim();
+  if(!txt||!currentChatUser)return;
+  input.value='';
+  addChatMsg('user',txt);
+  const{error}=await sb.from('messages').insert({sender_id:cu.id,receiver_id:currentChatUser.id,content:txt});
+  if(error)console.error('Chat err:',error);
+}
+function chatKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensagem();}}
 
 // ===== IA GROQ =====
-let iaHistory=[];
 function adicionarMsgIA(txt,role='ai'){
   const el=document.getElementById('ia-msgs');
   if(!el)return;
   const time=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   const div=document.createElement('div');
   div.className='msg '+role;
-  div.innerHTML=`<div class="msg-av">${role==='user'?document.getElementById('headerAvatar')?.textContent||'?':'🧠'}</div><div><div class="msg-bubble">${txt.replace(/\n/g,'<br>')}</div><div class="msg-time">${time}</div></div>`;
+  const av=role==='user'?(document.getElementById('headerAvatar')?.textContent||'?'):'🧠';
+  div.innerHTML=`<div class="msg-av">${av}</div><div><div class="msg-bubble">${txt.replace(/\n/g,'<br>')}</div><div class="msg-time">${time}</div></div>`;
   el.appendChild(div);
   el.scrollTop=el.scrollHeight;
 }
@@ -533,7 +1084,7 @@ function addTypingIA(){
   const el=document.getElementById('ia-msgs');
   const div=document.createElement('div');
   div.className='msg ai';div.id='ia-typing';
-  div.innerHTML='<div class="msg-av">🧠</div><div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
+  div.innerHTML='<div class="msg-av">🧠</div><div class="msg-bubble"><div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
   el.appendChild(div);el.scrollTop=el.scrollHeight;
 }
 async function enviarIA(){
@@ -547,12 +1098,34 @@ async function enviarIA(){
   addTypingIA();
   let resposta='';
   try{
-    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'system',content:'Voce e a IA do 9A Hub, assistente de estudos para alunos do 9 ano. Responda em portugues brasileiro. NUNCA resolva exercicios direto, explique o raciocinio para o aluno aprender. Seja didatico e amigavel.'},...iaHistory.slice(-10)],max_tokens:800,temperature:0.7})});
+    console.log('Chamando Groq API...');
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
+      body:JSON.stringify({
+        model:'llama3-8b-8192',
+        messages:[
+          {role:'system',content:'Voce e a IA assistente do 9A Hub, um app escolar para alunos do 9 ano. Responda SEMPRE em portugues brasileiro. NUNCA resolva exercicios diretamente. Sempre explique o RACIOCINIO passo a passo para o aluno aprender. Seja didatico, amigavel e motivador. Use emojis com moderacao.'},
+          ...iaHistory.slice(-8)
+        ],
+        max_tokens:800,temperature:0.7
+      })
+    });
+    if(!res.ok){
+      const errData=await res.json();
+      console.error('Groq error:',errData);
+      throw new Error(errData.error?.message||'Erro na API');
+    }
     const d=await res.json();
     resposta=d.choices?.[0]?.message?.content||'Nao consegui responder.';
     iaHistory.push({role:'assistant',content:resposta});
-    await sb.from('chat_ia').insert({user_id:currentUser.id,mensagem:msg,resposta});
-  }catch(e){resposta='Erro de conexao. Tente novamente.';}
+    await sb.from('chat_ia').insert({user_id:cu.id,mensagem:msg,resposta});
+    registrarLog('logs_ia','pergunta',{msg:msg.substring(0,100)});
+    atualizarXP(2);
+  }catch(e){
+    console.error('IA erro:',e);
+    resposta='Erro ao conectar com a IA 😕 Verifique sua conexao e tente novamente.\n\nDetalhes: '+e.message;
+  }
   document.getElementById('ia-typing')?.remove();
   adicionarMsgIA(resposta,'ai');
   document.getElementById('ia-send-btn').disabled=false;
@@ -563,315 +1136,374 @@ function iaKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar
 async function iniciarSimulado(){
   const materia=document.getElementById('sim-materia').value;
   const assunto=document.getElementById('sim-assunto').value;
-  const dif=document.getElementById('sim-dificuldade').value;
+  const dif=document.getElementById('sim-dif').value;
   if(!materia||!assunto){toast('Preencha materia e assunto','error');return;}
   const tempos={facil:30,medio:60,dificil:90};
-  document.getElementById('simulado-config').style.display='none';
-  const pq=document.getElementById('simulado-perguntas');
+  simTempo=tempos[dif];
+  document.getElementById('sim-config').style.display='none';
+  const pq=document.getElementById('sim-perguntas');
   pq.style.display='block';
   pq.innerHTML='<div class="empty"><div class="icon">⏳</div><p>Gerando perguntas com IA...</p></div>';
   try{
-    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:`Crie 5 perguntas de multipla escolha sobre ${materia} - ${assunto} para alunos do 9 ano. Dificuldade: ${dif}. Responda APENAS em JSON valido com este formato exato: {"questions":[{"question":"pergunta","options":["A) op1","B) op2","C) op3","D) op4"],"correct":0,"explanation":"explicacao"}]}`}],max_tokens:1500,temperature:0.7})});
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
+      body:JSON.stringify({
+        model:'llama3-8b-8192',
+        messages:[{role:'user',content:`Crie 5 perguntas de multipla escolha sobre ${materia} - ${assunto} para alunos do 9 ano brasileiro. Nivel: ${dif}. Responda SOMENTE com JSON valido, sem texto antes ou depois, no formato: {"questions":[{"question":"pergunta aqui","options":["A) opcao1","B) opcao2","C) opcao3","D) opcao4"],"correct":0,"explanation":"explicacao detalhada passo a passo aqui"}]}`}],
+        max_tokens:2000,temperature:0.7
+      })
+    });
+    if(!res.ok)throw new Error('API error');
     const d=await res.json();
-    const txt=d.choices?.[0]?.message?.content||'';
-    const json=txt.replace(/```json|```/g,'').trim();
-    const parsed=JSON.parse(json);
+    const txt=d.choices?.[0]?.message?.content||'{}';
+    const clean=txt.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(clean);
     simPerguntas=parsed.questions;
-    simAtual=0;simRespostas=[];
-    mostrarPergunta(tempos[dif]);
-  }catch(e){pq.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao gerar perguntas. Tente novamente.</p></div>';document.getElementById('simulado-config').style.display='block';}
+    simIdx=0;simRespostas=[];
+    mostrarPergunta();
+    registrarLog('logs_perguntas','simulado_gerado',{materia,assunto,dif});
+  }catch(e){
+    console.error('Simulado err:',e);
+    pq.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao gerar perguntas.<br>Tente novamente.</p></div><button class="btn btn-primary" style="margin-top:12px;width:100%" onclick="reiniciarSimulado()">Tentar novamente</button>';
+  }
 }
-function mostrarPergunta(tempo){
-  if(simAtual>=simPerguntas.length){finalizarSimulado();return;}
-  const p=simPerguntas[simAtual];
-  const pq=document.getElementById('simulado-perguntas');
+function mostrarPergunta(){
+  if(simIdx>=simPerguntas.length){finalizarSimulado();return;}
+  const p=simPerguntas[simIdx];
+  const pq=document.getElementById('sim-perguntas');
   pq.innerHTML=`
-    <div style="font-size:.8em;color:rgba(255,255,255,.5);margin-bottom:8px">Pergunta ${simAtual+1} de ${simPerguntas.length}</div>
+    <div style="font-size:.75em;color:rgba(255,255,255,.4);margin-bottom:6px">Pergunta ${simIdx+1} de ${simPerguntas.length}</div>
     <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
-    <div id="timer-txt" style="text-align:right;font-size:.8em;color:#00ff99;margin-bottom:16px">${tempo}s</div>
-    <div class="card-item" style="margin-bottom:16px"><p style="font-weight:700;line-height:1.5">${p.question}</p></div>
-    ${p.options.map((op,i)=>`<button class="btn btn-ghost" style="width:100%;justify-content:flex-start;margin-bottom:8px;text-align:left;white-space:normal;height:auto;padding:12px 16px" onclick="responderSimulado(${i})">${op}</button>`).join('')}
+    <div id="timer-txt" style="text-align:right;font-size:.75em;color:#00ff99;margin-bottom:14px">${simTempo}s</div>
+    <div class="card-item" style="margin-bottom:14px"><p style="font-weight:700;line-height:1.5;font-size:.92em">${p.question}</p></div>
+    ${p.options.map((op,i)=>`<button class="opcao-btn" onclick="responder(${i})">${op}</button>`).join('')}
   `;
-  let t=tempo;
+  let t=simTempo;
   const fill=document.getElementById('timer-fill');
   const txt=document.getElementById('timer-txt');
   if(simTimer)clearInterval(simTimer);
   simTimer=setInterval(()=>{
-    t--;
-    const pct=(t/tempo)*100;
-    fill.style.width=pct+'%';
-    txt.textContent=t+'s';
-    if(pct<30)fill.classList.add('danger');
-    if(t<=0){clearInterval(simTimer);simRespostas.push(-1);simAtual++;mostrarPergunta(tempo);}
+    t--;fill.style.width=(t/simTempo*100)+'%';txt.textContent=t+'s';
+    if(t/simTempo<0.3)fill.classList.add('danger');
+    if(t<=0){clearInterval(simTimer);simRespostas.push(-1);simIdx++;mostrarPergunta();}
   },1000);
 }
-function responderSimulado(idx){
+function responder(idx){
   clearInterval(simTimer);
+  const p=simPerguntas[simIdx];
+  const btns=document.querySelectorAll('.opcao-btn');
+  btns.forEach((b,i)=>{
+    if(i===p.correct)b.classList.add('correta');
+    else if(i===idx&&idx!==p.correct)b.classList.add('errada');
+    b.disabled=true;
+  });
   simRespostas.push(idx);
-  simAtual++;
-  const dif=document.getElementById('sim-dificuldade').value;
-  const tempos={facil:30,medio:60,dificil:90};
-  mostrarPergunta(tempos[dif]);
+  const acertou=idx===p.correct;
+  if(acertou){atualizarXP(15);btns[idx].classList.add('acerto-glow');}
+  else if(btns[idx]){btns[idx].classList.add('erro-shake');}
+  setTimeout(()=>{simIdx++;mostrarPergunta();},1200);
 }
 async function finalizarSimulado(){
+  clearInterval(simTimer);
   let acertos=0;
   simPerguntas.forEach((p,i)=>{if(simRespostas[i]===p.correct)acertos++;});
   const score=Math.round((acertos/simPerguntas.length)*100);
-  document.getElementById('simulado-perguntas').style.display='none';
-  const res=document.getElementById('simulado-resultado');
+  const bonusXP=acertos*15;
+  document.getElementById('sim-perguntas').style.display='none';
+  const res=document.getElementById('sim-resultado');
   res.style.display='block';
   res.innerHTML=`
-    <div class="card-item" style="text-align:center;padding:24px;margin-bottom:16px">
-      <div style="font-size:3em;margin-bottom:8px">${score>=70?'🎉':score>=50?'😐':'😢'}</div>
-      <div style="font-size:2em;font-weight:700;color:${score>=70?'#00ff99':score>=50?'#fbbf24':'#f87171'}">${score}%</div>
-      <div style="color:rgba(255,255,255,.5);margin-top:4px">${acertos} de ${simPerguntas.length} acertos</div>
+    <div class="card-item" style="text-align:center;padding:24px;margin-bottom:14px">
+      <div style="font-size:3em;margin-bottom:6px">${score>=70?'🎉':score>=50?'😐':'😢'}</div>
+      <div style="font-size:2.2em;font-weight:700;color:${score>=70?'#00ff99':score>=50?'#fbbf24':'#f87171'};font-family:Orbitron,sans-serif">${score}%</div>
+      <div style="color:rgba(255,255,255,.45);margin-top:4px;font-size:.85em">${acertos} de ${simPerguntas.length} acertos</div>
+      <div style="color:#00ff99;font-size:.82em;margin-top:6px">+${bonusXP} XP ganhos!</div>
     </div>
-    <div class="section-title">📖 <span class="accent">Explicacoes</span></div>
-    ${simPerguntas.map((p,i)=>`
-      <div class="card-item" style="margin-bottom:10px;border-left:3px solid ${simRespostas[i]===p.correct?'#00ff99':'#f87171'}">
-        <div style="font-size:.85em;font-weight:700;margin-bottom:6px">${p.question}</div>
-        <div style="font-size:.78em;color:${simRespostas[i]===p.correct?'#00ff99':'#f87171'};margin-bottom:4px">${simRespostas[i]===p.correct?'✅ Correto':'❌ Errado - Resposta: '+p.options[p.correct]}</div>
-        <div style="font-size:.78em;color:rgba(255,255,255,.5)">${p.explanation}</div>
-      </div>
-    `).join('')}
-    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="reiniciarSimulado()">🔄 Novo Simulado</button>
+    <div class="section-title" style="font-size:1em">📖 <span class="accent">Explicacoes</span></div>
+    ${simPerguntas.map((p,i)=>`<div class="card-item" style="margin-bottom:10px;border-left:3px solid ${simRespostas[i]===p.correct?'#00ff99':'#f87171'}"><div style="font-size:.82em;font-weight:700;margin-bottom:5px">${p.question}</div><div style="font-size:.75em;margin-bottom:5px;color:${simRespostas[i]===p.correct?'#00ff99':'#f87171'}">${simRespostas[i]===p.correct?'✅ Correto!':'❌ Errado — Resposta: '+p.options[p.correct]}</div><div style="font-size:.78em;color:rgba(255,255,255,.5);line-height:1.5">${p.explanation}</div></div>`).join('')}
+    <button class="btn btn-primary" style="width:100%;padding:13px;margin-top:6px" onclick="reiniciarSimulado()">🔄 Novo Simulado</button>
   `;
-  await sb.from('quiz_sessions').insert({user_id:currentUser.id,materia:document.getElementById('sim-materia').value,assunto:document.getElementById('sim-assunto').value,score:acertos,total_questions:simPerguntas.length,difficulty:document.getElementById('sim-dificuldade').value});
-  await carregarRanking();
+  await sb.from('quiz_sessions').insert({user_id:cu.id,materia:document.getElementById('sim-materia').value,assunto:document.getElementById('sim-assunto').value,score:acertos,total_questions:simPerguntas.length,difficulty:document.getElementById('sim-dif').value});
+  atualizarXP(bonusXP);
+  carregarRanking();
+  registrarLog('logs_usuario','simulado_completo',{score,acertos});
 }
-function reiniciarSimulado(){
-  document.getElementById('simulado-resultado').style.display='none';
-  document.getElementById('simulado-config').style.display='block';
-  simPerguntas=[];simAtual=0;simRespostas=[];
-}
+function reiniciarSimulado(){document.getElementById('sim-resultado').style.display='none';document.getElementById('sim-config').style.display='block';simPerguntas=[];simIdx=0;simRespostas=[];}
 
 // ===== RANKING =====
 async function carregarRanking(){
-  const{data}=await sb.from('users').select('id,nome');
-  const{data:quizzes}=await sb.from('quiz_sessions').select('user_id,score,total_questions');
+  const{data:users}=await sb.from('users').select('id,nome,xp').order('xp',{ascending:false});
   const el=document.getElementById('lista-ranking');
-  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">🏆</div><p>Sem dados ainda</p></div>';return;}
-  const pts={};
-  (quizzes||[]).forEach(q=>{if(!pts[q.user_id])pts[q.user_id]=0;pts[q.user_id]+=Math.round((q.score/q.total_questions)*100);});
-  const ranked=data.map(u=>({...u,pts:pts[u.id]||0})).sort((a,b)=>b.pts-a.pts);
+  if(!users?.length){el.innerHTML='<div class="empty"><div class="icon">🏆</div><p>Sem dados</p></div>';return;}
   const medals=['🥇','🥈','🥉'];
   const posClass=['gold','silver','bronze'];
-  el.innerHTML=ranked.map((u,i)=>`<div class="ranking-item"><span class="rank-pos ${posClass[i]||''}">${i<3?medals[i]:i+1+'°'}</span><div style="flex:1"><div style="font-weight:700;font-size:.9em">${u.nome}</div><div style="font-size:.78em;color:rgba(255,255,255,.4)">Pontos: <strong style="color:#00ff99">${u.pts}</strong></div></div></div>`).join('');
-}
-
-// ===== EVENTOS =====
-async function carregarEventos(){
-  const{data}=await sb.from('eventos').select('*').order('data',{ascending:true});
-  const el=document.getElementById('lista-eventos');
-  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📅</div><p>Nenhum evento</p></div>';return;}
-  el.innerHTML=data.map(e=>`<div class="card-item" style="cursor:pointer" onclick="abrirEvento('${e.id}')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="font-weight:700">${e.titulo}</div>${e.custo>0?`<span class="badge badge-yellow">R$ ${e.custo}</span>`:''}</div><div style="font-size:.82em;color:rgba(255,255,255,.5);margin:4px 0">${e.descricao||''}</div>${e.data?`<div style="font-size:.75em;color:#00ff99">📆 ${new Date(e.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>`:''} ${e.local?`<div style="font-size:.75em;color:rgba(255,255,255,.4)">📍 ${e.local}</div>`:''}</div>`).join('');
-}
-async function abrirEvento(id){
-  const{data:ev}=await sb.from('eventos').select('*').eq('id',id).single();
-  const{data:regras}=await sb.from('regras_evento').select('*').eq('evento_id',id);
-  const{data:alimentos}=await sb.from('alimentos_evento').select('*').eq('evento_id',id);
-  const{data:comidas}=await sb.from('comida_escolhida').select('item').eq('evento_id',id);
-  const itensSelecionados=(comidas||[]).map(c=>c.item);
-  const{data:minha}=await sb.from('comida_escolhida').select('item').eq('evento_id',id).eq('user_id',currentUser.id).maybeSingle();
-  const{data:confirmei}=await sb.from('event_attendees').select('id').eq('event_id',id).eq('user_id',currentUser.id).maybeSingle();
-
-  let html=`<div class="card-item" style="margin-bottom:12px">
-    <h2 style="font-size:1.2em;margin-bottom:6px">${ev.titulo}</h2>
-    <p style="font-size:.85em;color:rgba(255,255,255,.5);margin-bottom:8px">${ev.descricao||''}</p>
-    ${ev.data?`<div style="font-size:.8em;color:#00ff99">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}</div>`:''}
-    ${ev.local?`<div style="font-size:.8em;color:rgba(255,255,255,.4)">📍 ${ev.local}</div>`:''}
-    ${ev.custo>0?`<div style="font-size:.8em;color:#fbbf24">💰 R$ ${ev.custo}</div>`:''}
-    <div style="margin-top:12px">
-      ${confirmei?'<span class="badge badge-green">✅ Presenca confirmada</span>':
-      `<button class="btn btn-primary" style="padding:10px 20px" onclick="confirmarPresenca('${id}')">✅ Confirmar Presenca</button>`}
-    </div>
-  </div>`;
-
-  if(ev.ativar_regras&&regras?.length){
-    html+=`<div class="card-item" style="margin-bottom:12px"><div class="section-title" style="margin-bottom:10px;font-size:1em">📏 Regras do Evento</div>`;
-    html+=regras.map(r=>`<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:.85em"><span style="color:#00ff99">•</span><span style="color:rgba(255,255,255,.7)">${r.descricao}</span></div>`).join('');
-    html+='</div>';
-  }
-
-  if(ev.ativar_comida&&alimentos?.length){
-    html+=`<div class="card-item"><div class="section-title" style="margin-bottom:10px;font-size:1em">🍔 Escolher Comida</div>`;
-    if(minha){html+=`<div class="badge badge-green" style="margin-bottom:10px">✅ Voce escolheu: ${minha.item}</div>`;}
-    else{
-      html+=alimentos.map(a=>{
-        const ja=itensSelecionados.includes(a.nome_item);
-        return `<button class="btn ${ja?'btn-danger':'btn-ghost'}" style="width:100%;justify-content:space-between;margin-bottom:8px" ${ja?'disabled':''} onclick="escolherComida('${id}','${a.nome_item}',this)">${a.nome_item}${ja?'<span>Ja escolhido</span>':''}</button>`;
-      }).join('');
-    }
-    html+='</div>';
-  }
-
-  document.getElementById('evento-detalhe-content').innerHTML=html;
-  showSection('evento-detalhe',null);
-}
-async function confirmarPresenca(evId){
-  await sb.from('event_attendees').upsert({event_id:evId,user_id:currentUser.id},{onConflict:'event_id,user_id'});
-  toast('Presenca confirmada!','success');
-  abrirEvento(evId);
-}
-async function escolherComida(evId,item,btn){
-  const{data:ud}=await sb.from('users').select('nome').eq('id',currentUser.id).single();
-  await sb.from('comida_escolhida').insert({evento_id:evId,user_id:currentUser.id,nome_aluno:ud?.nome||'',item});
-  toast('Comida escolhida: '+item,'success');
-  abrirEvento(evId);
-}
-
-// CRIAR EVENTO
-function abrirModalEvento(){evRegras=[];evComidas=[];document.getElementById('modal-evento').classList.add('open');document.getElementById('ev-regras-box').style.display='none';document.getElementById('ev-comida-box').style.display='none';renderListaRegras();renderListaComidas();}
-document.getElementById('ev-ativar-regras')?.addEventListener('change',function(){document.getElementById('ev-regras-box').style.display=this.checked?'block':'none';});
-document.getElementById('ev-ativar-comida')?.addEventListener('change',function(){document.getElementById('ev-comida-box').style.display=this.checked?'block':'none';});
-function addRegra(){const v=document.getElementById('ev-regra-input').value.trim();if(!v)return;evRegras.push(v);document.getElementById('ev-regra-input').value='';renderListaRegras();}
-function addComida(){const v=document.getElementById('ev-comida-input').value.trim();if(!v)return;evComidas.push(v);document.getElementById('ev-comida-input').value='';renderListaComidas();}
-function renderListaRegras(){document.getElementById('ev-regras-lista').innerHTML=evRegras.map((r,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:.85em;border-bottom:1px solid rgba(255,255,255,.06)"><span>${r}</span><button onclick="evRegras.splice(${i},1);renderListaRegras()" style="background:none;border:none;color:#f87171;cursor:pointer">✕</button></div>`).join('');}
-function renderListaComidas(){document.getElementById('ev-comida-lista').innerHTML=evComidas.map((c,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:.85em;border-bottom:1px solid rgba(255,255,255,.06)"><span>${c}</span><button onclick="evComidas.splice(${i},1);renderListaComidas()" style="background:none;border:none;color:#f87171;cursor:pointer">✕</button></div>`).join('');}
-async function criarEvento(){
-  if(!isAdmin){toast('Sem permissao','error');return;}
-  const titulo=document.getElementById('ev-titulo').value.trim();
-  if(!titulo){toast('Informe o titulo','error');return;}
-  const{data:ev}=await sb.from('eventos').insert({titulo,descricao:document.getElementById('ev-descricao').value,data:document.getElementById('ev-data').value||null,local:document.getElementById('ev-local').value,custo:parseFloat(document.getElementById('ev-custo').value)||0,ativar_regras:document.getElementById('ev-ativar-regras').checked,ativar_comida:document.getElementById('ev-ativar-comida').checked,criado_por:currentUser.id}).select().single();
-  if(ev){
-    for(const r of evRegras)await sb.from('regras_evento').insert({evento_id:ev.id,descricao:r});
-    for(const c of evComidas)await sb.from('alimentos_evento').insert({evento_id:ev.id,nome_item:c});
-  }
-  fecharModal('modal-evento');
-  toast('Evento criado!','success');
-  carregarEventos();
-  carregarDashboard();
-}
-
-// ===== MENSALIDADE =====
-async function carregarMensalidade(){
-  const{data:cfg}=await sb.from('settings').select('*');
-  const pix=cfg?.find(c=>c.key==='pix_key');
-  const pixNome=cfg?.find(c=>c.key==='pix_name');
-  const fee=cfg?.find(c=>c.key==='monthly_fee');
-  document.getElementById('pix-info').innerHTML=`<strong style="color:#00ff99">Chave Pix:</strong> ${pix?.value||'Nao configurado'}<br><strong>Nome:</strong> ${pixNome?.value||''}<br><strong>Valor:</strong> R$ ${fee?.value||'0'}`;
-  if(isAdmin){
-    document.getElementById('pix-key-input').value=pix?.value||'';
-    document.getElementById('pix-name-input').value=pixNome?.value||'';
-  }
-  const ano=new Date().getFullYear();
-  const{data:pag}=await sb.from('payments').select('*').eq('user_id',currentUser.id).eq('year',ano).maybeSingle();
-  const statusEl=document.getElementById('meu-status-pagamento');
-  if(pag){
-    const cores={approved:'badge-green',pending:'badge-yellow',rejected:'badge-red'};
-    const txt={approved:'✅ Pago',pending:'⏳ Aguardando',rejected:'❌ Reprovado'};
-    statusEl.innerHTML=`<span class="badge ${cores[pag.status]}">${txt[pag.status]}</span>${pag.admin_note?`<p style="font-size:.8em;color:rgba(255,255,255,.5);margin-top:6px">${pag.admin_note}</p>`:''}`;
-  }
-}
-async function salvarPix(){
-  if(!isAdmin)return;
-  await sb.from('settings').upsert({key:'pix_key',value:document.getElementById('pix-key-input').value},{onConflict:'key'});
-  await sb.from('settings').upsert({key:'pix_name',value:document.getElementById('pix-name-input').value},{onConflict:'key'});
-  toast('Pix salvo!','success');
-}
-async function enviarComprovante(){
-  const nome=document.getElementById('pag-nome').value.trim();
-  const file=document.getElementById('pag-comprovante').files[0];
-  if(!nome||!file){toast('Preencha nome e comprovante','error');return;}
-  const ext=file.name.split('.').pop();
-  const path=`${currentUser.id}_${Date.now()}.${ext}`;
-  const{error:upErr}=await sb.storage.from('comprovantes').upload(path,file);
-  if(upErr){toast('Erro ao enviar imagem','error');return;}
-  const{data:urlData}=sb.storage.from('comprovantes').getPublicUrl(path);
-  const ano=new Date().getFullYear();
-  const mes=new Date().toLocaleString('pt-BR',{month:'long'});
-  await sb.from('payments').upsert({user_id:currentUser.id,nome,comprovante_url:urlData.publicUrl,status:'pending',month:mes,year:ano,amount:0},{onConflict:'user_id,year'});
-  toast('Comprovante enviado!','success');
-  carregarMensalidade();
-  carregarDashboard();
-}
-async function carregarPagamentos(){
-  const{data}=await sb.from('payments').select('*,users(nome)').order('criado_em',{ascending:false});
-  const el=document.getElementById('lista-pagamentos');
-  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">💰</div><p>Nenhum pagamento</p></div>';return;}
-  const cores={approved:'badge-green',pending:'badge-yellow',rejected:'badge-red'};
-  const txt={approved:'Pago',pending:'Pendente',rejected:'Reprovado'};
-  el.innerHTML=data.map(p=>`<div class="card-item" style="margin-bottom:10px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <div style="font-weight:700">${p.users?.nome||p.nome||'?'}</div>
-      <span class="badge ${cores[p.status]}">${txt[p.status]}</span>
-    </div>
-    ${p.comprovante_url?`<img src="${p.comprovante_url}" style="width:100%;border-radius:8px;max-height:200px;object-fit:cover;margin-bottom:8px">`:''}
-    ${p.status==='pending'?`<div style="display:flex;gap:8px">
-      <button class="btn btn-success" style="flex:1;justify-content:center;font-size:.8em" onclick="atualizarPagamento('${p.id}','approved')">✅ Aprovar</button>
-      <button class="btn btn-danger" style="flex:1;justify-content:center;font-size:.8em" onclick="atualizarPagamento('${p.id}','rejected')">❌ Recusar</button>
-    </div>`:''}
+  el.innerHTML=users.map((u,i)=>`<div class="ranking-item" style="${u.id===cu.id?'border-color:rgba(0,255,153,0.3);background:rgba(0,255,153,0.04)':''}">
+    <span class="rank-pos ${posClass[i]||''}">${i<3?medals[i]:i+1+'°'}</span>
+    <div style="flex:1"><div style="font-weight:700;font-size:.88em">${u.nome}${u.id===cu.id?' (voce)':''}</div><div style="font-size:.75em;color:rgba(255,255,255,.38)">⚡ ${u.xp||0} XP</div></div>
+    ${i===0?'<span style="font-size:1.5em">👑</span>':''}
   </div>`).join('');
 }
-async function atualizarPagamento(id,status){
-  if(!isAdmin){toast('Sem permissao','error');return;}
-  await sb.from('payments').update({status}).eq('id',id);
-  toast(status==='approved'?'Aprovado!':'Recusado!',status==='approved'?'success':'error');
-  carregarPagamentos();
+
+// ===== DIALOGO INTERATIVO =====
+const dialogos={
+  mercado:{cenario:'🛒 Supermercado do bairro',personagem:'Dona Maria',avatar:'👩‍🦳',
+    cenas:[
+      {fala:'Bom dia! Você quer comprar 3 laranjas por R$ 0,50 cada e 2 maçãs por R$ 1,20 cada. Quanto vai ser no total?',
+       pergunta:'Quanto você deve pagar?',
+       opcoes:['R$ 3,90','R$ 2,90','R$ 4,20','R$ 3,50'],
+       correta:0,explicacao:'3 laranjas × R$0,50 = R$1,50\n2 maças × R$1,20 = R$2,40\nTotal: R$1,50 + R$2,40 = R$3,90',xp:20},
+      {fala:'Otimo! Agora voce tem R$ 10,00 e gastou R$ 3,90. Quanto vai sobrar de troco?',
+       pergunta:'Qual é o troco?',
+       opcoes:['R$ 6,10','R$ 7,10','R$ 5,90','R$ 6,50'],
+       correta:0,explicacao:'R$10,00 - R$3,90 = R$6,10\nSubtracao simples!',xp:15}
+    ]},
+  historia:{cenario:'🏛️ Roma Antiga, ano 44 a.C.',personagem:'Senador Romano',avatar:'🏛️',
+    cenas:[
+      {fala:'Salve, jovem! Julio Cesar acabou de ser assassinado. Quem liderou a conspiricao?',
+       pergunta:'Quem assassinou Julio Cesar?',
+       opcoes:['Marco Bruto e Cassio','Augusto e Marco Antonio','Nero e Caligula','Espartaco e Crasso'],
+       correta:0,explicacao:'Marco Bruto e Cassio lideram a conspiracao conhecida como "Idus de Marco" em 15 de marco de 44 a.C.',xp:20}
+    ]},
+  ciencias:{cenario:'🔬 Laboratorio de Ciencias',personagem:'Prof. Cientista',avatar:'👨‍🔬',
+    cenas:[
+      {fala:'Olha esse experimento! Eu misturei acido com base. O que voce acha que vai acontecer?',
+       pergunta:'O que acontece ao misturar acido com base?',
+       opcoes:['Neutralizacao, formando sal e agua','Explosao violenta','Nada acontece','Vira gas toxico'],
+       correta:0,explicacao:'Quando acido e base se misturam ocorre uma reacao de neutralizacao, produzindo sal e agua. Exemplo: HCl + NaOH → NaCl + H2O',xp:20}
+    ]},
+  ingles:{cenario:'☕ Cafe em Londres',personagem:'Barista Tom',avatar:'🧑‍🍳',
+    cenas:[
+      {fala:'Good morning! What would you like to order?',
+       pergunta:'Como voce pede um cafe com leite em ingles?',
+       opcoes:['I would like a coffee with milk, please','Give me coffee milk now','I want cafe au lait','Coffee please with the milk'],
+       correta:0,explicacao:'"I would like" e a forma polida de pedir algo. "A coffee with milk" = cafe com leite. "Please" demonstra educacao.',xp:20}
+    ]}
+};
+let dialogoAtual=null,dialogoCena=0;
+function iniciarDialogo(tipo){
+  dialogoAtual=dialogos[tipo];
+  dialogoCena=0;
+  document.getElementById('dialogo-container').style.display='none';
+  document.getElementById('dialogo-ativo').style.display='block';
+  mostrarCenaDialogo();
+}
+function mostrarCenaDialogo(){
+  const d=dialogoAtual;
+  const cena=d.cenas[dialogoCena];
+  document.getElementById('dialogo-ativo').innerHTML=`
+    <button class="btn btn-ghost btn-sm" style="margin-bottom:12px" onclick="voltarDialogos()">← Voltar</button>
+    <div style="font-size:.78em;color:#00ff99;margin-bottom:10px;font-style:italic">📍 ${d.cenario}</div>
+    <div class="dialogo-box">
+      <div class="dialogo-personagem">
+        <div class="dialogo-avatar">${d.avatar}</div>
+        <div>
+          <div class="dialogo-nome">${d.personagem}</div>
+          <div class="dialogo-fala">"${cena.fala}"</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-item" style="margin-bottom:12px"><p style="font-weight:700;font-size:.9em">❓ ${cena.pergunta}</p></div>
+    ${cena.opcoes.map((op,i)=>`<button class="opcao-btn" id="dialogo-btn-${i}" onclick="responderDialogo(${i})">${op}</button>`).join('')}
+    <div id="dialogo-feedback" style="display:none"></div>
+  `;
+}
+function responderDialogo(idx){
+  const cena=dialogoAtual.cenas[dialogoCena];
+  const acertou=idx===cena.correta;
+  document.querySelectorAll('.opcao-btn').forEach((b,i)=>{
+    if(i===cena.correta)b.classList.add('correta');
+    else if(i===idx&&!acertou)b.classList.add('errada');
+    b.disabled=true;
+  });
+  const fb=document.getElementById('dialogo-feedback');
+  fb.style.display='block';
+  if(acertou){
+    atualizarXP(cena.xp);
+    fb.innerHTML=`<div class="card-item" style="border-left:3px solid #00ff99;margin-top:10px"><div style="color:#00ff99;font-weight:700;margin-bottom:4px">✅ ${dialogoAtual.personagem} diz: "Perfeito! Muito bem!"</div><div style="font-size:.8em;color:rgba(255,255,255,.6);white-space:pre-line">${cena.explicacao}</div></div>`;
+  }else{
+    fb.innerHTML=`<div class="card-item" style="border-left:3px solid #f87171;margin-top:10px"><div style="color:#f87171;font-weight:700;margin-bottom:4px">❌ ${dialogoAtual.personagem} diz: "Nao! Vamos entender o processo..."</div><div style="font-size:.8em;color:rgba(255,255,255,.6);white-space:pre-line">${cena.explicacao}</div></div>`;
+  }
+  const prox=document.createElement('button');
+  prox.className='btn btn-primary';
+  prox.style.cssText='width:100%;margin-top:10px';
+  const temProx=dialogoCena<dialogoAtual.cenas.length-1;
+  prox.textContent=temProx?'Proxima →':'Finalizar ✓';
+  prox.onclick=()=>{
+    if(temProx){dialogoCena++;mostrarCenaDialogo();}
+    else voltarDialogos();
+  };
+  fb.appendChild(prox);
+}
+function voltarDialogos(){
+  dialogoAtual=null;dialogoCena=0;
+  document.getElementById('dialogo-container').style.display='block';
+  document.getElementById('dialogo-ativo').style.display='none';
 }
 
-// ===== AVISOS =====
-async function carregarAvisos(){
-  const{data}=await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('criado_em',{ascending:false});
-  const el=document.getElementById('lista-avisos');
-  el.innerHTML=data?.length?data.map(a=>`<div class="card-item">${a.target_user_id?'<span class="badge badge-green" style="margin-bottom:6px;display:inline-block">Individual</span>':''}<div style="font-weight:700;margin-bottom:4px">${a.title}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.criado_em).toLocaleDateString('pt-BR')}</div></div>`).join(''):'<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>';
+// ===== MISSOES =====
+const missoesPadrao=[
+  {id:'sim_diaria',tipo:'diaria',titulo:'Fazer um simulado',descricao:'Complete 1 simulado hoje',icone:'📝',xp:30,meta:1},
+  {id:'ia_diaria',tipo:'diaria',titulo:'Perguntar para a IA',descricao:'Faca 3 perguntas para a IA',icone:'🧠',xp:15,meta:3},
+  {id:'dialogo_diaria',tipo:'diaria',titulo:'Dialogo interativo',descricao:'Complete 1 dialogo',icone:'🎭',xp:20,meta:1},
+  {id:'sim_semanal',tipo:'semanal',titulo:'5 simulados na semana',descricao:'Complete 5 simulados esta semana',icone:'🏆',xp:100,meta:5},
+  {id:'ranking_semanal',tipo:'semanal',titulo:'Top 3 do ranking',descricao:'Esteja no top 3 do ranking',icone:'🥇',xp:50,meta:1},
+];
+let filtroMissao='diaria';
+function filtrarMissoes(tipo){
+  filtroMissao=tipo;
+  carregarMissoes();
 }
-async function carregarUsuariosAviso(){
+async function carregarMissoes(){
+  const filtradas=missoesPadrao.filter(m=>m.tipo===filtroMissao);
+  const el=document.getElementById('lista-missoes');
+  el.innerHTML=filtradas.map(m=>`<div class="missao-item"><div class="missao-icon">${m.icone}</div><div class="missao-info"><div class="missao-titulo">${m.titulo}</div><div class="missao-desc">${m.descricao}</div><div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div></div><div class="missao-xp">+${m.xp} XP</div></div>`).join('');
+}
+
+// ===== COPA DO MES =====
+async function carregarCopa(){
+  const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});
+  document.getElementById('copa-mes-label').textContent=mes;
+  const el=document.getElementById('copa-content');
+  const{data:logs}=await sb.from('logs_perguntas').select('*').order('criado_em',{ascending:false}).limit(5);
+  if(!logs?.length){
+    el.innerHTML=`<div class="empty"><div class="icon">🏆</div><p>A copa do mes comecara em breve!</p></div>${isAdmin?`<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="gerarPerguntasCopa()">🤖 Gerar Perguntas (Admin)</button>`:''}`;
+    return;
+  }
+  el.innerHTML=`<div style="margin-bottom:12px">${isAdmin?`<button class="btn btn-primary btn-sm" style="margin-bottom:12px" onclick="gerarPerguntasCopa()">+ Gerar mais perguntas</button>`:''}${logs.map(l=>`<div class="card-item" style="margin-bottom:8px"><div style="font-size:.82em;font-weight:700;margin-bottom:4px">${l.pergunta||l.dados||'...'}</div><div style="font-size:.7em;color:rgba(255,255,255,.35)">${new Date(l.criado_em).toLocaleDateString('pt-BR')}</div></div>`).join('')}</div>`;
+}
+async function gerarPerguntasCopa(){
   if(!isAdmin)return;
-  const{data}=await sb.from('users').select('id,nome').neq('id',currentUser.id);
-  const sel=document.getElementById('av-destinatario');
-  (data||[]).forEach(u=>{const op=document.createElement('option');op.value=u.id;op.textContent=u.nome;sel.appendChild(op);});
-}
-function abrirModalAviso(){document.getElementById('modal-aviso').classList.add('open');}
-async function criarAviso(){
-  if(!isAdmin){toast('Sem permissao','error');return;}
-  const titulo=document.getElementById('av-titulo').value.trim();
-  const content=document.getElementById('av-conteudo').value.trim();
-  const dest=document.getElementById('av-destinatario').value;
-  if(!titulo||!content){toast('Preencha todos os campos','error');return;}
-  await sb.from('announcements').insert({title:titulo,content,target_user_id:dest||null,criado_por:currentUser.id});
-  fecharModal('modal-aviso');
-  toast('Aviso criado!','success');
-  carregarAvisos();
-  carregarDashboard();
+  toast('Gerando perguntas com IA...','info');
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
+      body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:'Gere 3 perguntas desafiadoras para uma copa escolar do 9 ano, cobrindo materias variadas (matematica, portugues, historia, ciencias). Para cada pergunta, inclua 4 opcoes e a resposta. Formato: JSON com array "perguntas". Responda apenas JSON valido.'}],max_tokens:1000,temperature:0.8})
+    });
+    const d=await res.json();
+    const txt=d.choices?.[0]?.message?.content||'';
+    await registrarLog('logs_perguntas','copa_gerada',{dados:txt.substring(0,500),pergunta:'Copa do Mes - '+new Date().toLocaleDateString('pt-BR')});
+    toast('Perguntas geradas e salvas nos logs!','success');
+    carregarCopa();
+  }catch(e){toast('Erro ao gerar perguntas','error');console.error(e);}
 }
 
-// ===== REGRAS =====
-async function carregarRegras(){
-  const{data}=await sb.from('regras').select('*').order('categoria');
-  const el=document.getElementById('lista-regras');
-  el.innerHTML=data?.length?data.map(r=>`<div class="card-item" style="border-left:3px solid #00ff99"><span class="badge badge-green" style="margin-bottom:6px;display:inline-block">${r.categoria}</span><div style="font-weight:700;color:#00ff99;margin-bottom:4px">${r.titulo}</div><div style="font-size:.85em;color:rgba(255,255,255,.6)">${r.conteudo}</div></div>`).join(''):'<div class="empty"><div class="icon">📏</div><p>Nenhuma regra</p></div>';
+// ===== DUELO =====
+async function iniciarDuelo(){
+  const oponenteId=document.getElementById('duelo-oponente').value;
+  const materia=document.getElementById('duelo-materia').value;
+  if(!oponenteId||!materia){toast('Selecione oponente e materia','error');return;}
+  const oponenteNome=todosUsers.find(u=>u.id===oponenteId)?.nome||'Oponente';
+  document.getElementById('duelo-lobby').style.display='none';
+  const el=document.getElementById('duelo-ativo');
+  el.style.display='block';
+  el.innerHTML='<div class="empty"><div class="icon">⏳</div><p>Gerando perguntas do duelo...</p></div>';
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
+      body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:`Crie 5 perguntas rapidas de multipla escolha sobre ${materia} para alunos do 9 ano. Responda SOMENTE JSON: {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}`}],max_tokens:1500,temperature:0.7})
+    });
+    const d=await res.json();
+    const txt=d.choices?.[0]?.message?.content||'{}';
+    const parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    dueloPerguntas=parsed.questions;
+    dueloIdx=0;dueloMinhaPts=0;dueloOponentePts=0;
+    mostrarDuelo(oponenteNome);
+  }catch(e){el.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao gerar duelo</p></div><button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="voltarDuelo()">Voltar</button>';console.error(e);}
 }
-function abrirModalRegra(){document.getElementById('modal-regra').classList.add('open');}
-async function criarRegra(){
-  if(!isAdmin){toast('Sem permissao','error');return;}
-  const titulo=document.getElementById('rg-titulo').value.trim();
-  const conteudo=document.getElementById('rg-conteudo').value.trim();
-  if(!titulo||!conteudo){toast('Preencha todos os campos','error');return;}
-  await sb.from('regras').insert({titulo,conteudo,categoria:document.getElementById('rg-categoria').value,criado_por:currentUser.id});
-  fecharModal('modal-regra');
-  toast('Regra criada!','success');
-  carregarRegras();
+function mostrarDuelo(oponenteNome){
+  if(dueloIdx>=dueloPerguntas.length){finalizarDuelo(oponenteNome);return;}
+  const p=dueloPerguntas[dueloIdx];
+  // Simular resposta do oponente
+  const oponenteAcerta=Math.random()>0.45;
+  const el=document.getElementById('duelo-ativo');
+  el.innerHTML=`
+    <div class="duelo-placar"><div class="duelo-jogador"><div style="font-size:.72em;color:rgba(255,255,255,.4)">Voce</div><div class="duelo-pts">${dueloMinhaPts}</div></div><div class="duelo-vs">VS</div><div class="duelo-jogador"><div style="font-size:.72em;color:rgba(255,255,255,.4)">${oponenteNome}</div><div class="duelo-pts" style="color:#f87171">${dueloOponentePts}</div></div></div>
+    <div style="font-size:.72em;color:rgba(255,255,255,.35);margin-bottom:10px">Pergunta ${dueloIdx+1}/${dueloPerguntas.length}</div>
+    <div class="card-item" style="margin-bottom:12px"><p style="font-weight:700;font-size:.9em">${p.question}</p></div>
+    ${p.options.map((op,i)=>`<button class="opcao-btn" onclick="responderDuelo(${i},${p.correct},${oponenteAcerta},'${oponenteNome}')">${op}</button>`).join('')}
+  `;
+}
+function responderDuelo(idx,correct,oponenteAcerta,nome){
+  document.querySelectorAll('.opcao-btn').forEach((b,i)=>{
+    if(i===correct)b.classList.add('correta');
+    else if(i===idx&&idx!==correct)b.classList.add('errada');
+    b.disabled=true;
+  });
+  if(idx===correct){dueloMinhaPts++;atualizarXP(10);}
+  if(oponenteAcerta)dueloOponentePts++;
+  setTimeout(()=>{dueloIdx++;mostrarDuelo(nome);},1000);
+}
+function finalizarDuelo(oponenteNome){
+  const ganhou=dueloMinhaPts>dueloOponentePts;
+  const empate=dueloMinhaPts===dueloOponentePts;
+  if(ganhou)atualizarXP(50);
+  document.getElementById('duelo-ativo').innerHTML=`
+    <div class="card-item" style="text-align:center;padding:24px">
+      <div style="font-size:3em;margin-bottom:8px">${ganhou?'🏆':empate?'🤝':'😢'}</div>
+      <div style="font-size:1.3em;font-weight:700;color:${ganhou?'#00ff99':empate?'#fbbf24':'#f87171'}">${ganhou?'Voce Ganhou!':empate?'Empate!':'Voce Perdeu'}</div>
+      <div style="font-size:.88em;color:rgba(255,255,255,.5);margin-top:8px">${dueloMinhaPts} x ${dueloOponentePts} contra ${oponenteNome}</div>
+      ${ganhou?'<div style="color:#00ff99;font-size:.82em;margin-top:6px">+50 XP de bonus!</div>':''}
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="voltarDuelo()">Jogar Novamente</button>
+  `;
+  registrarLog('logs_usuario','duelo_finalizado',{resultado:ganhou?'ganhou':empate?'empate':'perdeu',pts:dueloMinhaPts});
+}
+function voltarDuelo(){document.getElementById('duelo-lobby').style.display='block';document.getElementById('duelo-ativo').style.display='none';}
+
+// ===== PLANO DE ESTUDO =====
+async function carregarPlanoEstudo(){
+  const{data:quizzes}=await sb.from('quiz_sessions').select('*').eq('user_id',cu.id).order('criado_em',{ascending:false}).limit(20);
+  const el=document.getElementById('plano-content');
+  if(!quizzes?.length){
+    el.innerHTML=`<div class="card-item" style="text-align:center;padding:20px"><div style="font-size:2em;margin-bottom:8px">📋</div><p style="color:rgba(255,255,255,.5);font-size:.88em">Faca alguns simulados para gerar seu plano personalizado!</p><button class="btn btn-primary" style="margin-top:12px" onclick="nav('simulado',null)">Fazer Simulado</button></div>`;
+    return;
+  }
+  const porMateria={};
+  quizzes.forEach(q=>{
+    if(!porMateria[q.materia])porMateria[q.materia]={total:0,acertos:0,sessoes:0};
+    porMateria[q.materia].total+=q.total_questions;
+    porMateria[q.materia].acertos+=q.score;
+    porMateria[q.materia].sessoes++;
+  });
+  const materias=Object.entries(porMateria).map(([m,d])=>({materia:m,...d,pct:Math.round(d.acertos/d.total*100)})).sort((a,b)=>a.pct-b.pct);
+  el.innerHTML=`
+    <div class="card-item" style="margin-bottom:12px"><div style="font-weight:700;margin-bottom:10px">📊 Seu Desempenho</div>${materias.map(m=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:.82em">${m.materia}</span><span style="font-size:.75em;color:${m.pct>=70?'#00ff99':m.pct>=50?'#fbbf24':'#f87171'}">${m.pct}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${m.pct}%;background:${m.pct>=70?'linear-gradient(90deg,#00ff99,#00ccff)':m.pct>=50?'linear-gradient(90deg,#fbbf24,#f97316)':'linear-gradient(90deg,#f87171,#ef4444)'}"></div></div></div>`).join('')}</div>
+    <div class="section-title" style="font-size:1em">📌 <span class="accent">Prioridades</span></div>
+    ${materias.slice(0,3).map(m=>`<div class="card-item" style="border-left:3px solid ${m.pct<50?'#f87171':'#fbbf24'};margin-bottom:8px"><div style="font-weight:700;font-size:.88em;margin-bottom:3px">${m.materia} — ${m.pct}% de acerto</div><div style="font-size:.78em;color:rgba(255,255,255,.5)">${m.pct<50?'⚠️ Precisa de atencao urgente!':'📈 Pode melhorar mais!'}</div><button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="document.getElementById('sim-materia').value='${m.materia}';nav('simulado',null)">Praticar agora →</button></div>`).join('')}
+  `;
 }
 
-// ===== ADMIN USUARIOS =====
-async function carregarUsuariosAdmin(){
+// ===== ADMIN USERS =====
+async function carregarUsersAdmin(){
   const{data}=await sb.from('users').select('*').order('nome');
-  const el=document.getElementById('lista-usuarios-admin');
+  const el=document.getElementById('lista-users-admin');
   if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">👥</div><p>Nenhum usuario</p></div>';return;}
-  el.innerHTML=data.map(u=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-    <div><div style="font-weight:700;font-size:.9em">${u.nome}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${u.email}</div></div>
+  el.innerHTML=data.map(u=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
+    <div><div style="font-weight:700;font-size:.88em">${u.nome}</div><div style="font-size:.72em;color:rgba(255,255,255,.38)">${u.email}</div><div style="font-size:.7em;color:#00ff99">⚡ ${u.xp||0} XP</div></div>
     <div style="display:flex;gap:6px">
-      ${u.is_banned?`<button class="btn btn-success" style="padding:6px 10px;font-size:.75em" onclick="banirUsuario('${u.id}',false)">Desbanir</button>`:
-      u.email!==ADMIN_EMAIL?`<button class="btn btn-danger" style="padding:6px 10px;font-size:.75em" onclick="banirUsuario('${u.id}',true)">Banir</button>`:''}
+      ${u.is_banned?`<button class="btn btn-success btn-sm" onclick="banirUser('${u.id}',false)">Desbanir</button>`:
+      u.email!==ADMIN_EMAIL?`<button class="btn btn-danger btn-sm" onclick="banirUser('${u.id}',true)">Banir</button>`:'<span class="badge badge-yellow">Admin</span>'}
     </div>
   </div>`).join('');
 }
-async function banirUsuario(id,banir){
+async function banirUser(id,banir){
   if(!isAdmin)return;
   await sb.from('users').update({is_banned:banir}).eq('id',id);
   toast(banir?'Usuario banido':'Usuario desbanido',banir?'error':'success');
-  carregarUsuariosAdmin();
+  carregarUsersAdmin();
+  registrarLog('logs_sistema',banir?'banir_usuario':'desbanir_usuario',{user_id:id});
+}
+
+// ===== LOGS =====
+async function carregarLogs(tabela){
+  const{data,error}=await sb.from(tabela).select('*').order('criado_em',{ascending:false}).limit(20);
+  const el=document.getElementById('logs-content');
+  if(error){el.innerHTML=`<div class="empty"><div class="icon">⚠️</div><p>Tabela ${tabela} nao encontrada</p></div>`;return;}
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📊</div><p>Nenhum log</p></div>';return;}
+  el.innerHTML=data.map(l=>`<div class="card-item" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span class="badge badge-blue">${l.acao||'log'}</span><span style="font-size:.68em;color:rgba(255,255,255,.3)">${new Date(l.criado_em).toLocaleString('pt-BR')}</span></div>${l.dados?`<div style="font-size:.75em;color:rgba(255,255,255,.4);font-family:monospace;word-break:break-all">${typeof l.dados==='string'?l.dados.substring(0,150):JSON.stringify(l.dados).substring(0,150)}</div>`:''}</div>`).join('');
 }
 </script>
 </body>
