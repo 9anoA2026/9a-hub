@@ -10,88 +10,108 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;min-height:100vh;overflow-x:hidden}
 body{font-family:'Roboto',sans-serif;background:#050a12;color:#fff}
-
-/* BG */
 .bg-anim{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:#050a12;overflow:hidden}
 .bg-anim::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,153,0.07) 0%,transparent 70%);top:-200px;left:-200px;animation:drift1 12s ease-in-out infinite alternate}
 .bg-anim::after{content:'';position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(0,200,255,0.05) 0%,transparent 70%);bottom:-150px;right:-150px;animation:drift2 15s ease-in-out infinite alternate}
 @keyframes drift1{to{transform:translate(80px,60px)}}
 @keyframes drift2{to{transform:translate(-60px,-50px)}}
-
-/* HEADER */
 header{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(5,10,18,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,255,153,0.1)}
-.logo-txt{font-family:'Orbitron',sans-serif;font-size:1.3em;color:#00ff99;text-shadow:0 0 15px #00ff99;letter-spacing:3px}
+.logo-txt{font-family:'Orbitron',sans-serif;font-size:1.3em;color:#00ff99;text-shadow:0 0 15px #00ff99;letter-spacing:3px;animation:neon 3s ease-in-out infinite}
 .logo-txt span{color:#fff}
+@keyframes neon{0%,100%{text-shadow:0 0 15px #00ff99}50%{text-shadow:0 0 25px #00ff99,0 0 50px rgba(0,255,153,0.4)}}
 .menu-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:6px;width:36px;height:36px}
 .menu-btn span{display:block;height:2px;background:#fff;border-radius:2px;transition:all 0.25s;transform-origin:center}
 .menu-btn.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .menu-btn.open span:nth-child(2){opacity:0}
 .menu-btn.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 .avatar-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.9em;cursor:pointer;flex-shrink:0}
-
-/* SIDEBAR */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;backdrop-filter:blur(4px)}
 .overlay.open{display:block}
-.sidebar{position:fixed;top:0;left:-280px;width:268px;height:100%;background:rgba(5,12,25,0.99);border-right:1px solid rgba(0,255,153,0.12);z-index:201;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;padding-top:56px}
+.sidebar{position:fixed;top:0;left:-280px;width:268px;height:100%;background:rgba(5,12,25,0.99);border-right:1px solid rgba(0,255,153,0.12);z-index:201;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;padding-top:56px;overflow-y:auto}
 .sidebar.open{left:0}
 .sidebar-user{padding:16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px}
 .sidebar-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:1.1em;flex-shrink:0}
 .sidebar-name{font-weight:700;font-size:.95em}
 .sidebar-role{font-size:.72em;color:rgba(255,255,255,0.4);margin-top:2px}
-.nav-items{flex:1;overflow-y:auto;padding:8px 0}
-.nav-item{display:flex;align-items:center;gap:12px;padding:13px 16px;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.2s;font-size:.92em;border-left:3px solid transparent;text-decoration:none}
+.nav-items{flex:1;padding:8px 0}
+.nav-item{display:flex;align-items:center;gap:12px;padding:13px 16px;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.2s;font-size:.92em;border-left:3px solid transparent}
 .nav-item:hover,.nav-item.active{color:#00ff99;background:rgba(0,255,153,0.05);border-left-color:#00ff99}
 .nav-item .icon{font-size:1.2em;width:26px;text-align:center}
 .nav-sep{height:1px;background:rgba(255,255,255,0.06);margin:6px 16px}
-.logout-btn{padding:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;color:#ff6b6b;cursor:pointer;font-size:.9em;transition:background 0.2s}
+.logout-btn{padding:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;color:#ff6b6b;cursor:pointer;font-size:.9em}
 .logout-btn:hover{background:rgba(255,107,107,0.08)}
-
-/* MAIN */
 main{margin-top:56px;padding:16px;max-width:680px;margin-left:auto;margin-right:auto}
 .section{display:none;animation:fadeIn 0.3s ease}
 .section.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .section-title{font-size:1.25em;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.section-title .accent{color:#00ff99}
-
-/* DASHBOARD GRID */
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.dash-card{background:rgba(8,16,30,0.9);border:1px solid rgba(0,255,153,0.1);border-radius:18px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;overflow:hidden}
-.dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);opacity:0;transition:opacity 0.3s}
-.dash-card:hover,.dash-card:active{transform:translateY(-2px);border-color:rgba(0,255,153,0.25)}
-.dash-card:hover::before,.dash-card:active::before{opacity:1}
-.dash-card .icon{font-size:2em}
-.dash-card .label{font-size:.8em;font-weight:600;color:rgba(255,255,255,0.7)}
-.dash-card .desc{font-size:.68em;color:rgba(255,255,255,0.35)}
-
-/* CARDS NEON COLORS */
-.c-green{--c:#00ff99}.c-blue{--c:#00ccff}.c-purple{--c:#a855f7}.c-yellow{--c:#fbbf24}.c-pink{--c:#f472b6}.c-orange{--c:#fb923c}.c-teal{--c:#2dd4bf}.c-red{--c:#f87171}.c-indigo{--c:#818cf8}
-
-/* BANNER */
+.accent{color:#00ff99}
 .banner{background:linear-gradient(135deg,rgba(0,255,153,0.08),rgba(0,200,255,0.08));border:1px solid rgba(0,255,153,0.15);border-radius:18px;padding:18px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
 .banner-icon{font-size:2.5em}
 .banner-text h2{font-size:1.1em;font-weight:700}
 .banner-text p{font-size:.78em;color:rgba(255,255,255,0.4);margin-top:3px}
-
-/* TOAST */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(5,12,25,.97);border:1px solid rgba(0,255,153,.2);color:#fff;padding:10px 20px;border-radius:20px;font-size:.82em;z-index:999;transition:transform 0.3s;white-space:nowrap}
+.card-item{background:rgba(8,16,30,0.9);border:1px solid rgba(0,255,153,0.1);border-radius:14px;padding:14px;margin-bottom:10px;transition:all 0.2s}
+.card-item:hover{border-color:rgba(0,255,153,0.25)}
+.skeleton{background:linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:12px;height:70px;margin-bottom:10px}
+@keyframes shimmer{to{background-position:-200% 0}}
+.empty{text-align:center;padding:48px 16px;color:rgba(255,255,255,0.3)}
+.empty .icon{font-size:3em;margin-bottom:12px}
+.btn{padding:12px 20px;border:none;border-radius:10px;font-family:'Roboto',sans-serif;font-size:.9em;font-weight:700;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:linear-gradient(135deg,#00cc7a,#00ff99);color:#000}
+.btn-danger{background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.3)}
+.btn-success{background:rgba(0,255,153,0.15);color:#00ff99;border:1px solid rgba(0,255,153,0.3)}
+.btn-ghost{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1)}
+.input{width:100%;padding:12px 16px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#fff;font-family:'Roboto',sans-serif;font-size:.9em;outline:none;transition:border-color 0.2s;margin-bottom:10px}
+.input:focus{border-color:rgba(0,255,153,0.5)}
+.input::placeholder{color:rgba(255,255,255,0.2)}
+select.input{-webkit-appearance:none}
+.badge{display:inline-block;font-size:.72em;padding:3px 10px;border-radius:20px;font-weight:700}
+.badge-green{background:rgba(0,255,153,0.1);color:#00ff99;border:1px solid rgba(0,255,153,0.2)}
+.badge-yellow{background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.2)}
+.badge-red{background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.2)}
+.modal{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:20px;overflow-y:auto}
+.modal.open{display:flex;align-items:flex-start;justify-content:center}
+.modal-box{background:#0a1525;border:1px solid rgba(0,255,153,0.15);border-radius:20px;padding:24px;width:100%;max-width:480px;margin-top:20px}
+.modal-title{font-size:1.1em;font-weight:700;margin-bottom:16px;color:#00ff99}
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 130px)}
+.chat-msgs{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:10px}
+.msg{display:flex;gap:8px;max-width:85%}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8em;font-weight:700;margin-top:2px}
+.msg.user .msg-av{background:linear-gradient(135deg,#00ff99,#00ccff);color:#000}
+.msg.ai .msg-av{background:rgba(0,255,153,0.15);color:#00ff99}
+.msg-bubble{padding:10px 14px;border-radius:18px;font-size:.88em;line-height:1.55;word-break:break-word}
+.msg.user .msg-bubble{background:linear-gradient(135deg,#006644,#00a366);color:#fff;border-bottom-right-radius:4px}
+.msg.ai .msg-bubble{background:rgba(0,255,153,0.07);border:1px solid rgba(0,255,153,0.12);color:rgba(255,255,255,0.9);border-bottom-left-radius:4px}
+.msg-time{font-size:.7em;color:rgba(255,255,255,0.3);margin-top:4px;text-align:right}
+.chat-input-area{display:flex;gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
+.chat-input{flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:11px 16px;color:#fff;font-family:'Roboto',sans-serif;font-size:.9em;outline:none;resize:none;max-height:100px;min-height:44px}
+.chat-input:focus{border-color:rgba(0,255,153,0.4)}
+.send-btn{width:44px;height:44px;border-radius:50%;border:none;background:linear-gradient(135deg,#00cc7a,#00ff99);color:#000;font-size:1.3em;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;align-self:flex-end}
+.send-btn:disabled{opacity:0.4}
+.typing-indicator{display:flex;gap:4px;align-items:center;padding:6px 2px}
+.typing-dot{width:6px;height:6px;background:#00ff99;border-radius:50%;animation:typing 1.2s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typing{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+.timer-bar{width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.timer-fill{height:100%;background:linear-gradient(90deg,#00ff99,#00ccff);border-radius:3px;transition:width 1s linear}
+.timer-fill.danger{background:linear-gradient(90deg,#f87171,#ef4444)}
+.ranking-item{display:flex;align-items:center;gap:12px;background:rgba(8,16,30,0.9);border:1px solid rgba(0,255,153,0.1);border-radius:12px;padding:12px 16px;margin-bottom:8px}
+.rank-pos{font-family:'Orbitron',sans-serif;font-size:1.1em;font-weight:700;width:36px;text-align:center;flex-shrink:0}
+.rank-pos.gold{color:#ffd700}
+.rank-pos.silver{color:#c0c0c0}
+.rank-pos.bronze{color:#cd7f32}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(5,12,25,.97);border:1px solid rgba(0,255,153,.2);color:#fff;padding:10px 20px;border-radius:20px;font-size:.82em;z-index:999;transition:transform 0.3s;white-space:nowrap;max-width:90%;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.success{border-color:rgba(0,255,153,.5);color:#00ff99}
 .toast.error{border-color:rgba(255,80,80,.5);color:#ff8080}
-
-/* SKELETON */
-.skeleton{background:linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:12px;height:80px;margin-bottom:10px}
-@keyframes shimmer{to{background-position:-200% 0}}
-
-/* EMPTY */
-.empty{text-align:center;padding:48px 16px;color:rgba(255,255,255,0.3)}
-.empty .icon{font-size:3em;margin-bottom:12px}
 </style>
 </head>
 <body>
 <div class="bg-anim"></div>
 
-<!-- HEADER -->
 <header>
   <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -100,292 +120,758 @@ main{margin-top:56px;padding:16px;max-width:680px;margin-left:auto;margin-right:
   <div class="avatar-btn" id="headerAvatar">?</div>
 </header>
 
-<!-- OVERLAY + SIDEBAR -->
 <div class="overlay" id="overlay" onclick="closeMenu()"></div>
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-user">
     <div class="sidebar-avatar" id="sidebarAvatar">?</div>
     <div>
-      <div class="sidebar-name" id="sidebarName">Carregando...</div>
+      <div class="sidebar-name" id="sidebarName">...</div>
       <div class="sidebar-role" id="sidebarRole">Aluno</div>
     </div>
   </div>
   <div class="nav-items">
-    <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="icon">⊞</span> Inicio</div>
+    <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="icon">🏠</span> Inicio</div>
     <div class="nav-item" onclick="showSection('chat',this)"><span class="icon">💬</span> Chat Privado</div>
-    <div class="nav-item" onclick="showSection('assistente',this)"><span class="icon">🤖</span> Assistente 9A</div>
     <div class="nav-item" onclick="showSection('ia',this)"><span class="icon">🧠</span> IA Groq</div>
     <div class="nav-item" onclick="showSection('simulado',this)"><span class="icon">📝</span> Simulado</div>
     <div class="nav-item" onclick="showSection('ranking',this)"><span class="icon">🏆</span> Ranking</div>
     <div class="nav-sep"></div>
     <div class="nav-item" onclick="showSection('eventos',this)"><span class="icon">📅</span> Eventos</div>
-    <div class="nav-item" onclick="showSection('comida',this)"><span class="icon">🍔</span> Comida</div>
-    <div class="nav-item" onclick="showSection('regras',this)"><span class="icon">📏</span> Regras</div>
     <div class="nav-item" onclick="showSection('mensalidade',this)"><span class="icon">💰</span> Mensalidade</div>
     <div class="nav-item" onclick="showSection('avisos',this)"><span class="icon">📢</span> Avisos</div>
-    <div class="nav-item" onclick="showSection('livros',this)"><span class="icon">📚</span> Livros Digitais</div>
+    <div class="nav-item" onclick="showSection('regras',this)"><span class="icon">📏</span> Regras</div>
     <div class="nav-sep"></div>
-    <div class="nav-item" id="adminNav" style="display:none" onclick="window.location.href='admin.html'"><span class="icon">⚙️</span> Painel Admin</div>
+    <div class="nav-item admin-only" style="display:none" onclick="showSection('admin',this)"><span class="icon">⚙️</span> Painel Admin</div>
   </div>
-  <div class="logout-btn" onclick="logout()"><span>🚪</span> Sair da conta</div>
+  <div class="logout-btn" onclick="logout()"><span>🚪</span> Sair</div>
 </nav>
 
-<!-- MAIN -->
 <main>
 
-  <!-- DASHBOARD -->
-  <section class="section active" id="section-dashboard">
-    <div class="banner">
-      <div class="banner-icon">🎓</div>
-      <div class="banner-text">
-        <h2 id="greetingText">Ola!</h2>
-        <p id="greetingDate"></p>
-      </div>
+<!-- DASHBOARD -->
+<section class="section active" id="section-dashboard">
+  <div class="banner">
+    <div class="banner-icon">🎓</div>
+    <div class="banner-text">
+      <h2 id="greetingText">Ola!</h2>
+      <p id="greetingDate"></p>
     </div>
+  </div>
+  <div id="dash-mensalidade" style="margin-bottom:16px"></div>
+  <div class="section-title">📢 <span class="accent">Avisos</span></div>
+  <div id="dash-avisos"><div class="skeleton"></div><div class="skeleton"></div></div>
+  <div class="section-title" style="margin-top:20px">📅 <span class="accent">Proximos Eventos</span></div>
+  <div id="dash-eventos"><div class="skeleton"></div></div>
+</section>
 
-    <!-- MENSALIDADE STATUS -->
-    <div id="dash-mensalidade" style="margin-bottom:16px"></div>
+<!-- CHAT PRIVADO -->
+<section class="section" id="section-chat">
+  <div class="section-title">💬 <span class="accent">Chat Privado</span></div>
+  <input class="input" id="chatSearch" placeholder="Buscar aluno..." oninput="filtrarUsuarios()">
+  <div id="lista-usuarios"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
 
-    <!-- AVISOS -->
-    <div class="section-title">📢 <span class="accent">Avisos</span></div>
-    <div id="dash-avisos" style="margin-bottom:20px">
-      <div class="skeleton"></div><div class="skeleton"></div>
+<!-- CONVERSA -->
+<section class="section" id="section-conversa">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+    <button class="btn btn-ghost" style="padding:8px 12px" onclick="showSection('chat',null)">← Voltar</button>
+    <div class="section-title" style="margin:0" id="conversa-title">Conversa</div>
+  </div>
+  <div class="chat-wrap">
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chat-msg-input" placeholder="Digite uma mensagem..." rows="1" onkeydown="chatKeydown(event)"></textarea>
+      <button class="send-btn" id="chat-send-btn" onclick="enviarMensagem()">➤</button>
     </div>
+  </div>
+</section>
 
-    <!-- EVENTOS -->
-    <div class="section-title">📅 <span class="accent">Proximos Eventos</span></div>
-    <div id="dash-eventos">
-      <div class="skeleton"></div><div class="skeleton"></div>
+<!-- IA -->
+<section class="section" id="section-ia">
+  <div class="section-title">🧠 <span class="accent">IA Groq</span></div>
+  <div class="chat-wrap">
+    <div class="chat-msgs" id="ia-msgs"></div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="ia-input" placeholder="Pergunte sobre qualquer materia..." rows="1" onkeydown="iaKeydown(event)"></textarea>
+      <button class="send-btn" id="ia-send-btn" onclick="enviarIA()">➤</button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CHAT -->
-  <section class="section" id="section-chat">
-    <div class="section-title">💬 <span class="accent">Chat Privado</span></div>
-    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-    <p style="color:rgba(255,255,255,0.3);text-align:center;margin-top:8px;font-size:.85em">Em breve...</p>
-  </section>
+<!-- SIMULADO -->
+<section class="section" id="section-simulado">
+  <div class="section-title">📝 <span class="accent">Simulado</span></div>
+  <div id="simulado-config">
+    <select class="input" id="sim-materia">
+      <option value="">Selecione a materia</option>
+      <option>Portugues</option>
+      <option>Matematica</option>
+      <option>Historia</option>
+      <option>Geografia</option>
+      <option>Ingles</option>
+      <option>Artes</option>
+      <option>Ciencias</option>
+    </select>
+    <input class="input" id="sim-assunto" placeholder="Assunto especifico (ex: Frações)">
+    <select class="input" id="sim-dificuldade">
+      <option value="facil">Facil (30s por pergunta)</option>
+      <option value="medio" selected>Medio (60s por pergunta)</option>
+      <option value="dificil">Dificil (90s por pergunta)</option>
+    </select>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="iniciarSimulado()">🚀 Iniciar Simulado</button>
+  </div>
+  <div id="simulado-perguntas" style="display:none"></div>
+  <div id="simulado-resultado" style="display:none"></div>
+</section>
 
-  <!-- ASSISTENTE -->
-  <section class="section" id="section-assistente">
-    <div class="section-title">🤖 <span class="accent">Assistente 9A</span></div>
-    <div class="empty"><div class="icon">🤖</div><p>Nenhum aviso por enquanto</p></div>
-  </section>
+<!-- RANKING -->
+<section class="section" id="section-ranking">
+  <div class="section-title">🏆 <span class="accent">Ranking</span></div>
+  <div id="lista-ranking"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
 
-  <!-- IA -->
-  <section class="section" id="section-ia">
-    <div class="section-title">🧠 <span class="accent">IA Groq</span></div>
-    <div class="empty"><div class="icon">🧠</div><p>Em breve...</p></div>
-  </section>
+<!-- EVENTOS -->
+<section class="section" id="section-eventos">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div class="section-title" style="margin:0">📅 <span class="accent">Eventos</span></div>
+    <button class="btn btn-primary admin-only" style="display:none;padding:8px 14px;font-size:.8em" onclick="abrirModalEvento()">+ Criar</button>
+  </div>
+  <div id="lista-eventos"><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
 
-  <!-- SIMULADO -->
-  <section class="section" id="section-simulado">
-    <div class="section-title">📝 <span class="accent">Simulado</span></div>
-    <div class="empty"><div class="icon">📝</div><p>Em breve...</p></div>
-  </section>
+<!-- EVENTO DETALHE -->
+<section class="section" id="section-evento-detalhe">
+  <button class="btn btn-ghost" style="padding:8px 12px;margin-bottom:16px" onclick="showSection('eventos',null)">← Voltar</button>
+  <div id="evento-detalhe-content"></div>
+</section>
 
-  <!-- RANKING -->
-  <section class="section" id="section-ranking">
-    <div class="section-title">🏆 <span class="accent">Ranking</span></div>
-    <div class="empty"><div class="icon">🏆</div><p>Em breve...</p></div>
-  </section>
+<!-- MENSALIDADE -->
+<section class="section" id="section-mensalidade">
+  <div class="section-title">💰 <span class="accent">Mensalidade</span></div>
+  <div id="mensalidade-aluno">
+    <div class="card-item" style="text-align:center;padding:20px">
+      <img src="https://www.advocacianunes.com.br/wp-content/uploads/2022/04/logo-pix-icone-1024.png" style="width:80px;margin-bottom:12px">
+      <div id="pix-info" style="margin-bottom:16px;color:rgba(255,255,255,0.6);font-size:.9em">Carregando chave Pix...</div>
+      <div id="meu-status-pagamento" style="margin-bottom:16px"></div>
+    </div>
+    <div class="card-item">
+      <p style="font-size:.85em;color:rgba(255,255,255,0.5);margin-bottom:12px">Enviar comprovante:</p>
+      <input class="input" id="pag-nome" placeholder="Seu nome completo">
+      <input type="file" id="pag-comprovante" accept="image/*" style="color:#fff;margin-bottom:10px;width:100%">
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="enviarComprovante()">📤 Enviar Comprovante</button>
+    </div>
+  </div>
+  <div class="admin-only" id="mensalidade-admin" style="display:none">
+    <div class="section-title" style="margin-top:20px">👑 <span class="accent">Gerenciar Pagamentos</span></div>
+    <div style="margin-bottom:12px">
+      <input class="input" id="pix-key-input" placeholder="Chave Pix">
+      <input class="input" id="pix-name-input" placeholder="Nome do recebedor">
+      <button class="btn btn-primary" onclick="salvarPix()">💾 Salvar Pix</button>
+    </div>
+    <div id="lista-pagamentos"><div class="skeleton"></div></div>
+  </div>
+</section>
 
-  <!-- EVENTOS -->
-  <section class="section" id="section-eventos">
-    <div class="section-title">📅 <span class="accent">Eventos</span></div>
-    <div id="lista-eventos"><div class="skeleton"></div><div class="skeleton"></div></div>
-  </section>
+<!-- AVISOS -->
+<section class="section" id="section-avisos">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div class="section-title" style="margin:0">📢 <span class="accent">Avisos</span></div>
+    <button class="btn btn-primary admin-only" style="display:none;padding:8px 14px;font-size:.8em" onclick="abrirModalAviso()">+ Criar</button>
+  </div>
+  <div id="lista-avisos"><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
 
-  <!-- COMIDA -->
-  <section class="section" id="section-comida">
-    <div class="section-title">🍔 <span class="accent">Comida</span></div>
-    <div class="empty"><div class="icon">🍔</div><p>Em breve...</p></div>
-  </section>
+<!-- REGRAS -->
+<section class="section" id="section-regras">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div class="section-title" style="margin:0">📏 <span class="accent">Regras</span></div>
+    <button class="btn btn-primary admin-only" style="display:none;padding:8px 14px;font-size:.8em" onclick="abrirModalRegra()">+ Criar</button>
+  </div>
+  <div id="lista-regras"><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
 
-  <!-- REGRAS -->
-  <section class="section" id="section-regras">
-    <div class="section-title">📏 <span class="accent">Regras</span></div>
-    <div id="lista-regras"><div class="skeleton"></div><div class="skeleton"></div></div>
-  </section>
-
-  <!-- MENSALIDADE -->
-  <section class="section" id="section-mensalidade">
-    <div class="section-title">💰 <span class="accent">Mensalidade</span></div>
-    <div class="empty"><div class="icon">💰</div><p>Em breve...</p></div>
-  </section>
-
-  <!-- AVISOS -->
-  <section class="section" id="section-avisos">
-    <div class="section-title">📢 <span class="accent">Avisos</span></div>
-    <div id="lista-avisos"><div class="skeleton"></div><div class="skeleton"></div></div>
-  </section>
-
-  <!-- LIVROS -->
-  <section class="section" id="section-livros">
-    <div class="section-title">📚 <span class="accent">Livros Digitais</span></div>
-    <div id="lista-livros"><div class="skeleton"></div><div class="skeleton"></div></div>
-  </section>
+<!-- ADMIN -->
+<section class="section admin-only" id="section-admin" style="display:none">
+  <div class="section-title">⚙️ <span class="accent">Painel Admin</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+    <div class="card-item" style="cursor:pointer;text-align:center" onclick="showSection('eventos',null)">📅<br><small>Eventos</small></div>
+    <div class="card-item" style="cursor:pointer;text-align:center" onclick="showSection('mensalidade',null)">💰<br><small>Pagamentos</small></div>
+    <div class="card-item" style="cursor:pointer;text-align:center" onclick="showSection('avisos',null)">📢<br><small>Avisos</small></div>
+    <div class="card-item" style="cursor:pointer;text-align:center" onclick="showSection('regras',null)">📏<br><small>Regras</small></div>
+  </div>
+  <div class="section-title">👥 <span class="accent">Usuarios</span></div>
+  <div id="lista-usuarios-admin"><div class="skeleton"></div></div>
+</section>
 
 </main>
+
+<!-- MODAL EVENTO -->
+<div class="modal" id="modal-evento">
+  <div class="modal-box">
+    <div class="modal-title">📅 Criar Evento</div>
+    <input class="input" id="ev-titulo" placeholder="Titulo do evento">
+    <textarea class="input" id="ev-descricao" placeholder="Descricao" rows="3"></textarea>
+    <input class="input" type="datetime-local" id="ev-data">
+    <input class="input" id="ev-local" placeholder="Local">
+    <input class="input" type="number" id="ev-custo" placeholder="Custo (R$)" value="0">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <input type="checkbox" id="ev-ativar-regras" style="width:auto;margin:0">
+      <label style="font-size:.85em;color:rgba(255,255,255,0.7)">Ativar regras do evento</label>
+    </div>
+    <div id="ev-regras-box" style="display:none">
+      <div id="ev-regras-lista"></div>
+      <div style="display:flex;gap:8px">
+        <input class="input" id="ev-regra-input" placeholder="Ex: Limite de Coca: 4" style="margin:0;flex:1">
+        <button class="btn btn-ghost" onclick="addRegra()">+</button>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin:10px 0">
+      <input type="checkbox" id="ev-ativar-comida" style="width:auto;margin:0">
+      <label style="font-size:.85em;color:rgba(255,255,255,0.7)">Ativar lista de comida</label>
+    </div>
+    <div id="ev-comida-box" style="display:none">
+      <div id="ev-comida-lista"></div>
+      <div style="display:flex;gap:8px">
+        <input class="input" id="ev-comida-input" placeholder="Ex: Coca-Cola" style="margin:0;flex:1">
+        <button class="btn btn-ghost" onclick="addComida()">+</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fecharModal('modal-evento')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="criarEvento()">Criar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AVISO -->
+<div class="modal" id="modal-aviso">
+  <div class="modal-box">
+    <div class="modal-title">📢 Criar Aviso</div>
+    <input class="input" id="av-titulo" placeholder="Titulo">
+    <textarea class="input" id="av-conteudo" placeholder="Conteudo" rows="4"></textarea>
+    <select class="input" id="av-destinatario">
+      <option value="">Todos os alunos</option>
+    </select>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fecharModal('modal-aviso')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="criarAviso()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REGRA -->
+<div class="modal" id="modal-regra">
+  <div class="modal-box">
+    <div class="modal-title">📏 Criar Regra</div>
+    <input class="input" id="rg-titulo" placeholder="Titulo da regra">
+    <textarea class="input" id="rg-conteudo" placeholder="Descricao" rows="4"></textarea>
+    <select class="input" id="rg-categoria">
+      <option>Comportamento</option>
+      <option>Vestimenta</option>
+      <option>Celular</option>
+      <option>Geral</option>
+    </select>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fecharModal('modal-regra')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="criarRegra()">Salvar</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 const SUPABASE_URL='https://hhiynhqsmikecreqnqbt.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
-let sb, currentUser;
+const GROQ_KEY='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';
+const ADMIN_EMAIL='miqueiasasaf890@gmail.com';
 
-window.addEventListener('load', async () => {
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  
-  // Evitar loop - verificar se ja veio do login
-  const { data } = await sb.auth.getSession();
-  if (!data.session) {
-    if (!window.location.href.includes('login.html')) {
-      window.location.replace('login.html');
-    }
-    return;
+let sb,currentUser,isAdmin=false,currentChatUser=null,simPerguntas=[],simAtual=0,simTimer=null,simRespostas=[],evRegras=[],evComidas=[];
+
+window.addEventListener('load',async()=>{
+  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  const{data}=await sb.auth.getSession();
+  if(!data.session){window.location.replace('login.html');return;}
+  currentUser=data.session.user;
+  isAdmin=currentUser.email===ADMIN_EMAIL;
+
+  const{data:ud}=await sb.from('users').select('nome').eq('id',currentUser.id).single();
+  const nome=ud?.nome||currentUser.email.split('@')[0];
+  const partes=nome.trim().split(' ');
+  const nomeExibir=partes.length>=2?partes[0]+' '+partes[1]:partes[0];
+  const inicial=partes[0][0].toUpperCase();
+
+  document.getElementById('headerAvatar').textContent=inicial;
+  document.getElementById('sidebarAvatar').textContent=inicial;
+  document.getElementById('sidebarName').textContent=nomeExibir;
+  document.getElementById('sidebarRole').textContent=isAdmin?'👑 Admin':'Aluno';
+
+  if(isAdmin){
+    document.querySelectorAll('.admin-only').forEach(el=>el.style.display='flex');
+    document.getElementById('section-admin').style.display='block';
+    document.getElementById('mensalidade-admin').style.display='block';
+    carregarPagamentos();
+    carregarUsuariosAdmin();
   }
-  currentUser = data.session.user;
 
-  const { data: userData } = await sb.from('users').select('nome,is_admin').eq('id', currentUser.id).single();
-  const nomeCompleto = userData?.nome || currentUser.email.split('@')[0];
-  const isAdmin = userData?.is_admin || false;
-  
-  // Pegar primeiro e segundo nome
-  const partes = nomeCompleto.trim().split(' ');
-  const nomeExibir = partes.length >= 2 ? partes[0] + ' ' + partes[1] : partes[0];
-  const inicial = partes[0][0].toUpperCase();
+  const h=new Date().getHours();
+  const greet=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
+  document.getElementById('greetingText').textContent=greet+', '+partes[0]+'! 👋';
+  document.getElementById('greetingDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
 
-  document.getElementById('headerAvatar').textContent = inicial;
-  document.getElementById('sidebarAvatar').textContent = inicial;
-  document.getElementById('sidebarName').textContent = nomeExibir;
-  document.getElementById('sidebarRole').textContent = isAdmin ? '👑 Admin' : 'Aluno';
-  if (isAdmin) document.getElementById('adminNav').style.display = 'flex';
+  if(Notification.permission==='default')Notification.requestPermission();
 
-  const h = new Date().getHours();
-  const greet = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
-  document.getElementById('greetingText').textContent = greet + ', ' + partes[0] + '! 👋';
-  document.getElementById('greetingDate').textContent = new Date().toLocaleDateString('pt-BR', {weekday:'long',day:'2-digit',month:'long'});
-
-  carregarEventos();
-  carregarRegras();
-  carregarAvisos();
-  carregarLivros();
   carregarDashboard();
+  carregarChat();
+  carregarEventos();
+  carregarRanking();
+  carregarAvisos();
+  carregarRegras();
+  carregarMensalidade();
+  carregarUsuariosAviso();
+  adicionarMsgIA('Oi! Sou a IA do 9A Hub. Posso te ajudar com duvidas de qualquer materia. O que quer saber?');
 });
 
-function toggleMenu() {
-  const open = document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open', open);
-  document.getElementById('menuBtn').classList.toggle('open', open);
-  document.body.style.overflow = open ? 'hidden' : '';
-}
-function closeMenu() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('open');
-  document.getElementById('menuBtn').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function showSection(name, el) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('section-' + name).classList.add('active');
-  if (el) {
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
-  }
+// ===== UI =====
+function toggleMenu(){const o=document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open',o);document.getElementById('menuBtn').classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';}
+function closeMenu(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open');document.getElementById('menuBtn').classList.remove('open');document.body.style.overflow='';}
+function showSection(name,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const sec=document.getElementById('section-'+name);
+  if(sec){sec.classList.add('active');sec.style.display='block';}
+  if(el){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
   closeMenu();
 }
-async function logout() {
-  await sb.auth.signOut();
-  window.location.href = 'login.html';
-}
-function toast(msg, type='info') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast ' + type + ' show';
-  setTimeout(() => el.classList.remove('show'), 3000);
+function fecharModal(id){document.getElementById(id).classList.remove('open');}
+function toast(msg,type='info'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast '+type+' show';setTimeout(()=>el.classList.remove('show'),3000);}
+async function logout(){await sb.auth.signOut();window.location.replace('login.html');}
+
+// ===== DASHBOARD =====
+async function carregarDashboard(){
+  const mesAtual=new Date().toLocaleString('pt-BR',{month:'long'});
+  const ano=new Date().getFullYear();
+  const{data:pag}=await sb.from('payments').select('status').eq('user_id',currentUser.id).eq('year',ano).maybeSingle();
+  const statusEl=document.getElementById('dash-mensalidade');
+  const cfg={approved:['rgba(0,255,153,0.08)','rgba(0,255,153,0.2)','#00ff99','✅ Mensalidade paga'],pending:['rgba(251,191,36,0.08)','rgba(251,191,36,0.2)','#fbbf24','⏳ Aguardando aprovacao'],rejected:['rgba(248,113,113,0.08)','rgba(248,113,113,0.2)','#f87171','❌ Comprovante reprovado']};
+  const[bg,border,color,txt]=pag?cfg[pag.status]||cfg.pending:['rgba(248,113,113,0.08)','rgba(248,113,113,0.2)','#f87171','⚠️ Mensalidade em aberto'];
+  statusEl.innerHTML=`<div style="background:${bg};border:1px solid ${border};border-radius:14px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px" onclick="showSection('mensalidade',null)"><span style="font-size:1.5em">💰</span><div><div style="font-weight:700;color:${color}">${txt}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${mesAtual} ${ano}</div></div></div>`;
+
+  const{data:avisos}=await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('criado_em',{ascending:false}).limit(3);
+  const ae=document.getElementById('dash-avisos');
+  ae.innerHTML=avisos?.length?avisos.map(a=>`<div class="card-item"><div style="font-weight:700;margin-bottom:4px">${a.title}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.criado_em).toLocaleDateString('pt-BR')}</div></div>`).join(''):'<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>';
+
+  const hoje=new Date().toISOString();
+  const{data:evs}=await sb.from('eventos').select('*').gte('data',hoje).order('data',{ascending:true}).limit(3);
+  const ee=document.getElementById('dash-eventos');
+  ee.innerHTML=evs?.length?evs.map(e=>`<div class="card-item" style="cursor:pointer" onclick="abrirEvento('${e.id}')"><div style="font-weight:700">${e.titulo}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${e.descricao||''}</div>${e.data?`<div style="font-size:.75em;color:#00ff99;margin-top:6px">📆 ${new Date(e.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long'})}</div>`:''}</div>`).join(''):'<div class="empty"><div class="icon">📅</div><p>Nenhum evento proximo</p></div>';
 }
 
-async function carregarEventos() {
-  const { data } = await sb.from('eventos').select('*').order('data', { ascending: true });
-  const el = document.getElementById('lista-eventos');
-  if (!data?.length) { el.innerHTML = '<div class="empty"><div class="icon">📅</div><p>Nenhum evento por enquanto</p></div>'; return; }
-  el.innerHTML = data.map(ev => `
-    <div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px">
-      <div style="font-weight:700;margin-bottom:4px">${ev.titulo}</div>
-      <div style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:6px">${ev.descricao||''}</div>
-      ${ev.data ? `<div style="font-size:.75em;color:#00ff99">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>` : ''}
-      ${ev.local ? `<div style="font-size:.75em;color:rgba(255,255,255,.4)">📍 ${ev.local}</div>` : ''}
-    </div>`).join('');
+// ===== CHAT PRIVADO =====
+let todosUsuarios=[];
+async function carregarChat(){
+  const{data}=await sb.from('users').select('id,nome').neq('id',currentUser.id).order('nome');
+  todosUsuarios=data||[];
+  renderUsuarios(todosUsuarios);
+  if(isAdmin){
+    const label=document.querySelector('#section-chat .section-title');
+    if(label)label.innerHTML='💬 <span class="accent">Chat Privado</span> <small style="font-size:.6em;color:#fbbf24">(Admin)</small>';
+  }
+}
+function renderUsuarios(lista){
+  const el=document.getElementById('lista-usuarios');
+  el.innerHTML=lista.length?lista.map(u=>`<div class="card-item" style="display:flex;align-items:center;gap:12px;cursor:pointer" onclick="abrirConversa('${u.id}','${u.nome}')"><div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;flex-shrink:0">${u.nome[0].toUpperCase()}</div><div><div style="font-weight:700;font-size:.9em">${u.nome}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">Toque para conversar</div></div></div>`).join(''):'<div class="empty"><div class="icon">👥</div><p>Nenhum aluno encontrado</p></div>';
+}
+function filtrarUsuarios(){
+  const q=document.getElementById('chatSearch').value.toLowerCase();
+  renderUsuarios(todosUsuarios.filter(u=>u.nome.toLowerCase().includes(q)));
+}
+async function abrirConversa(userId,nome){
+  currentChatUser={id:userId,nome};
+  document.getElementById('conversa-title').textContent=nome;
+  showSection('conversa',null);
+  const msgs=document.getElementById('chat-msgs');
+  msgs.innerHTML='';
+  let query=sb.from('messages').select('*').order('criado_em');
+  if(!isAdmin)query=query.or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${currentUser.id})`);
+  else query=query.or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${currentUser.id})`);
+  const{data}=await query;
+  (data||[]).forEach(m=>addChatMsg(m.sender_id===currentUser.id?'user':'other',m.content,false));
+  msgs.scrollTop=msgs.scrollHeight;
+}
+async function enviarMensagem(){
+  const input=document.getElementById('chat-msg-input');
+  const txt=input.value.trim();
+  if(!txt||!currentChatUser)return;
+  input.value='';
+  addChatMsg('user',txt);
+  await sb.from('messages').insert({sender_id:currentUser.id,receiver_id:currentChatUser.id,content:txt});
+}
+function chatKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensagem();}}
+function addChatMsg(role,txt,scroll=true){
+  const el=document.getElementById('chat-msgs');
+  const time=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const div=document.createElement('div');
+  div.className='msg '+role;
+  div.innerHTML=`<div class="msg-av">${role==='user'?document.getElementById('headerAvatar').textContent:'👤'}</div><div><div class="msg-bubble">${txt}</div><div class="msg-time">${time}</div></div>`;
+  el.appendChild(div);
+  if(scroll)el.scrollTop=el.scrollHeight;
 }
 
-async function carregarRegras() {
-  const { data } = await sb.from('regras').select('*');
-  const el = document.getElementById('lista-regras');
-  if (!data?.length) { el.innerHTML = '<div class="empty"><div class="icon">📏</div><p>Nenhuma regra cadastrada</p></div>'; return; }
-  el.innerHTML = data.map(r => `
-    <div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-left:3px solid #00ff99;border-radius:14px;padding:14px;margin-bottom:10px">
-      <div style="font-weight:700;color:#00ff99;margin-bottom:4px">${r.titulo}</div>
-      <div style="font-size:.85em;color:rgba(255,255,255,.6)">${r.conteudo}</div>
-    </div>`).join('');
+// ===== IA GROQ =====
+let iaHistory=[];
+function adicionarMsgIA(txt,role='ai'){
+  const el=document.getElementById('ia-msgs');
+  if(!el)return;
+  const time=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const div=document.createElement('div');
+  div.className='msg '+role;
+  div.innerHTML=`<div class="msg-av">${role==='user'?document.getElementById('headerAvatar')?.textContent||'?':'🧠'}</div><div><div class="msg-bubble">${txt.replace(/\n/g,'<br>')}</div><div class="msg-time">${time}</div></div>`;
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+}
+function addTypingIA(){
+  const el=document.getElementById('ia-msgs');
+  const div=document.createElement('div');
+  div.className='msg ai';div.id='ia-typing';
+  div.innerHTML='<div class="msg-av">🧠</div><div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
+  el.appendChild(div);el.scrollTop=el.scrollHeight;
+}
+async function enviarIA(){
+  const input=document.getElementById('ia-input');
+  const msg=input.value.trim();
+  if(!msg)return;
+  input.value='';
+  document.getElementById('ia-send-btn').disabled=true;
+  adicionarMsgIA(msg,'user');
+  iaHistory.push({role:'user',content:msg});
+  addTypingIA();
+  let resposta='';
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'system',content:'Voce e a IA do 9A Hub, assistente de estudos para alunos do 9 ano. Responda em portugues brasileiro. NUNCA resolva exercicios direto, explique o raciocinio para o aluno aprender. Seja didatico e amigavel.'},...iaHistory.slice(-10)],max_tokens:800,temperature:0.7})});
+    const d=await res.json();
+    resposta=d.choices?.[0]?.message?.content||'Nao consegui responder.';
+    iaHistory.push({role:'assistant',content:resposta});
+    await sb.from('chat_ia').insert({user_id:currentUser.id,mensagem:msg,resposta});
+  }catch(e){resposta='Erro de conexao. Tente novamente.';}
+  document.getElementById('ia-typing')?.remove();
+  adicionarMsgIA(resposta,'ai');
+  document.getElementById('ia-send-btn').disabled=false;
+}
+function iaKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarIA();}}
+
+// ===== SIMULADO =====
+async function iniciarSimulado(){
+  const materia=document.getElementById('sim-materia').value;
+  const assunto=document.getElementById('sim-assunto').value;
+  const dif=document.getElementById('sim-dificuldade').value;
+  if(!materia||!assunto){toast('Preencha materia e assunto','error');return;}
+  const tempos={facil:30,medio:60,dificil:90};
+  document.getElementById('simulado-config').style.display='none';
+  const pq=document.getElementById('simulado-perguntas');
+  pq.style.display='block';
+  pq.innerHTML='<div class="empty"><div class="icon">⏳</div><p>Gerando perguntas com IA...</p></div>';
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:`Crie 5 perguntas de multipla escolha sobre ${materia} - ${assunto} para alunos do 9 ano. Dificuldade: ${dif}. Responda APENAS em JSON valido com este formato exato: {"questions":[{"question":"pergunta","options":["A) op1","B) op2","C) op3","D) op4"],"correct":0,"explanation":"explicacao"}]}`}],max_tokens:1500,temperature:0.7})});
+    const d=await res.json();
+    const txt=d.choices?.[0]?.message?.content||'';
+    const json=txt.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(json);
+    simPerguntas=parsed.questions;
+    simAtual=0;simRespostas=[];
+    mostrarPergunta(tempos[dif]);
+  }catch(e){pq.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao gerar perguntas. Tente novamente.</p></div>';document.getElementById('simulado-config').style.display='block';}
+}
+function mostrarPergunta(tempo){
+  if(simAtual>=simPerguntas.length){finalizarSimulado();return;}
+  const p=simPerguntas[simAtual];
+  const pq=document.getElementById('simulado-perguntas');
+  pq.innerHTML=`
+    <div style="font-size:.8em;color:rgba(255,255,255,.5);margin-bottom:8px">Pergunta ${simAtual+1} de ${simPerguntas.length}</div>
+    <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+    <div id="timer-txt" style="text-align:right;font-size:.8em;color:#00ff99;margin-bottom:16px">${tempo}s</div>
+    <div class="card-item" style="margin-bottom:16px"><p style="font-weight:700;line-height:1.5">${p.question}</p></div>
+    ${p.options.map((op,i)=>`<button class="btn btn-ghost" style="width:100%;justify-content:flex-start;margin-bottom:8px;text-align:left;white-space:normal;height:auto;padding:12px 16px" onclick="responderSimulado(${i})">${op}</button>`).join('')}
+  `;
+  let t=tempo;
+  const fill=document.getElementById('timer-fill');
+  const txt=document.getElementById('timer-txt');
+  if(simTimer)clearInterval(simTimer);
+  simTimer=setInterval(()=>{
+    t--;
+    const pct=(t/tempo)*100;
+    fill.style.width=pct+'%';
+    txt.textContent=t+'s';
+    if(pct<30)fill.classList.add('danger');
+    if(t<=0){clearInterval(simTimer);simRespostas.push(-1);simAtual++;mostrarPergunta(tempo);}
+  },1000);
+}
+function responderSimulado(idx){
+  clearInterval(simTimer);
+  simRespostas.push(idx);
+  simAtual++;
+  const dif=document.getElementById('sim-dificuldade').value;
+  const tempos={facil:30,medio:60,dificil:90};
+  mostrarPergunta(tempos[dif]);
+}
+async function finalizarSimulado(){
+  let acertos=0;
+  simPerguntas.forEach((p,i)=>{if(simRespostas[i]===p.correct)acertos++;});
+  const score=Math.round((acertos/simPerguntas.length)*100);
+  document.getElementById('simulado-perguntas').style.display='none';
+  const res=document.getElementById('simulado-resultado');
+  res.style.display='block';
+  res.innerHTML=`
+    <div class="card-item" style="text-align:center;padding:24px;margin-bottom:16px">
+      <div style="font-size:3em;margin-bottom:8px">${score>=70?'🎉':score>=50?'😐':'😢'}</div>
+      <div style="font-size:2em;font-weight:700;color:${score>=70?'#00ff99':score>=50?'#fbbf24':'#f87171'}">${score}%</div>
+      <div style="color:rgba(255,255,255,.5);margin-top:4px">${acertos} de ${simPerguntas.length} acertos</div>
+    </div>
+    <div class="section-title">📖 <span class="accent">Explicacoes</span></div>
+    ${simPerguntas.map((p,i)=>`
+      <div class="card-item" style="margin-bottom:10px;border-left:3px solid ${simRespostas[i]===p.correct?'#00ff99':'#f87171'}">
+        <div style="font-size:.85em;font-weight:700;margin-bottom:6px">${p.question}</div>
+        <div style="font-size:.78em;color:${simRespostas[i]===p.correct?'#00ff99':'#f87171'};margin-bottom:4px">${simRespostas[i]===p.correct?'✅ Correto':'❌ Errado - Resposta: '+p.options[p.correct]}</div>
+        <div style="font-size:.78em;color:rgba(255,255,255,.5)">${p.explanation}</div>
+      </div>
+    `).join('')}
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="reiniciarSimulado()">🔄 Novo Simulado</button>
+  `;
+  await sb.from('quiz_sessions').insert({user_id:currentUser.id,materia:document.getElementById('sim-materia').value,assunto:document.getElementById('sim-assunto').value,score:acertos,total_questions:simPerguntas.length,difficulty:document.getElementById('sim-dificuldade').value});
+  await carregarRanking();
+}
+function reiniciarSimulado(){
+  document.getElementById('simulado-resultado').style.display='none';
+  document.getElementById('simulado-config').style.display='block';
+  simPerguntas=[];simAtual=0;simRespostas=[];
 }
 
-async function carregarAvisos() {
-  const { data } = await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('created_at', { ascending: false });
-  const el = document.getElementById('lista-avisos');
-  if (!data?.length) { el.innerHTML = '<div class="empty"><div class="icon">📢</div><p>Nenhum aviso por enquanto</p></div>'; return; }
-  el.innerHTML = data.map(a => `
-    <div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px">
-      ${a.target_user_id ? '<span style="font-size:.7em;background:rgba(0,255,153,.15);color:#00ff99;padding:2px 8px;border-radius:20px;margin-bottom:6px;display:inline-block">Aviso individual</span>' : ''}
-      <div style="font-weight:700;margin-bottom:4px">${a.title}</div>
-      <div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div>
-      <div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.created_at).toLocaleDateString('pt-BR')}</div>
-    </div>`).join('');
+// ===== RANKING =====
+async function carregarRanking(){
+  const{data}=await sb.from('users').select('id,nome');
+  const{data:quizzes}=await sb.from('quiz_sessions').select('user_id,score,total_questions');
+  const el=document.getElementById('lista-ranking');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">🏆</div><p>Sem dados ainda</p></div>';return;}
+  const pts={};
+  (quizzes||[]).forEach(q=>{if(!pts[q.user_id])pts[q.user_id]=0;pts[q.user_id]+=Math.round((q.score/q.total_questions)*100);});
+  const ranked=data.map(u=>({...u,pts:pts[u.id]||0})).sort((a,b)=>b.pts-a.pts);
+  const medals=['🥇','🥈','🥉'];
+  const posClass=['gold','silver','bronze'];
+  el.innerHTML=ranked.map((u,i)=>`<div class="ranking-item"><span class="rank-pos ${posClass[i]||''}">${i<3?medals[i]:i+1+'°'}</span><div style="flex:1"><div style="font-weight:700;font-size:.9em">${u.nome}</div><div style="font-size:.78em;color:rgba(255,255,255,.4)">Pontos: <strong style="color:#00ff99">${u.pts}</strong></div></div></div>`).join('');
 }
 
-async function carregarDashboard() {
-  // Mensalidade status
-  const mesAtual = new Date().toLocaleString('pt-BR',{month:'long'});
-  const anoAtual = new Date().getFullYear();
-  const { data: pagamento } = await sb.from('payments').select('status').eq('user_id', currentUser.id).eq('year', anoAtual).single();
-  const statusEl = document.getElementById('dash-mensalidade');
-  if (pagamento) {
-    const cores = { approved: ['rgba(0,255,153,0.08)','rgba(0,255,153,0.2)','#00ff99','✅ Mensalidade paga'], pending: ['rgba(251,191,36,0.08)','rgba(251,191,36,0.2)','#fbbf24','⏳ Mensalidade pendente'], rejected: ['rgba(248,113,113,0.08)','rgba(248,113,113,0.2)','#f87171','❌ Mensalidade reprovada'] };
-    const [bg, border, color, txt] = cores[pagamento.status] || cores.pending;
-    statusEl.innerHTML = `<div style="background:${bg};border:1px solid ${border};border-radius:14px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showSection('mensalidade',null)"><span style="font-size:1.5em">💰</span><div><div style="font-weight:700;color:${color}">${txt}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${mesAtual} de ${anoAtual}</div></div></div>`;
-  } else {
-    statusEl.innerHTML = `<div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:14px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showSection('mensalidade',null)"><span style="font-size:1.5em">💰</span><div><div style="font-weight:700;color:#f87171">⚠️ Mensalidade em aberto</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">Clique para pagar</div></div></div>`;
+// ===== EVENTOS =====
+async function carregarEventos(){
+  const{data}=await sb.from('eventos').select('*').order('data',{ascending:true});
+  const el=document.getElementById('lista-eventos');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📅</div><p>Nenhum evento</p></div>';return;}
+  el.innerHTML=data.map(e=>`<div class="card-item" style="cursor:pointer" onclick="abrirEvento('${e.id}')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="font-weight:700">${e.titulo}</div>${e.custo>0?`<span class="badge badge-yellow">R$ ${e.custo}</span>`:''}</div><div style="font-size:.82em;color:rgba(255,255,255,.5);margin:4px 0">${e.descricao||''}</div>${e.data?`<div style="font-size:.75em;color:#00ff99">📆 ${new Date(e.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>`:''} ${e.local?`<div style="font-size:.75em;color:rgba(255,255,255,.4)">📍 ${e.local}</div>`:''}</div>`).join('');
+}
+async function abrirEvento(id){
+  const{data:ev}=await sb.from('eventos').select('*').eq('id',id).single();
+  const{data:regras}=await sb.from('regras_evento').select('*').eq('evento_id',id);
+  const{data:alimentos}=await sb.from('alimentos_evento').select('*').eq('evento_id',id);
+  const{data:comidas}=await sb.from('comida_escolhida').select('item').eq('evento_id',id);
+  const itensSelecionados=(comidas||[]).map(c=>c.item);
+  const{data:minha}=await sb.from('comida_escolhida').select('item').eq('evento_id',id).eq('user_id',currentUser.id).maybeSingle();
+  const{data:confirmei}=await sb.from('event_attendees').select('id').eq('event_id',id).eq('user_id',currentUser.id).maybeSingle();
+
+  let html=`<div class="card-item" style="margin-bottom:12px">
+    <h2 style="font-size:1.2em;margin-bottom:6px">${ev.titulo}</h2>
+    <p style="font-size:.85em;color:rgba(255,255,255,.5);margin-bottom:8px">${ev.descricao||''}</p>
+    ${ev.data?`<div style="font-size:.8em;color:#00ff99">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}</div>`:''}
+    ${ev.local?`<div style="font-size:.8em;color:rgba(255,255,255,.4)">📍 ${ev.local}</div>`:''}
+    ${ev.custo>0?`<div style="font-size:.8em;color:#fbbf24">💰 R$ ${ev.custo}</div>`:''}
+    <div style="margin-top:12px">
+      ${confirmei?'<span class="badge badge-green">✅ Presenca confirmada</span>':
+      `<button class="btn btn-primary" style="padding:10px 20px" onclick="confirmarPresenca('${id}')">✅ Confirmar Presenca</button>`}
+    </div>
+  </div>`;
+
+  if(ev.ativar_regras&&regras?.length){
+    html+=`<div class="card-item" style="margin-bottom:12px"><div class="section-title" style="margin-bottom:10px;font-size:1em">📏 Regras do Evento</div>`;
+    html+=regras.map(r=>`<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:.85em"><span style="color:#00ff99">•</span><span style="color:rgba(255,255,255,.7)">${r.descricao}</span></div>`).join('');
+    html+='</div>';
   }
 
-  // Avisos no dashboard
-  const { data: avisos } = await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('created_at',{ascending:false}).limit(3);
-  const avisosEl = document.getElementById('dash-avisos');
-  if (!avisos?.length) { avisosEl.innerHTML = '<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>'; }
-  else { avisosEl.innerHTML = avisos.map(a => `<div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px">${a.target_user_id?'<span style="font-size:.7em;background:rgba(0,255,153,.15);color:#00ff99;padding:2px 8px;border-radius:20px;margin-bottom:6px;display:inline-block">Individual</span>':''}<div style="font-weight:700;margin-bottom:4px">${a.title}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.created_at).toLocaleDateString('pt-BR')}</div></div>`).join(''); }
+  if(ev.ativar_comida&&alimentos?.length){
+    html+=`<div class="card-item"><div class="section-title" style="margin-bottom:10px;font-size:1em">🍔 Escolher Comida</div>`;
+    if(minha){html+=`<div class="badge badge-green" style="margin-bottom:10px">✅ Voce escolheu: ${minha.item}</div>`;}
+    else{
+      html+=alimentos.map(a=>{
+        const ja=itensSelecionados.includes(a.nome_item);
+        return `<button class="btn ${ja?'btn-danger':'btn-ghost'}" style="width:100%;justify-content:space-between;margin-bottom:8px" ${ja?'disabled':''} onclick="escolherComida('${id}','${a.nome_item}',this)">${a.nome_item}${ja?'<span>Ja escolhido</span>':''}</button>`;
+      }).join('');
+    }
+    html+='</div>';
+  }
 
-  // Eventos no dashboard
-  const { data: eventos } = await sb.from('eventos').select('*').gte('data', new Date().toISOString()).order('data',{ascending:true}).limit(3);
-  const eventosEl = document.getElementById('dash-eventos');
-  if (!eventos?.length) { eventosEl.innerHTML = '<div class="empty"><div class="icon">📅</div><p>Nenhum evento proximo</p></div>'; }
-  else { eventosEl.innerHTML = eventos.map(ev => `<div style="background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px"><div style="font-weight:700;margin-bottom:4px">${ev.titulo}</div><div style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:6px">${ev.descricao||''}</div>${ev.data?`<div style="font-size:.75em;color:#00ff99">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>`:''}</div>`).join(''); }
+  document.getElementById('evento-detalhe-content').innerHTML=html;
+  showSection('evento-detalhe',null);
+}
+async function confirmarPresenca(evId){
+  await sb.from('event_attendees').upsert({event_id:evId,user_id:currentUser.id},{onConflict:'event_id,user_id'});
+  toast('Presenca confirmada!','success');
+  abrirEvento(evId);
+}
+async function escolherComida(evId,item,btn){
+  const{data:ud}=await sb.from('users').select('nome').eq('id',currentUser.id).single();
+  await sb.from('comida_escolhida').insert({evento_id:evId,user_id:currentUser.id,nome_aluno:ud?.nome||'',item});
+  toast('Comida escolhida: '+item,'success');
+  abrirEvento(evId);
 }
 
-async function carregarLivros() {
-  const { data } = await sb.from('livros').select('*').order('materia');
-  const el = document.getElementById('lista-livros');
-  if (!data?.length) { el.innerHTML = '<div class="empty"><div class="icon">📚</div><p>Nenhum livro disponivel ainda</p></div>'; return; }
-  const materias = ['Portugues','Matematica','Historia','Geografia','Ingles','Artes','Ciencias'];
-  const icons = {'Portugues':'📖','Matematica':'📐','Historia':'🏛️','Geografia':'🌍','Ingles':'🇬🇧','Artes':'🎨','Ciencias':'🔬'};
-  el.innerHTML = data.map(l => `
-    <a href="${l.url}" target="_blank" style="display:flex;align-items:center;gap:14px;background:rgba(8,16,30,.9);border:1px solid rgba(0,255,153,.1);border-radius:14px;padding:14px;margin-bottom:10px;text-decoration:none;color:#fff">
-      <span style="font-size:2em">${icons[l.materia]||'📚'}</span>
-      <div style="flex:1">
-        <div style="font-weight:700">${l.materia}</div>
-        <div style="font-size:.78em;color:rgba(255,255,255,.4)">${l.descricao||'Livro digital'}</div>
-      </div>
-      <span style="color:#00ff99;font-size:1.3em">⬇</span>
-    </a>`).join('');
+// CRIAR EVENTO
+function abrirModalEvento(){evRegras=[];evComidas=[];document.getElementById('modal-evento').classList.add('open');document.getElementById('ev-regras-box').style.display='none';document.getElementById('ev-comida-box').style.display='none';renderListaRegras();renderListaComidas();}
+document.getElementById('ev-ativar-regras')?.addEventListener('change',function(){document.getElementById('ev-regras-box').style.display=this.checked?'block':'none';});
+document.getElementById('ev-ativar-comida')?.addEventListener('change',function(){document.getElementById('ev-comida-box').style.display=this.checked?'block':'none';});
+function addRegra(){const v=document.getElementById('ev-regra-input').value.trim();if(!v)return;evRegras.push(v);document.getElementById('ev-regra-input').value='';renderListaRegras();}
+function addComida(){const v=document.getElementById('ev-comida-input').value.trim();if(!v)return;evComidas.push(v);document.getElementById('ev-comida-input').value='';renderListaComidas();}
+function renderListaRegras(){document.getElementById('ev-regras-lista').innerHTML=evRegras.map((r,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:.85em;border-bottom:1px solid rgba(255,255,255,.06)"><span>${r}</span><button onclick="evRegras.splice(${i},1);renderListaRegras()" style="background:none;border:none;color:#f87171;cursor:pointer">✕</button></div>`).join('');}
+function renderListaComidas(){document.getElementById('ev-comida-lista').innerHTML=evComidas.map((c,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:.85em;border-bottom:1px solid rgba(255,255,255,.06)"><span>${c}</span><button onclick="evComidas.splice(${i},1);renderListaComidas()" style="background:none;border:none;color:#f87171;cursor:pointer">✕</button></div>`).join('');}
+async function criarEvento(){
+  if(!isAdmin){toast('Sem permissao','error');return;}
+  const titulo=document.getElementById('ev-titulo').value.trim();
+  if(!titulo){toast('Informe o titulo','error');return;}
+  const{data:ev}=await sb.from('eventos').insert({titulo,descricao:document.getElementById('ev-descricao').value,data:document.getElementById('ev-data').value||null,local:document.getElementById('ev-local').value,custo:parseFloat(document.getElementById('ev-custo').value)||0,ativar_regras:document.getElementById('ev-ativar-regras').checked,ativar_comida:document.getElementById('ev-ativar-comida').checked,criado_por:currentUser.id}).select().single();
+  if(ev){
+    for(const r of evRegras)await sb.from('regras_evento').insert({evento_id:ev.id,descricao:r});
+    for(const c of evComidas)await sb.from('alimentos_evento').insert({evento_id:ev.id,nome_item:c});
+  }
+  fecharModal('modal-evento');
+  toast('Evento criado!','success');
+  carregarEventos();
+  carregarDashboard();
+}
+
+// ===== MENSALIDADE =====
+async function carregarMensalidade(){
+  const{data:cfg}=await sb.from('settings').select('*');
+  const pix=cfg?.find(c=>c.key==='pix_key');
+  const pixNome=cfg?.find(c=>c.key==='pix_name');
+  const fee=cfg?.find(c=>c.key==='monthly_fee');
+  document.getElementById('pix-info').innerHTML=`<strong style="color:#00ff99">Chave Pix:</strong> ${pix?.value||'Nao configurado'}<br><strong>Nome:</strong> ${pixNome?.value||''}<br><strong>Valor:</strong> R$ ${fee?.value||'0'}`;
+  if(isAdmin){
+    document.getElementById('pix-key-input').value=pix?.value||'';
+    document.getElementById('pix-name-input').value=pixNome?.value||'';
+  }
+  const ano=new Date().getFullYear();
+  const{data:pag}=await sb.from('payments').select('*').eq('user_id',currentUser.id).eq('year',ano).maybeSingle();
+  const statusEl=document.getElementById('meu-status-pagamento');
+  if(pag){
+    const cores={approved:'badge-green',pending:'badge-yellow',rejected:'badge-red'};
+    const txt={approved:'✅ Pago',pending:'⏳ Aguardando',rejected:'❌ Reprovado'};
+    statusEl.innerHTML=`<span class="badge ${cores[pag.status]}">${txt[pag.status]}</span>${pag.admin_note?`<p style="font-size:.8em;color:rgba(255,255,255,.5);margin-top:6px">${pag.admin_note}</p>`:''}`;
+  }
+}
+async function salvarPix(){
+  if(!isAdmin)return;
+  await sb.from('settings').upsert({key:'pix_key',value:document.getElementById('pix-key-input').value},{onConflict:'key'});
+  await sb.from('settings').upsert({key:'pix_name',value:document.getElementById('pix-name-input').value},{onConflict:'key'});
+  toast('Pix salvo!','success');
+}
+async function enviarComprovante(){
+  const nome=document.getElementById('pag-nome').value.trim();
+  const file=document.getElementById('pag-comprovante').files[0];
+  if(!nome||!file){toast('Preencha nome e comprovante','error');return;}
+  const ext=file.name.split('.').pop();
+  const path=`${currentUser.id}_${Date.now()}.${ext}`;
+  const{error:upErr}=await sb.storage.from('comprovantes').upload(path,file);
+  if(upErr){toast('Erro ao enviar imagem','error');return;}
+  const{data:urlData}=sb.storage.from('comprovantes').getPublicUrl(path);
+  const ano=new Date().getFullYear();
+  const mes=new Date().toLocaleString('pt-BR',{month:'long'});
+  await sb.from('payments').upsert({user_id:currentUser.id,nome,comprovante_url:urlData.publicUrl,status:'pending',month:mes,year:ano,amount:0},{onConflict:'user_id,year'});
+  toast('Comprovante enviado!','success');
+  carregarMensalidade();
+  carregarDashboard();
+}
+async function carregarPagamentos(){
+  const{data}=await sb.from('payments').select('*,users(nome)').order('criado_em',{ascending:false});
+  const el=document.getElementById('lista-pagamentos');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">💰</div><p>Nenhum pagamento</p></div>';return;}
+  const cores={approved:'badge-green',pending:'badge-yellow',rejected:'badge-red'};
+  const txt={approved:'Pago',pending:'Pendente',rejected:'Reprovado'};
+  el.innerHTML=data.map(p=>`<div class="card-item" style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-weight:700">${p.users?.nome||p.nome||'?'}</div>
+      <span class="badge ${cores[p.status]}">${txt[p.status]}</span>
+    </div>
+    ${p.comprovante_url?`<img src="${p.comprovante_url}" style="width:100%;border-radius:8px;max-height:200px;object-fit:cover;margin-bottom:8px">`:''}
+    ${p.status==='pending'?`<div style="display:flex;gap:8px">
+      <button class="btn btn-success" style="flex:1;justify-content:center;font-size:.8em" onclick="atualizarPagamento('${p.id}','approved')">✅ Aprovar</button>
+      <button class="btn btn-danger" style="flex:1;justify-content:center;font-size:.8em" onclick="atualizarPagamento('${p.id}','rejected')">❌ Recusar</button>
+    </div>`:''}
+  </div>`).join('');
+}
+async function atualizarPagamento(id,status){
+  if(!isAdmin){toast('Sem permissao','error');return;}
+  await sb.from('payments').update({status}).eq('id',id);
+  toast(status==='approved'?'Aprovado!':'Recusado!',status==='approved'?'success':'error');
+  carregarPagamentos();
+}
+
+// ===== AVISOS =====
+async function carregarAvisos(){
+  const{data}=await sb.from('announcements').select('*').or(`target_user_id.is.null,target_user_id.eq.${currentUser.id}`).order('criado_em',{ascending:false});
+  const el=document.getElementById('lista-avisos');
+  el.innerHTML=data?.length?data.map(a=>`<div class="card-item">${a.target_user_id?'<span class="badge badge-green" style="margin-bottom:6px;display:inline-block">Individual</span>':''}<div style="font-weight:700;margin-bottom:4px">${a.title}</div><div style="font-size:.82em;color:rgba(255,255,255,.5)">${a.content}</div><div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:6px">${new Date(a.criado_em).toLocaleDateString('pt-BR')}</div></div>`).join(''):'<div class="empty"><div class="icon">📢</div><p>Nenhum aviso</p></div>';
+}
+async function carregarUsuariosAviso(){
+  if(!isAdmin)return;
+  const{data}=await sb.from('users').select('id,nome').neq('id',currentUser.id);
+  const sel=document.getElementById('av-destinatario');
+  (data||[]).forEach(u=>{const op=document.createElement('option');op.value=u.id;op.textContent=u.nome;sel.appendChild(op);});
+}
+function abrirModalAviso(){document.getElementById('modal-aviso').classList.add('open');}
+async function criarAviso(){
+  if(!isAdmin){toast('Sem permissao','error');return;}
+  const titulo=document.getElementById('av-titulo').value.trim();
+  const content=document.getElementById('av-conteudo').value.trim();
+  const dest=document.getElementById('av-destinatario').value;
+  if(!titulo||!content){toast('Preencha todos os campos','error');return;}
+  await sb.from('announcements').insert({title:titulo,content,target_user_id:dest||null,criado_por:currentUser.id});
+  fecharModal('modal-aviso');
+  toast('Aviso criado!','success');
+  carregarAvisos();
+  carregarDashboard();
+}
+
+// ===== REGRAS =====
+async function carregarRegras(){
+  const{data}=await sb.from('regras').select('*').order('categoria');
+  const el=document.getElementById('lista-regras');
+  el.innerHTML=data?.length?data.map(r=>`<div class="card-item" style="border-left:3px solid #00ff99"><span class="badge badge-green" style="margin-bottom:6px;display:inline-block">${r.categoria}</span><div style="font-weight:700;color:#00ff99;margin-bottom:4px">${r.titulo}</div><div style="font-size:.85em;color:rgba(255,255,255,.6)">${r.conteudo}</div></div>`).join(''):'<div class="empty"><div class="icon">📏</div><p>Nenhuma regra</p></div>';
+}
+function abrirModalRegra(){document.getElementById('modal-regra').classList.add('open');}
+async function criarRegra(){
+  if(!isAdmin){toast('Sem permissao','error');return;}
+  const titulo=document.getElementById('rg-titulo').value.trim();
+  const conteudo=document.getElementById('rg-conteudo').value.trim();
+  if(!titulo||!conteudo){toast('Preencha todos os campos','error');return;}
+  await sb.from('regras').insert({titulo,conteudo,categoria:document.getElementById('rg-categoria').value,criado_por:currentUser.id});
+  fecharModal('modal-regra');
+  toast('Regra criada!','success');
+  carregarRegras();
+}
+
+// ===== ADMIN USUARIOS =====
+async function carregarUsuariosAdmin(){
+  const{data}=await sb.from('users').select('*').order('nome');
+  const el=document.getElementById('lista-usuarios-admin');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">👥</div><p>Nenhum usuario</p></div>';return;}
+  el.innerHTML=data.map(u=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <div><div style="font-weight:700;font-size:.9em">${u.nome}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${u.email}</div></div>
+    <div style="display:flex;gap:6px">
+      ${u.is_banned?`<button class="btn btn-success" style="padding:6px 10px;font-size:.75em" onclick="banirUsuario('${u.id}',false)">Desbanir</button>`:
+      u.email!==ADMIN_EMAIL?`<button class="btn btn-danger" style="padding:6px 10px;font-size:.75em" onclick="banirUsuario('${u.id}',true)">Banir</button>`:''}
+    </div>
+  </div>`).join('');
+}
+async function banirUsuario(id,banir){
+  if(!isAdmin)return;
+  await sb.from('users').update({is_banned:banir}).eq('id',id);
+  toast(banir?'Usuario banido':'Usuario desbanido',banir?'error':'success');
+  carregarUsuariosAdmin();
 }
 </script>
 </body>
