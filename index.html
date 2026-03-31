@@ -62,7 +62,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;
 .logout-btn:hover{background:rgba(248,113,113,0.08)}
 
 /* MAIN + TRANSIÇÕES */
-main{margin-top:56px;padding:16px;max-width:680px;margin-left:auto;margin-right:auto;position:relative;overflow:hidden}
+main{margin-top:56px;padding:16px;max-width:680px;margin-left:auto;margin-right:auto}
 .section{display:none;position:relative}
 .section.active{display:block;animation:slideIn 0.25s ease}
 .section.saindo{animation:slideOut 0.2s ease forwards}
@@ -115,7 +115,7 @@ select.input{-webkit-appearance:none}
 .modal-close{cursor:pointer;color:rgba(255,255,255,0.4);font-size:1.2em;padding:4px}
 
 /* CHAT */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 130px);max-height:650px}
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 160px);max-height:600px}
 .chat-msgs{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth}
 .chat-msgs::-webkit-scrollbar{width:3px}
 .chat-msgs::-webkit-scrollbar-thumb{background:rgba(0,255,153,0.2);border-radius:2px}
@@ -205,7 +205,7 @@ select.input{-webkit-appearance:none}
   <div class="logo-txt">9<span>A</span></div>
   <div class="header-right">
     <div class="xp-badge" id="xpBadge">⚡ 0 XP</div>
-    <div class="avatar-btn" id="headerAvatar">?</div>
+    <div class="avatar-btn" id="headerAvatar" onclick="abrirPerfil()">?</div>
   </div>
 </header>
 
@@ -273,7 +273,10 @@ select.input{-webkit-appearance:none}
   </div>
   <div class="cat-canais admin-only" style="display:none">
     <div class="nav-item" onclick="nav('admin',this)"><span class="nav-icon">⚙️</span>painel-admin</div>
-    <div class="nav-item" onclick="nav('logs',this)"><span class="nav-icon">📊</span>logs</div>
+    <div class="nav-item" onclick="nav('logs',this);carregarLogs('logs_ia')"><span class="nav-icon">📊</span>logs</div>
+    <div class="nav-item" onclick="nav('monitor',this);carregarMonitor()"><span class="nav-icon">📡</span>monitoramento</div>
+    <div class="nav-item" onclick="nav('livros',this);carregarLivros()"><span class="nav-icon">📚</span>livros-digitais</div>
+    <div class="nav-item" onclick="nav('pagamentos-status',this);carregarPagStatus('todos')"><span class="nav-icon">💳</span>status-pagamentos</div>
   </div>
 
   <div class="nav-sep"></div>
@@ -397,26 +400,38 @@ select.input{-webkit-appearance:none}
 <section class="section" id="section-dialogo">
   <div class="section-title">🎭 <span class="accent">Dialogos Interativos</span></div>
   <div id="dialogo-container">
+    <div style="margin-bottom:12px;padding:10px;background:rgba(0,255,153,0.05);border:1px solid rgba(0,255,153,0.15);border-radius:12px">
+      <div style="font-size:.78em;color:#00ff99;margin-bottom:8px;font-weight:700">🤖 Dialogo gerado por IA (novo a cada vez!)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn btn-ghost" onclick="iniciarDialogoIA('Matematica')" style="flex-direction:column;padding:14px;gap:4px">📐<small>Matematica</small></button>
+        <button class="btn btn-ghost" onclick="iniciarDialogoIA('Historia')" style="flex-direction:column;padding:14px;gap:4px">🏛️<small>Historia</small></button>
+        <button class="btn btn-ghost" onclick="iniciarDialogoIA('Ciencias')" style="flex-direction:column;padding:14px;gap:4px">🔬<small>Ciencias</small></button>
+        <button class="btn btn-ghost" onclick="iniciarDialogoIA('Ingles')" style="flex-direction:column;padding:14px;gap:4px">🇬🇧<small>Ingles</small></button>
+        <button class="btn btn-ghost" onclick="iniciarDialogoIA('Portugues')" style="flex-direction:column;padding:14px;gap:4px">📖<small>Portugues</small></button>
+        <button class="btn btn-ghost" onclick="iniciarDialogoIA('Geografia')" style="flex-direction:column;padding:14px;gap:4px">🌍<small>Geografia</small></button>
+      </div>
+    </div>
+    <div style="font-size:.75em;color:rgba(255,255,255,.3);margin-bottom:8px">Classicos pre-definidos:</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="card-item" style="cursor:pointer;text-align:center;padding:20px" onclick="iniciarDialogo('mercado')">
-        <div style="font-size:2em;margin-bottom:6px">🛒</div>
-        <div style="font-weight:700;font-size:.9em">No Mercado</div>
-        <div style="font-size:.72em;color:rgba(255,255,255,.4);margin-top:3px">Matematica</div>
+      <div class="card-item" style="cursor:pointer;text-align:center;padding:16px" onclick="iniciarDialogo('mercado')">
+        <div style="font-size:1.8em;margin-bottom:4px">🛒</div>
+        <div style="font-weight:700;font-size:.85em">No Mercado</div>
+        <div style="font-size:.7em;color:rgba(255,255,255,.4)">Matematica</div>
       </div>
-      <div class="card-item" style="cursor:pointer;text-align:center;padding:20px" onclick="iniciarDialogo('historia')">
-        <div style="font-size:2em;margin-bottom:6px">🏛️</div>
-        <div style="font-weight:700;font-size:.9em">Viagem no Tempo</div>
-        <div style="font-size:.72em;color:rgba(255,255,255,.4);margin-top:3px">Historia</div>
+      <div class="card-item" style="cursor:pointer;text-align:center;padding:16px" onclick="iniciarDialogo('historia')">
+        <div style="font-size:1.8em;margin-bottom:4px">🏛️</div>
+        <div style="font-weight:700;font-size:.85em">Roma Antiga</div>
+        <div style="font-size:.7em;color:rgba(255,255,255,.4)">Historia</div>
       </div>
-      <div class="card-item" style="cursor:pointer;text-align:center;padding:20px" onclick="iniciarDialogo('ciencias')">
-        <div style="font-size:2em;margin-bottom:6px">🔬</div>
-        <div style="font-weight:700;font-size:.9em">Laboratorio</div>
-        <div style="font-size:.72em;color:rgba(255,255,255,.4);margin-top:3px">Ciencias</div>
+      <div class="card-item" style="cursor:pointer;text-align:center;padding:16px" onclick="iniciarDialogo('ciencias')">
+        <div style="font-size:1.8em;margin-bottom:4px">🔬</div>
+        <div style="font-weight:700;font-size:.85em">Laboratorio</div>
+        <div style="font-size:.7em;color:rgba(255,255,255,.4)">Ciencias</div>
       </div>
-      <div class="card-item" style="cursor:pointer;text-align:center;padding:20px" onclick="iniciarDialogo('ingles')">
-        <div style="font-size:2em;margin-bottom:6px">🇬🇧</div>
-        <div style="font-weight:700;font-size:.9em">Cafe em Londres</div>
-        <div style="font-size:.72em;color:rgba(255,255,255,.4);margin-top:3px">Ingles</div>
+      <div class="card-item" style="cursor:pointer;text-align:center;padding:16px" onclick="iniciarDialogo('ingles')">
+        <div style="font-size:1.8em;margin-bottom:4px">🇬🇧</div>
+        <div style="font-weight:700;font-size:.85em">Cafe em Londres</div>
+        <div style="font-size:.7em;color:rgba(255,255,255,.4)">Ingles</div>
       </div>
     </div>
   </div>
@@ -524,6 +539,48 @@ select.input{-webkit-appearance:none}
   <div id="logs-content"><div class="skeleton"></div></div>
 </section>
 
+
+<!-- LIVROS DIGITAIS -->
+<section class="section admin-only" id="section-livros" style="display:none">
+  <div class="section-title">📚 <span class="accent">Livros Digitais</span></div>
+  <div class="card-item" style="margin-bottom:12px">
+    <p style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:10px">Upload de livro/material para IA usar nos simulados:</p>
+    <select class="input" id="livro-materia">
+      <option value="">Selecione a materia</option>
+      <option>Portugues</option><option>Matematica</option><option>Historia</option>
+      <option>Geografia</option><option>Ingles</option><option>Artes</option><option>Ciencias</option>
+    </select>
+    <input class="input" id="livro-titulo" placeholder="Titulo do material">
+    <input type="file" id="livro-arquivo" accept=".pdf,.txt,.doc,.docx" style="color:rgba(255,255,255,.6);margin-bottom:10px;width:100%;font-size:.85em">
+    <button class="btn btn-primary" style="width:100%" onclick="uploadLivro()">📤 Enviar Material</button>
+  </div>
+  <div id="lista-livros"><div class="skeleton"></div></div>
+</section>
+
+<!-- MONITORAMENTO -->
+<section class="section admin-only" id="section-monitor" style="display:none">
+  <div class="section-title">📡 <span class="accent">Monitoramento</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px" id="monitor-stats">
+    <div class="card-item" style="text-align:center"><div style="font-size:1.8em;font-weight:700;color:#00ff99" id="mon-total-users">-</div><div style="font-size:.72em;color:rgba(255,255,255,.4)">Usuarios</div></div>
+    <div class="card-item" style="text-align:center"><div style="font-size:1.8em;font-weight:700;color:#fbbf24" id="mon-pagamentos">-</div><div style="font-size:.72em;color:rgba(255,255,255,.4)">Pagamentos pendentes</div></div>
+    <div class="card-item" style="text-align:center"><div style="font-size:1.8em;font-weight:700;color:#60a5fa" id="mon-simulados">-</div><div style="font-size:.72em;color:rgba(255,255,255,.4)">Simulados hoje</div></div>
+    <div class="card-item" style="text-align:center"><div style="font-size:1.8em;font-weight:700;color:#a78bfa" id="mon-msgs">-</div><div style="font-size:.72em;color:rgba(255,255,255,.4)">Mensagens hoje</div></div>
+  </div>
+  <div class="section-title" style="font-size:1em">👥 <span class="accent">Usuarios Online Recentes</span></div>
+  <div id="monitor-users"><div class="skeleton"></div></div>
+</section>
+
+<!-- PAGAMENTOS STATUS -->
+<section class="section" id="section-pagamentos-status">
+  <div class="section-title">💰 <span class="accent">Status Pagamentos</span></div>
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+    <button class="btn btn-primary btn-sm" onclick="filtrarPagStatus('todos')">Todos</button>
+    <button class="btn btn-ghost btn-sm" onclick="filtrarPagStatus('approved')">Pagos</button>
+    <button class="btn btn-ghost btn-sm" onclick="filtrarPagStatus('pending')">Pendentes</button>
+    <button class="btn btn-ghost btn-sm" onclick="filtrarPagStatus('rejected')">Reprovados</button>
+  </div>
+  <div id="lista-pag-status"><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
 </main>
 
 <!-- MODAIS -->
@@ -593,6 +650,40 @@ select.input{-webkit-appearance:none}
   </div>
 </div>
 
+
+<!-- MODAL PERFIL -->
+<div class="modal" id="modal-perfil">
+  <div class="modal-box">
+    <div class="modal-title">👤 Meu Perfil <span class="modal-close" onclick="fecharModal('modal-perfil')">✕</span></div>
+    <div style="text-align:center;margin-bottom:16px">
+      <div id="perfil-avatar-big" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:2em;margin:0 auto 10px;cursor:pointer" onclick="document.getElementById('perfil-foto-input').click()">?</div>
+      <input type="file" id="perfil-foto-input" accept="image/*" style="display:none" onchange="uploadFotoPerfil(this)">
+      <div style="font-size:.75em;color:rgba(255,255,255,.35)">Toque na foto para alterar</div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:.75em;color:rgba(255,255,255,.45);margin-bottom:5px;text-transform:uppercase;letter-spacing:1px">Nome</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="input" id="perfil-nome" style="margin:0;flex:1" placeholder="Seu nome">
+        <button class="btn btn-ghost btn-sm" id="btn-salvar-nome" onclick="salvarNomePerfil()" style="flex-shrink:0">Salvar</button>
+      </div>
+      <div id="nome-aviso" style="font-size:.72em;color:#fbbf24;margin-top:4px;display:none">⚠️ Trocar nome requer aprovacao do Admin</div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:.75em;color:rgba(255,255,255,.45);margin-bottom:5px;text-transform:uppercase;letter-spacing:1px">Descricao</div>
+      <textarea class="input" id="perfil-desc" rows="2" placeholder="Fale algo sobre voce..." style="margin:0"></textarea>
+    </div>
+    <div class="card-item" style="margin-bottom:12px">
+      <div style="font-size:.78em;color:rgba(255,255,255,.5)">Email: <span id="perfil-email" style="color:#fff"></span></div>
+      <div style="font-size:.78em;color:rgba(255,255,255,.5);margin-top:4px">XP Total: <span style="color:#00ff99" id="perfil-xp">0</span></div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="salvarPerfil()">💾 Salvar Perfil</button>
+    <!-- Solicitacoes de mudanca de nome (admin) -->
+    <div class="admin-only" id="solicitacoes-nome" style="display:none;margin-top:14px">
+      <div style="font-size:.8em;font-weight:700;color:#fbbf24;margin-bottom:8px">📋 Solicitacoes de troca de nome</div>
+      <div id="lista-solicitacoes"></div>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -616,8 +707,13 @@ window.addEventListener('load',async()=>{
   cu=sess.session.user;
   isAdmin=cu.email===ADMIN_EMAIL;
 
-  const{data:ud}=await sb.from('users').select('nome,xp').eq('id',cu.id).single();
-  const nome=ud?.nome||cu.email.split('@')[0];
+  const{data:ud}=await sb.from('users').select('nome,xp').eq('id',cu.id).maybeSingle();
+  // Se nao tem usuario na tabela, inserir automaticamente
+  if(!ud){
+    const nomeAuth=cu.user_metadata?.nome||cu.user_metadata?.full_name||cu.email.split('@')[0];
+    await sb.from('users').upsert({id:cu.id,email:cu.email,nome:nomeAuth,xp:0},{onConflict:'id'});
+  }
+  const nome=ud?.nome||cu.user_metadata?.nome||cu.user_metadata?.full_name||cu.email.split('@')[0];
   xpTotal=ud?.xp||0;
   const partes=nome.trim().split(' ');
   nomeUser=partes.length>=2?partes[0]+' '+partes[1]:partes[0];
@@ -633,7 +729,11 @@ window.addEventListener('load',async()=>{
     document.querySelectorAll('.admin-only').forEach(el=>el.style.removeProperty('display'));
     document.getElementById('section-admin').style.display='block';
     document.getElementById('section-logs').style.display='block';
+    document.getElementById('section-livros').style.display='block';
+    document.getElementById('section-monitor').style.display='block';
+    document.getElementById('section-pagamentos-status').style.display='block';
     document.getElementById('admin-pagamentos').style.display='block';
+    document.getElementById('solicitacoes-nome').style.display='block';
     carregarPagamentos();
     carregarUsersAdmin();
     carregarPix();
@@ -662,13 +762,17 @@ window.addEventListener('load',async()=>{
 
 // ===== XP =====
 function atualizarXP(ganhou){
+  if(ganhou<0)return;
   xpTotal+=ganhou;
   document.getElementById('xpBadge').textContent='⚡ '+xpTotal+' XP';
   document.getElementById('sidebarXp').textContent='⚡ '+xpTotal+' XP';
   if(ganhou>0){
     mostrarXPFloat('+'+ganhou+' XP');
-    sb.from('users').update({xp:xpTotal}).eq('id',cu.id).then(()=>{});
-    registrarLog('logs_usuario','xp_ganho',{xp:ganhou,total:xpTotal});
+    // Salvar no banco imediatamente
+    sb.from('users').update({xp:xpTotal}).eq('id',cu.id).then(({error})=>{
+      if(error)console.error('Erro ao salvar XP:',error);
+    });
+    try{registrarLog('logs_usuario','xp_ganho',{xp:ganhou,total:xpTotal});}catch(e){}
   }
 }
 function mostrarXPFloat(txt){
@@ -996,7 +1100,7 @@ async function enviarComprovante(){
   const{data:urlData}=sb.storage.from('comprovantes').getPublicUrl(path);
   const ano=new Date().getFullYear();
   const mes=new Date().toLocaleString('pt-BR',{month:'long'});
-  const{error}=await sb.from('payments').upsert({user_id:cu.id,nome,comprovante_url:urlData.publicUrl,status:'pending',month:mes,year:ano,amount:0},{onConflict:'user_id,year'});
+  const{error}=await sb.from('payments').upsert({user_id:cu.id,nome,comprovante_url:urlData.publicUrl,status:'pending',month:mes,year:ano,amount:0},{onConflict:'user_id,year',ignoreDuplicates:false});
   if(error){toast('Erro ao enviar','error');console.error(error);return;}
   toast('Comprovante enviado!','success');
   carregarMensalidade();carregarDashboard();
@@ -1103,7 +1207,7 @@ async function enviarIA(){
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body:JSON.stringify({
-        model:'llama-3.3-70b-versatile',
+        model:'llama3-8b-8192',
         messages:[
           {role:'system',content:'Voce e a IA assistente do 9A Hub, um app escolar para alunos do 9 ano. Responda SEMPRE em portugues brasileiro. NUNCA resolva exercicios diretamente. Sempre explique o RACIOCINIO passo a passo para o aluno aprender. Seja didatico, amigavel e motivador. Use emojis com moderacao.'},
           ...iaHistory.slice(-8)
@@ -1149,8 +1253,8 @@ async function iniciarSimulado(){
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body:JSON.stringify({
-        model:'llama-3.3-70b-versatile',
-        messages:[{role:'user',content:`Crie 5 perguntas de multipla escolha sobre ${materia} - ${assunto} para alunos do 9 ano brasileiro. Nivel: ${dif}. Responda SOMENTE com JSON valido, sem texto antes ou depois, no formato: {"questions":[{"question":"pergunta aqui","options":["A) opcao1","B) opcao2","C) opcao3","D) opcao4"],"correct":0,"explanation":"explicacao detalhada passo a passo aqui"}]}`}],
+        model:'llama3-8b-8192',
+        messages:[{role:'user',content:`Crie 5 perguntas de multipla escolha sobre ${materia} - ${assunto} para alunos do 9 ano brasileiro. Nivel: ${dif}. IMPORTANTE: As perguntas devem ser adequadas para o 9 ano do ensino fundamental, nem muito faceis nem impossivelmente dificeis. Foque em conteudo que realmente e ensinado nessa serie. Responda SOMENTE com JSON valido, sem texto antes ou depois, no formato: {"questions":[{"question":"pergunta aqui","options":["A) opcao1","B) opcao2","C) opcao3","D) opcao4"],"correct":0,"explanation":"explicacao detalhada passo a passo aqui"}]}`}],
         max_tokens:2000,temperature:0.7
       })
     });
@@ -1318,9 +1422,12 @@ function responderDialogo(idx){
   });
   const fb=document.getElementById('dialogo-feedback');
   fb.style.display='block';
+  // Anti XP infinito: 1x por dialogo por dia
+  const keyXP='dlg_'+dialogoAtual.cenario+'_'+new Date().toDateString();
+  const podeGanharXP=!localStorage.getItem(keyXP);
   if(acertou){
-    atualizarXP(cena.xp);
-    fb.innerHTML=`<div class="card-item" style="border-left:3px solid #00ff99;margin-top:10px"><div style="color:#00ff99;font-weight:700;margin-bottom:4px">✅ ${dialogoAtual.personagem} diz: "Perfeito! Muito bem!"</div><div style="font-size:.8em;color:rgba(255,255,255,.6);white-space:pre-line">${cena.explicacao}</div></div>`;
+    if(podeGanharXP){atualizarXP(cena.xp);localStorage.setItem(keyXP,'1');}
+    fb.innerHTML=`<div class="card-item" style="border-left:3px solid #00ff99;margin-top:10px"><div style="color:#00ff99;font-weight:700;margin-bottom:4px">✅ ${dialogoAtual.personagem} diz: "Perfeito! Muito bem!"</div><div style="font-size:.8em;color:rgba(255,255,255,.6);white-space:pre-line">${cena.explicacao}</div>${podeGanharXP?'':'<div style="font-size:.72em;color:rgba(255,255,255,.3);margin-top:4px">XP ja ganho hoje neste dialogo</div>'}</div>`;
   }else{
     fb.innerHTML=`<div class="card-item" style="border-left:3px solid #f87171;margin-top:10px"><div style="color:#f87171;font-weight:700;margin-bottom:4px">❌ ${dialogoAtual.personagem} diz: "Nao! Vamos entender o processo..."</div><div style="font-size:.8em;color:rgba(255,255,255,.6);white-space:pre-line">${cena.explicacao}</div></div>`;
   }
@@ -1379,7 +1486,7 @@ async function gerarPerguntasCopa(){
     const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
-      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:'Gere 3 perguntas desafiadoras para uma copa escolar do 9 ano, cobrindo materias variadas (matematica, portugues, historia, ciencias). Para cada pergunta, inclua 4 opcoes e a resposta. Formato: JSON com array "perguntas". Responda apenas JSON valido.'}],max_tokens:1000,temperature:0.8})
+      body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:'Gere 3 perguntas desafiadoras para uma copa escolar do 9 ano, cobrindo materias variadas (matematica, portugues, historia, ciencias). Para cada pergunta, inclua 4 opcoes e a resposta. Formato: JSON com array "perguntas". Responda apenas JSON valido.'}],max_tokens:1000,temperature:0.8})
     });
     const d=await res.json();
     const txt=d.choices?.[0]?.message?.content||'';
@@ -1403,7 +1510,7 @@ async function iniciarDuelo(){
     const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
-      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:`Crie 5 perguntas rapidas de multipla escolha sobre ${materia} para alunos do 9 ano. Responda SOMENTE JSON: {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}`}],max_tokens:1500,temperature:0.7})
+      body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:`Crie 5 perguntas rapidas de multipla escolha sobre ${materia} para alunos do 9 ano. Responda SOMENTE JSON: {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}`}],max_tokens:1500,temperature:0.7})
     });
     const d=await res.json();
     const txt=d.choices?.[0]?.message?.content||'{}';
@@ -1505,6 +1612,188 @@ async function carregarLogs(tabela){
   if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📊</div><p>Nenhum log</p></div>';return;}
   el.innerHTML=data.map(l=>`<div class="card-item" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span class="badge badge-blue">${l.acao||'log'}</span><span style="font-size:.68em;color:rgba(255,255,255,.3)">${new Date(l.criado_em).toLocaleString('pt-BR')}</span></div>${l.dados?`<div style="font-size:.75em;color:rgba(255,255,255,.4);font-family:monospace;word-break:break-all">${typeof l.dados==='string'?l.dados.substring(0,150):JSON.stringify(l.dados).substring(0,150)}</div>`:''}</div>`).join('');
 }
+
+// ===== PERFIL =====
+async function abrirPerfil(){
+  const{data:ud}=await sb.from('users').select('*').eq('id',cu.id).maybeSingle();
+  const nome=ud?.nome||nomeUser;
+  document.getElementById('perfil-nome').value=nome;
+  document.getElementById('perfil-desc').value=ud?.descricao||'';
+  document.getElementById('perfil-email').textContent=cu.email;
+  document.getElementById('perfil-xp').textContent=xpTotal;
+  const avBig=document.getElementById('perfil-avatar-big');
+  if(ud?.avatar_url){avBig.innerHTML=`<img src="${ud.avatar_url}" style="width:72px;height:72px;border-radius:50%;object-fit:cover">`;}
+  else{avBig.textContent=nome[0].toUpperCase();}
+  // Mostrar aviso de nome para nao-admin
+  document.getElementById('nome-aviso').style.display=isAdmin?'none':'block';
+  if(isAdmin)carregarSolicitacoesNome();
+  abrirModal('modal-perfil');
+}
+async function salvarPerfil(){
+  const desc=document.getElementById('perfil-desc').value.trim();
+  await sb.from('users').update({descricao:desc}).eq('id',cu.id);
+  toast('Perfil salvo!','success');
+  fecharModal('modal-perfil');
+}
+async function salvarNomePerfil(){
+  const novoNome=document.getElementById('perfil-nome').value.trim();
+  if(!novoNome){toast('Nome invalido','error');return;}
+  if(isAdmin){
+    // Admin pode trocar direto
+    await sb.from('users').update({nome:novoNome}).eq('id',cu.id);
+    nomeUser=novoNome.split(' ').slice(0,2).join(' ');
+    document.getElementById('sidebarName').textContent=nomeUser;
+    document.getElementById('headerAvatar').textContent=novoNome[0].toUpperCase();
+    document.getElementById('sidebarAvatar').textContent=novoNome[0].toUpperCase();
+    toast('Nome alterado!','success');
+  }else{
+    // Aluno solicita aprovacao
+    await sb.from('solicitacoes_nome').insert({user_id:cu.id,nome_atual:nomeUser,nome_novo:novoNome,status:'pending'});
+    toast('Solicitacao enviada! Aguarde aprovacao do admin.','success');
+  }
+}
+async function uploadFotoPerfil(input){
+  const file=input.files[0];
+  if(!file)return;
+  const path='avatars/'+cu.id+'_'+Date.now()+'.'+file.name.split('.').pop();
+  const{error}=await sb.storage.from('comprovantes').upload(path,file,{upsert:true});
+  if(error){toast('Erro no upload','error');return;}
+  const{data}=sb.storage.from('comprovantes').getPublicUrl(path);
+  await sb.from('users').update({avatar_url:data.publicUrl}).eq('id',cu.id);
+  document.getElementById('perfil-avatar-big').innerHTML=`<img src="${data.publicUrl}" style="width:72px;height:72px;border-radius:50%;object-fit:cover">`;
+  document.getElementById('headerAvatar').innerHTML=`<img src="${data.publicUrl}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`;
+  toast('Foto atualizada!','success');
+}
+async function carregarSolicitacoesNome(){
+  const{data}=await sb.from('solicitacoes_nome').select('*,users(nome,email)').eq('status','pending');
+  const el=document.getElementById('lista-solicitacoes');
+  if(!data?.length){el.innerHTML='<div style="font-size:.78em;color:rgba(255,255,255,.3)">Nenhuma solicitacao</div>';return;}
+  el.innerHTML=data.map(s=>`<div class="card-item" style="margin-bottom:8px;padding:10px">
+    <div style="font-size:.8em;margin-bottom:5px"><strong>${s.users?.nome}</strong> quer trocar para <strong style="color:#00ff99">${s.nome_novo}</strong></div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-success btn-sm" onclick="aprovarNome('${s.id}','${s.user_id}','${s.nome_novo}')">✅ Aprovar</button>
+      <button class="btn btn-danger btn-sm" onclick="recusarNome('${s.id}')">❌ Recusar</button>
+    </div>
+  </div>`).join('');
+}
+async function aprovarNome(solId,userId,novoNome){
+  await sb.from('users').update({nome:novoNome}).eq('id',userId);
+  await sb.from('solicitacoes_nome').update({status:'approved'}).eq('id',solId);
+  await sb.from('notifications').insert({user_id:userId,title:'Nome aprovado!',message:'Seu nome foi alterado para '+novoNome,type:'info'});
+  toast('Nome aprovado!','success');
+  carregarSolicitacoesNome();
+}
+async function recusarNome(solId){
+  await sb.from('solicitacoes_nome').update({status:'rejected'}).eq('id',solId);
+  toast('Solicitacao recusada','error');
+  carregarSolicitacoesNome();
+}
+
+// ===== LIVROS DIGITAIS =====
+async function uploadLivro(){
+  if(!isAdmin)return;
+  const materia=document.getElementById('livro-materia').value;
+  const titulo=document.getElementById('livro-titulo').value.trim();
+  const file=document.getElementById('livro-arquivo').files[0];
+  if(!materia||!titulo||!file){toast('Preencha todos os campos','error');return;}
+  toast('Enviando arquivo...','info');
+  const path='livros/'+materia+'_'+Date.now()+'.'+file.name.split('.').pop();
+  const{error}=await sb.storage.from('livros').upload(path,file,{upsert:true});
+  if(error){toast('Erro no upload: '+error.message,'error');console.error(error);return;}
+  const{data}=sb.storage.from('livros').getPublicUrl(path);
+  await sb.from('livros').insert({materia,descricao:titulo,url:data.publicUrl});
+  toast('Material enviado!','success');
+  document.getElementById('livro-titulo').value='';
+  document.getElementById('livro-arquivo').value='';
+  carregarLivros();
+}
+async function carregarLivros(){
+  const{data}=await sb.from('livros').select('*').order('materia');
+  const el=document.getElementById('lista-livros');
+  if(!el)return;
+  const icons={Portugues:'📖',Matematica:'📐',Historia:'🏛️',Geografia:'🌍',Ingles:'🇬🇧',Artes:'🎨',Ciencias:'🔬'};
+  el.innerHTML=data?.length?data.map(l=>`<div class="card-item" style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+    <span style="font-size:1.8em">${icons[l.materia]||'📚'}</span>
+    <div style="flex:1"><div style="font-weight:700;font-size:.88em">${l.materia}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${l.descricao}</div></div>
+    ${isAdmin?`<button class="btn btn-danger btn-sm" onclick="deletarLivro('${l.id}')">🗑</button>`:''}
+  </div>`).join(''):'<div class="empty"><div class="icon">📚</div><p>Nenhum material enviado</p></div>';
+}
+async function deletarLivro(id){
+  await sb.from('livros').delete().eq('id',id);
+  toast('Material removido','success');
+  carregarLivros();
+}
+
+// ===== MONITORAMENTO =====
+async function carregarMonitor(){
+  const hoje=new Date().toISOString().split('T')[0];
+  const[users,pagsPend,sims,msgs]=await Promise.all([
+    sb.from('users').select('id,nome,email,xp,criado_em',{count:'exact'}),
+    sb.from('payments').select('id',{count:'exact'}).eq('status','pending'),
+    sb.from('quiz_sessions').select('id',{count:'exact'}).gte('criado_em',hoje),
+    sb.from('messages').select('id',{count:'exact'}).gte('criado_em',hoje),
+  ]);
+  document.getElementById('mon-total-users').textContent=users.count||0;
+  document.getElementById('mon-pagamentos').textContent=pagsPend.count||0;
+  document.getElementById('mon-simulados').textContent=sims.count||0;
+  document.getElementById('mon-msgs').textContent=msgs.count||0;
+
+  const el=document.getElementById('monitor-users');
+  const usersData=users.data||[];
+  el.innerHTML=usersData.sort((a,b)=>b.xp-a.xp).map(u=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;padding:10px 12px">
+    <div><div style="font-weight:700;font-size:.85em">${u.nome}</div><div style="font-size:.7em;color:rgba(255,255,255,.35)">${u.email}</div></div>
+    <div style="text-align:right"><div style="font-size:.78em;color:#00ff99">⚡ ${u.xp||0} XP</div></div>
+  </div>`).join('');
+}
+
+// ===== STATUS PAGAMENTOS =====
+let filtroStatusAtual='todos';
+async function carregarPagStatus(filtro){
+  filtroStatusAtual=filtro;
+  let query=sb.from('payments').select('*,users(nome,email)').order('criado_em',{ascending:false});
+  if(filtro!=='todos')query=query.eq('status',filtro);
+  const{data}=await query;
+  const el=document.getElementById('lista-pag-status');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">💰</div><p>Nenhum resultado</p></div>';return;}
+  const cfg={approved:['badge-green','✅ Pago'],pending:['badge-yellow','⏳ Pendente'],rejected:['badge-red','❌ Reprovado']};
+  el.innerHTML=data.map(p=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <div><div style="font-weight:700;font-size:.88em">${p.users?.nome||p.nome||'?'}</div><div style="font-size:.7em;color:rgba(255,255,255,.35)">${p.month} ${p.year}</div></div>
+    <span class="badge ${cfg[p.status]?.[0]||'badge-yellow'}">${cfg[p.status]?.[1]||'?'}</span>
+  </div>`).join('');
+}
+function filtrarPagStatus(f){carregarPagStatus(f);}
+
+// ===== SIMULADO COM LIVROS =====
+async function buscarContextoLivro(materia){
+  const{data}=await sb.from('livros').select('descricao,url').eq('materia',materia).limit(1).maybeSingle();
+  return data?'Material disponivel: '+data.descricao:'';
+}
+
+// ===== DIALOGO VIA IA =====
+async function iniciarDialogoIA(materia){
+  document.getElementById('dialogo-container').style.display='none';
+  const el=document.getElementById('dialogo-ativo');
+  el.style.display='block';
+  el.innerHTML='<div class="empty"><div class="icon">⏳</div><p>IA criando dialogo...</p></div>';
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
+      body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:`Crie um dialogo interativo educativo sobre ${materia} para alunos do 9 ano. Crie um cenario criativo com um personagem e 2 perguntas de multipla escolha. Responda APENAS JSON valido: {"cenario":"descricao do cenario","personagem":"nome do personagem","avatar":"emoji","cenas":[{"fala":"fala do personagem","pergunta":"pergunta","opcoes":["A) op1","B) op2","C) op3","D) op4"],"correct":0,"explicacao":"explicacao detalhada","xp":20}]}`}],max_tokens:1200,temperature:0.9})
+    });
+    const d=await res.json();
+    const txt=d.choices?.[0]?.message?.content||'{}';
+    const parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    dialogoAtual={cenario:parsed.cenario,personagem:parsed.personagem,avatar:parsed.avatar||'🤖',cenas:parsed.cenas};
+    dialogoCena=0;
+    mostrarCenaDialogo();
+    registrarLog('logs_ia','dialogo_gerado',{materia});
+  }catch(e){
+    console.error('Dialogo IA erro:',e);
+    el.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao gerar dialogo. Tente novamente.</p></div><button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="voltarDialogos()">Voltar</button>';
+  }
+}
+
 </script>
 </body>
 </html>
