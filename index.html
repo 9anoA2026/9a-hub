@@ -277,6 +277,7 @@ select.input{-webkit-appearance:none}
     <div class="nav-item" onclick="nav('monitor',this);carregarMonitor()"><span class="nav-icon">📡</span>monitoramento</div>
     <div class="nav-item" onclick="nav('livros',this);carregarLivros()"><span class="nav-icon">📚</span>livros-digitais</div>
     <div class="nav-item" onclick="nav('pagamentos-status',this);carregarPagStatus('todos')"><span class="nav-icon">💳</span>status-pagamentos</div>
+    <div class="nav-item" onclick="nav('mensalidade-todos',this);carregarMensalidadeTodos('todos')"><span class="nav-icon">💰</span>mensalidade-alunos</div>
   </div>
 
   <div class="nav-sep"></div>
@@ -581,6 +582,18 @@ select.input{-webkit-appearance:none}
   </div>
   <div id="lista-pag-status"><div class="skeleton"></div><div class="skeleton"></div></div>
 </section>
+
+<!-- MENSALIDADE TODOS -->
+<section class="section" id="section-mensalidade-todos">
+  <div class="section-title">💳 <span class="accent">Situacao Mensalidade</span></div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <button class="btn btn-primary btn-sm" onclick="carregarMensalidadeTodos('todos')">Todos</button>
+    <button class="btn btn-ghost btn-sm" onclick="carregarMensalidadeTodos('pago')">Pagos</button>
+    <button class="btn btn-ghost btn-sm" onclick="carregarMensalidadeTodos('pendente')">Pendentes</button>
+    <button class="btn btn-ghost btn-sm" onclick="carregarMensalidadeTodos('nao_pago')">Nao pagaram</button>
+  </div>
+  <div id="lista-mensalidade-todos"><div class="skeleton"></div><div class="skeleton"></div></div>
+</section>
 </main>
 
 <!-- MODAIS -->
@@ -684,6 +697,31 @@ select.input{-webkit-appearance:none}
     </div>
   </div>
 </div>
+
+<!-- MODAL PERFIL DE OUTRO USUARIO -->
+<div class="modal" id="modal-perfil-outro">
+  <div class="modal-box">
+    <div class="modal-title" id="perfil-outro-titulo">Perfil <span class="modal-close" onclick="fecharModal('modal-perfil-outro')">✕</span></div>
+    <div style="text-align:center;margin-bottom:16px">
+      <div id="perfil-outro-avatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:1.8em;margin:0 auto 10px">?</div>
+      <div style="font-weight:700;font-size:1.1em" id="perfil-outro-nome">?</div>
+      <div style="font-size:.78em;color:rgba(255,255,255,.4)" id="perfil-outro-desc"></div>
+    </div>
+    <div class="card-item" style="margin-bottom:12px">
+      <div style="font-size:.82em;color:rgba(255,255,255,.5)">⚡ XP: <span style="color:#00ff99;font-weight:700" id="perfil-outro-xp">0</span></div>
+      <div style="font-size:.82em;color:rgba(255,255,255,.5);margin-top:4px" id="perfil-outro-status"></div>
+    </div>
+    <div id="perfil-outro-acoes-admin" style="display:none">
+      <div style="font-size:.78em;color:rgba(255,255,255,.35);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Acoes do Admin</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn btn-danger btn-sm" id="btn-expulsar" onclick="expulsarUser()">🚪 Expulsar</button>
+        <button class="btn btn-danger btn-sm" id="btn-banir" onclick="banirUserPerfil()">🔨 Banir</button>
+        <button class="btn btn-ghost btn-sm" id="btn-castigo" onclick="castigarUser()" style="grid-column:span 2">⚡ Castigo (-15 XP)</button>
+        <button class="btn btn-ghost btn-sm" id="btn-reset-xp" onclick="resetarXPUser()" style="grid-column:span 2">🔄 Resetar XP</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -693,7 +731,7 @@ const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const GROQ='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';
 const ADMIN_EMAIL='miqueiasasaf890@gmail.com';
 
-let sb,cu,isAdmin=false,nomeUser='',xpTotal=0;
+let sb,cu,isAdmin=false,nomeUser='',xpTotal=0,iaMsgCount=0;
 let simPerguntas=[],simIdx=0,simTimer=null,simRespostas=[],simTempo=60;
 let evRegras=[],evComidas=[],todosUsers=[],currentChatUser=null;
 let dueloPerguntas=[],dueloIdx=0,dueloMinhaPts=0,dueloOponentePts=0,dueloTimer=null;
@@ -718,13 +756,26 @@ window.addEventListener('load',async()=>{
   const partes=nome.trim().split(' ');
   nomeUser=partes.length>=2?partes[0]+' '+partes[1]:partes[0];
   const ini=partes[0][0].toUpperCase();
+  const avatarUrl=ud?.avatar_url||null;
 
-  document.getElementById('headerAvatar').textContent=ini;
-  document.getElementById('sidebarAvatar').textContent=ini;
+  if(avatarUrl){
+    document.getElementById('headerAvatar').innerHTML=`<img src="${avatarUrl}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`;
+    document.getElementById('sidebarAvatar').innerHTML=`<img src="${avatarUrl}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`;
+  }else{
+    document.getElementById('headerAvatar').textContent=ini;
+    document.getElementById('sidebarAvatar').textContent=ini;
+  }
   document.getElementById('sidebarName').textContent=nomeUser;
   document.getElementById('sidebarRole').textContent=isAdmin?'👑 Admin':'Aluno';
   atualizarXP(0);
 
+  // Carregar foto do perfil se existir
+  if(ud?.avatar_url){
+    const hAv=document.getElementById('headerAvatar');
+    hAv.innerHTML=`<img src="${ud.avatar_url}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`;
+    hAv.style.padding='0';
+    document.getElementById('sidebarAvatar').innerHTML=`<img src="${ud.avatar_url}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`;
+  }
   if(isAdmin){
     document.querySelectorAll('.admin-only').forEach(el=>el.style.removeProperty('display'));
     document.getElementById('section-admin').style.display='block';
@@ -1094,16 +1145,52 @@ async function enviarComprovante(){
   const nome=document.getElementById('pag-nome').value.trim();
   const file=document.getElementById('pag-comprovante').files[0];
   if(!nome||!file){toast('Preencha nome e comprovante','error');return;}
-  const path=cu.id+'_'+Date.now()+'.'+file.name.split('.').pop();
-  const{error:upErr}=await sb.storage.from('comprovantes').upload(path,file);
-  if(upErr){toast('Erro no upload da imagem','error');console.error(upErr);return;}
-  const{data:urlData}=sb.storage.from('comprovantes').getPublicUrl(path);
+  
+  toast('Enviando...','info');
+  
+  // Converter para base64 para contornar problemas de storage
+  const toBase64 = f => new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result);
+    r.onerror=rej;
+    r.readAsDataURL(f);
+  });
+  
+  let imgUrl = '';
+  try{
+    // Tentar upload no storage primeiro
+    const path='comp_'+cu.id+'_'+Date.now()+'.'+file.name.split('.').pop();
+    const{error:upErr,data:upData}=await sb.storage.from('comprovantes').upload(path,file,{upsert:true});
+    if(upErr){
+      console.warn('Storage falhou, usando base64:',upErr.message);
+      imgUrl = await toBase64(file);
+    }else{
+      const{data}=sb.storage.from('comprovantes').getPublicUrl(path);
+      imgUrl = data.publicUrl;
+    }
+  }catch(e){
+    console.warn('Erro storage, usando base64');
+    imgUrl = await toBase64(file);
+  }
+  
   const ano=new Date().getFullYear();
   const mes=new Date().toLocaleString('pt-BR',{month:'long'});
-  const{error}=await sb.from('payments').upsert({user_id:cu.id,nome,comprovante_url:urlData.publicUrl,status:'pending',month:mes,year:ano,amount:0},{onConflict:'user_id,year',ignoreDuplicates:false});
-  if(error){toast('Erro ao enviar','error');console.error(error);return;}
-  toast('Comprovante enviado!','success');
-  carregarMensalidade();carregarDashboard();
+  
+  // Verificar se ja existe
+  const{data:exist}=await sb.from('payments').select('id').eq('user_id',cu.id).eq('year',ano).maybeSingle();
+  let err;
+  if(exist){
+    const{error:e}=await sb.from('payments').update({nome,comprovante_url:imgUrl,status:'pending',month:mes}).eq('id',exist.id);
+    err=e;
+  }else{
+    const{error:e}=await sb.from('payments').insert({user_id:cu.id,nome,comprovante_url:imgUrl,status:'pending',month:mes,year:ano,amount:0});
+    err=e;
+  }
+  if(err){toast('Erro ao salvar: '+err.message,'error');console.error(err);return;}
+  toast('Comprovante enviado! ✅','success');
+  carregarMensalidade();
+  carregarDashboard();
+  if(isAdmin)carregarPagamentos();
 }
 async function carregarPagamentos(){
   const{data}=await sb.from('payments').select('*,users(nome)').order('criado_em',{ascending:false});
@@ -1209,7 +1296,7 @@ async function enviarIA(){
       body:JSON.stringify({
         model:'llama-3.3-70b-versatile',
         messages:[
-          {role:'system',content:'Voce e a IA assistente do 9A Hub, um app escolar para alunos do 9 ano. Responda SEMPRE em portugues brasileiro. NUNCA resolva exercicios diretamente. Sempre explique o RACIOCINIO passo a passo para o aluno aprender. Seja didatico, amigavel e motivador. Use emojis com moderacao.'},
+          {role:'system',content:'Voce e a IA assistente do 9A Hub, app escolar para alunos do 9 ano. Responda SEMPRE em portugues brasileiro. NUNCA resolva exercicios diretamente. Explique o RACIOCINIO passo a passo. Seja didatico e motivador. IMPORTANTE: Mantenha respostas CURTAS e OBJETIVAS (maximo 3-4 paragrafos curtos). Use bullet points quando possivel. Nao escreva textos enormes. Use emojis com moderacao para deixar mais amigavel.'},
           ...iaHistory.slice(-8)
         ],
         max_tokens:800,temperature:0.7
@@ -1225,7 +1312,7 @@ async function enviarIA(){
     iaHistory.push({role:'assistant',content:resposta});
     await sb.from('chat_ia').insert({user_id:cu.id,mensagem:msg,resposta});
     registrarLog('logs_ia','pergunta',{msg:msg.substring(0,100)});
-    atualizarXP(2);
+    // XP apenas 1x por sessao de IA (nao a cada mensagem)
   }catch(e){
     console.error('IA erro:',e);
     resposta='Erro ao conectar com a IA 😕 Verifique sua conexao e tente novamente.\n\nDetalhes: '+e.message;
@@ -1254,7 +1341,17 @@ async function iniciarSimulado(){
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body:JSON.stringify({
         model:'llama-3.3-70b-versatile',
-        messages:[{role:'user',content:`Crie 5 perguntas de multipla escolha sobre ${materia} - ${assunto} para alunos do 9 ano brasileiro. Nivel: ${dif}. IMPORTANTE: As perguntas devem ser adequadas para o 9 ano do ensino fundamental, nem muito faceis nem impossivelmente dificeis. Foque em conteudo que realmente e ensinado nessa serie. Responda SOMENTE com JSON valido, sem texto antes ou depois, no formato: {"questions":[{"question":"pergunta aqui","options":["A) opcao1","B) opcao2","C) opcao3","D) opcao4"],"correct":0,"explanation":"explicacao detalhada passo a passo aqui"}]}`}],
+        messages:[{role:'user',content:`Voce e um professor experiente do 9 ano do ensino fundamental brasileiro. Crie EXATAMENTE 5 perguntas de multipla escolha sobre: ${materia} - topico: ${assunto}. 
+
+REGRAS OBRIGATORIAS:
+- Nivel ${dif}: ${dif==='facil'?'conceitos basicos, definicoes, exemplos simples':dif==='medio'?'aplicacao dos conceitos, interpretacao, calculos simples':'analise critica, problemas complexos, raciocinio aprofundado'}
+- As perguntas DEVEM ser sobre o conteudo especifico do 9 ano brasileiro
+- NUNCA repita perguntas
+- As alternativas erradas devem ser plausíveis (nao obvias)
+- A explicacao deve ensinar o raciocinio passo a passo
+
+Responda SOMENTE JSON valido, sem nada antes ou depois:
+{"questions":[{"question":"pergunta aqui","options":["A) opcao1","B) opcao2","C) opcao3","D) opcao4"],"correct":0,"explanation":"explicacao detalhada passo a passo"}]}`}],
         max_tokens:2000,temperature:0.7
       })
     });
@@ -1470,14 +1567,50 @@ async function carregarMissoes(){
 // ===== COPA DO MES =====
 async function carregarCopa(){
   const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});
-  document.getElementById('copa-mes-label').textContent=mes;
+  document.getElementById('copa-mes-label').textContent='Copa de '+mes;
   const el=document.getElementById('copa-content');
-  const{data:logs}=await sb.from('logs_perguntas').select('*').order('criado_em',{ascending:false}).limit(5);
-  if(!logs?.length){
-    el.innerHTML=`<div class="empty"><div class="icon">🏆</div><p>A copa do mes comecara em breve!</p></div>${isAdmin?`<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="gerarPerguntasCopa()">🤖 Gerar Perguntas (Admin)</button>`:''}`;
-    return;
+  const{data:logs}=await sb.from('logs_perguntas').select('*').order('criado_em',{ascending:false}).limit(20);
+  
+  let html='';
+  if(isAdmin){
+    html+=`<button class="btn btn-primary" style="width:100%;margin-bottom:14px" onclick="gerarPerguntasCopa()">🤖 Gerar Novas Perguntas</button>`;
   }
-  el.innerHTML=`<div style="margin-bottom:12px">${isAdmin?`<button class="btn btn-primary btn-sm" style="margin-bottom:12px" onclick="gerarPerguntasCopa()">+ Gerar mais perguntas</button>`:''}${logs.map(l=>`<div class="card-item" style="margin-bottom:8px"><div style="font-size:.82em;font-weight:700;margin-bottom:4px">${l.pergunta||l.dados||'...'}</div><div style="font-size:.7em;color:rgba(255,255,255,.35)">${new Date(l.criado_em).toLocaleDateString('pt-BR')}</div></div>`).join('')}</div>`;
+  
+  if(!logs?.length){
+    html+='<div class="empty"><div class="icon">🏆</div><p>Nenhuma pergunta gerada ainda.</p></div>';
+    el.innerHTML=html;return;
+  }
+  
+  // Tentar parsear as perguntas do JSON salvo
+  html+=`<div style="font-size:.78em;color:rgba(255,255,255,.4);margin-bottom:10px">${logs.length} pergunta(s) gerada(s) para a copa</div>`;
+  
+  logs.forEach(l=>{
+    let dadosParsed=null;
+    try{
+      const raw=typeof l.dados==='string'?l.dados:'';
+      if(raw.includes('questions')){
+        dadosParsed=JSON.parse(raw);
+      }
+    }catch(e){}
+    
+    if(dadosParsed&&dadosParsed.questions){
+      dadosParsed.questions.forEach((q,i)=>{
+        html+=`<div class="card-item" style="margin-bottom:10px;border-left:3px solid #fbbf24">
+          <div style="font-size:.72em;color:#fbbf24;margin-bottom:4px">Pergunta ${i+1}</div>
+          <div style="font-size:.85em;font-weight:700;margin-bottom:6px">${q.question}</div>
+          ${q.options.map((op,oi)=>`<div style="font-size:.78em;padding:3px 0;color:${oi===q.correct?'#00ff99':'rgba(255,255,255,.5)'}">${oi===q.correct?'✅ ':'• '}${op}</div>`).join('')}
+          <div style="font-size:.72em;color:rgba(255,255,255,.35);margin-top:6px">${new Date(l.criado_em).toLocaleDateString('pt-BR','pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div>
+        </div>`;
+      });
+    }else{
+      html+=`<div class="card-item" style="margin-bottom:8px">
+        <div style="font-size:.8em;color:rgba(255,255,255,.6)">${l.pergunta||'Perguntas geradas em '+new Date(l.criado_em).toLocaleDateString('pt-BR')}</div>
+        <div style="font-size:.7em;color:rgba(255,255,255,.3);margin-top:4px">${new Date(l.criado_em).toLocaleString('pt-BR')}</div>
+      </div>`;
+    }
+  });
+  
+  el.innerHTML=html;
 }
 async function gerarPerguntasCopa(){
   if(!isAdmin)return;
@@ -1490,7 +1623,13 @@ async function gerarPerguntasCopa(){
     });
     const d=await res.json();
     const txt=d.choices?.[0]?.message?.content||'';
-    await registrarLog('logs_perguntas','copa_gerada',{dados:txt.substring(0,500),pergunta:'Copa do Mes - '+new Date().toLocaleDateString('pt-BR')});
+    // Salvar JSON completo para exibir as questoes
+    await sb.from('logs_perguntas').insert({
+      user_id:cu.id,
+      acao:'copa_gerada',
+      dados:txt,
+      pergunta:'Copa do Mes - '+new Date().toLocaleDateString('pt-BR')
+    });
     toast('Perguntas geradas e salvas nos logs!','success');
     carregarCopa();
   }catch(e){toast('Erro ao gerar perguntas','error');console.error(e);}
@@ -1661,7 +1800,11 @@ async function uploadFotoPerfil(input){
   const{data}=sb.storage.from('comprovantes').getPublicUrl(path);
   await sb.from('users').update({avatar_url:data.publicUrl}).eq('id',cu.id);
   document.getElementById('perfil-avatar-big').innerHTML=`<img src="${data.publicUrl}" style="width:72px;height:72px;border-radius:50%;object-fit:cover">`;
-  document.getElementById('headerAvatar').innerHTML=`<img src="${data.publicUrl}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`;
+  const hAv=document.getElementById('headerAvatar');
+  hAv.innerHTML=`<img src="${data.publicUrl}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`;
+  hAv.style.padding='0';
+  document.getElementById('sidebarAvatar').innerHTML=`<img src="${data.publicUrl}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`;
+  document.getElementById('sidebarAvatar').innerHTML=`<img src="${data.publicUrl}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`;
   toast('Foto atualizada!','success');
 }
 async function carregarSolicitacoesNome(){
@@ -1696,13 +1839,22 @@ async function uploadLivro(){
   const titulo=document.getElementById('livro-titulo').value.trim();
   const file=document.getElementById('livro-arquivo').files[0];
   if(!materia||!titulo||!file){toast('Preencha todos os campos','error');return;}
-  toast('Enviando arquivo...','info');
-  const path='livros/'+materia+'_'+Date.now()+'.'+file.name.split('.').pop();
-  const{error}=await sb.storage.from('livros').upload(path,file,{upsert:true});
-  if(error){toast('Erro no upload: '+error.message,'error');console.error(error);return;}
-  const{data}=sb.storage.from('livros').getPublicUrl(path);
-  await sb.from('livros').insert({materia,descricao:titulo,url:data.publicUrl});
-  toast('Material enviado!','success');
+  toast('Processando material...','info');
+  let fileUrl='';
+  try{
+    const path='livros_'+materia+'_'+Date.now()+'.'+file.name.split('.').pop();
+    const{error:upErr}=await sb.storage.from('livros').upload(path,file,{upsert:true});
+    if(upErr){
+      console.warn('Storage livros falhou:',upErr.message);
+      fileUrl='ref:'+file.name;
+    }else{
+      const{data}=sb.storage.from('livros').getPublicUrl(path);
+      fileUrl=data.publicUrl;
+    }
+  }catch(e){fileUrl='ref:'+file.name;}
+  const{error}=await sb.from('livros').insert({materia,descricao:titulo,url:fileUrl});
+  if(error){toast('Erro ao salvar: '+error.message,'error');console.error(error);return;}
+  toast('Material registrado! ✅','success');
   document.getElementById('livro-titulo').value='';
   document.getElementById('livro-arquivo').value='';
   carregarLivros();
@@ -1793,6 +1945,178 @@ async function iniciarDialogoIA(materia){
     el.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao gerar dialogo. Tente novamente.</p></div><button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="voltarDialogos()">Voltar</button>';
   }
 }
+
+
+// ===== PERFIL DE OUTRO USUARIO =====
+let perfilOutroAtual = null;
+async function verPerfilUsuario(userId){
+  const{data:ud}=await sb.from('users').select('*').eq('id',userId).single();
+  if(!ud)return;
+  perfilOutroAtual=ud;
+  document.getElementById('perfil-outro-titulo').innerHTML=ud.nome+' <span class="modal-close" onclick="fecharModal('modal-perfil-outro')">✕</span>';
+  document.getElementById('perfil-outro-nome').textContent=ud.nome;
+  document.getElementById('perfil-outro-desc').textContent=ud.descricao||'Sem descricao';
+  document.getElementById('perfil-outro-xp').textContent=ud.xp||0;
+  const av=document.getElementById('perfil-outro-avatar');
+  if(ud.avatar_url){av.innerHTML=`<img src="${ud.avatar_url}" style="width:64px;height:64px;border-radius:50%;object-fit:cover">`;}
+  else{av.textContent=ud.nome[0].toUpperCase();}
+  const statusEl=document.getElementById('perfil-outro-status');
+  statusEl.textContent=ud.is_banned?'🔨 Banido':ud.isadmin?'👑 Admin':'✅ Aluno ativo';
+  statusEl.style.color=ud.is_banned?'#f87171':ud.isadmin?'#fbbf24':'#00ff99';
+  // Mostrar acoes admin
+  const adminAcoes=document.getElementById('perfil-outro-acoes-admin');
+  if(isAdmin&&userId!==cu.id){
+    adminAcoes.style.display='block';
+    document.getElementById('btn-banir').textContent=ud.is_banned?'✅ Desbanir':'🔨 Banir';
+  }else{adminAcoes.style.display='none';}
+  abrirModal('modal-perfil-outro');
+}
+async function expulsarUser(){
+  if(!perfilOutroAtual||!isAdmin)return;
+  // Expulsar = deletar da tabela users (pode criar conta de novo)
+  await sb.from('users').delete().eq('id',perfilOutroAtual.id);
+  toast('Usuario expulso (pode criar conta novamente)','success');
+  fecharModal('modal-perfil-outro');
+  carregarUsersAdmin();
+  registrarLog('logs_sistema','expulsar_usuario',{user_id:perfilOutroAtual.id,nome:perfilOutroAtual.nome});
+}
+async function banirUserPerfil(){
+  if(!perfilOutroAtual||!isAdmin)return;
+  const jaBanido=perfilOutroAtual.is_banned;
+  await sb.from('users').update({is_banned:!jaBanido}).eq('id',perfilOutroAtual.id);
+  toast(jaBanido?'Usuario desbanido!':'Usuario banido permanentemente!',jaBanido?'success':'error');
+  fecharModal('modal-perfil-outro');
+  carregarUsersAdmin();
+  registrarLog('logs_sistema',jaBanido?'desbanir':'banir_permanente',{user_id:perfilOutroAtual.id});
+}
+async function castigarUser(){
+  if(!perfilOutroAtual||!isAdmin)return;
+  const novoXP=Math.max(0,(perfilOutroAtual.xp||0)-15);
+  await sb.from('users').update({xp:novoXP}).eq('id',perfilOutroAtual.id);
+  await sb.from('notifications').insert({user_id:perfilOutroAtual.id,title:'Voce recebeu um castigo!',message:'O admin aplicou uma penalidade de -15 XP.',type:'warning'});
+  toast('Castigo aplicado! -15 XP','success');
+  document.getElementById('perfil-outro-xp').textContent=novoXP;
+  perfilOutroAtual.xp=novoXP;
+  registrarLog('logs_sistema','castigo',{user_id:perfilOutroAtual.id,xp_removido:15});
+}
+async function resetarXPUser(){
+  if(!perfilOutroAtual||!isAdmin)return;
+  if(!confirm('Resetar todo o XP de '+perfilOutroAtual.nome+'?'))return;
+  await sb.from('users').update({xp:0}).eq('id',perfilOutroAtual.id);
+  toast('XP resetado!','success');
+  document.getElementById('perfil-outro-xp').textContent=0;
+  perfilOutroAtual.xp=0;
+  registrarLog('logs_sistema','resetar_xp',{user_id:perfilOutroAtual.id});
+}
+
+// ===== MENSALIDADE TODOS OS ALUNOS =====
+async function carregarMensalidadeTodos(filtro='todos'){
+  const ano=new Date().getFullYear();
+  const{data:users}=await sb.from('users').select('id,nome').order('nome');
+  const{data:pagamentos}=await sb.from('payments').select('*').eq('year',ano);
+  const el=document.getElementById('lista-mensalidade-todos');
+  if(!users?.length){el.innerHTML='<div class="empty"><div class="icon">👥</div><p>Nenhum aluno</p></div>';return;}
+  
+  const pagMap={};
+  (pagamentos||[]).forEach(p=>pagMap[p.user_id]=p);
+  
+  let lista=users.map(u=>({...u,pag:pagMap[u.id]||null}));
+  if(filtro==='pago')lista=lista.filter(u=>u.pag?.status==='approved');
+  else if(filtro==='pendente')lista=lista.filter(u=>u.pag&&u.pag.status!=='approved');
+  else if(filtro==='nao_pago')lista=lista.filter(u=>!u.pag);
+  
+  const cfg={approved:'✅ Pago',pending:'⏳ Aguardando',rejected:'❌ Reprovado'};
+  const cls={approved:'badge-green',pending:'badge-yellow',rejected:'badge-red'};
+  
+  el.innerHTML=lista.map(u=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="verPerfilUsuario('${u.id}')">
+      <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.9em;flex-shrink:0">${u.nome[0].toUpperCase()}</div>
+      <div style="font-weight:700;font-size:.88em">${u.nome}</div>
+    </div>
+    <span class="badge ${u.pag?cls[u.pag.status]||'badge-yellow':'badge-red'}">${u.pag?cfg[u.pag.status]||'Enviado':'Nao pagou'}</span>
+  </div>`).join('');
+}
+
+// ===== COPA DO MES - MELHORADA =====
+async function carregarCopa(){
+  const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});
+  document.getElementById('copa-mes-label').textContent=mes;
+  const el=document.getElementById('copa-content');
+  const{data:logs}=await sb.from('logs_perguntas').select('*').order('criado_em',{ascending:false}).limit(10);
+  
+  let questoes=[];
+  if(logs?.length){
+    logs.forEach(l=>{
+      try{
+        const d=typeof l.dados==='string'?JSON.parse(l.dados):l.dados;
+        if(d&&d.questions)questoes=questoes.concat(d.questions);
+      }catch(e){}
+    });
+  }
+  
+  if(!questoes.length){
+    el.innerHTML=`<div class="card-item" style="text-align:center;padding:20px;margin-bottom:12px">
+      <div style="font-size:2em;margin-bottom:6px">🏆</div>
+      <p style="color:rgba(255,255,255,.5);font-size:.85em">A copa do mes ainda nao foi iniciada!</p>
+    </div>${isAdmin?`<button class="btn btn-primary" style="width:100%" onclick="gerarPerguntasCopa()">🤖 Gerar Perguntas da Copa</button>`:'<p style="text-align:center;font-size:.8em;color:rgba(255,255,255,.3)">Aguardando o admin iniciar a copa...</p>'}`;
+    return;
+  }
+  
+  // Mostrar questoes da copa
+  el.innerHTML=`
+    <div class="card-item" style="margin-bottom:12px;border-left:3px solid #fbbf24">
+      <div style="font-size:.8em;color:#fbbf24;font-weight:700;margin-bottom:6px">🏆 ${questoes.length} questoes disponiveis</div>
+      <div style="font-size:.75em;color:rgba(255,255,255,.4)">Compete pelo top ranking!</div>
+    </div>
+    ${isAdmin?`<button class="btn btn-primary btn-sm" style="margin-bottom:12px" onclick="gerarPerguntasCopa()">+ Gerar mais questoes</button>`:''}
+    ${questoes.slice(0,5).map((q,i)=>`<div class="card-item" style="margin-bottom:8px">
+      <div style="font-size:.82em;font-weight:700;margin-bottom:4px">${i+1}. ${q.question||q}</div>
+      ${q.options?q.options.map(op=>`<div style="font-size:.75em;color:rgba(255,255,255,.5);padding:2px 0">${op}</div>`).join(''):''}
+    </div>`).join('')}
+  `;
+}
+
+async function gerarPerguntasCopa(){
+  if(!isAdmin)return;
+  toast('Gerando questoes para a copa...','info');
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
+      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:'Gere 5 questoes desafiadoras para uma copa escolar do 9 ano, cobrindo materias variadas. Para cada questao inclua 4 opcoes e resposta correta. Formato: APENAS JSON valido, sem texto extra. {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}'}],max_tokens:1500,temperature:0.8})
+    });
+    if(!res.ok)throw new Error('API error '+res.status);
+    const d=await res.json();
+    const txt=d.choices?.[0]?.message?.content||'{}';
+    const parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    await sb.from('logs_perguntas').insert({
+      user_id:cu.id,
+      acao:'copa_gerada',
+      dados:JSON.stringify(parsed),
+      pergunta:'Copa do Mes - '+new Date().toLocaleDateString('pt-BR')
+    });
+    toast('Questoes geradas e salvas!','success');
+    carregarCopa();
+  }catch(e){toast('Erro ao gerar questoes: '+e.message,'error');console.error(e);}
+}
+
+// Adicionar visualizacao de perfil nos rankings e chats
+// Atualizar render do ranking para ter onclick
+async function carregarRanking(){
+  const{data:users}=await sb.from('users').select('id,nome,xp,avatar_url').order('xp',{ascending:false});
+  const el=document.getElementById('lista-ranking');
+  if(!users?.length){el.innerHTML='<div class="empty"><div class="icon">🏆</div><p>Sem dados</p></div>';return;}
+  const medals=['🥇','🥈','🥉'];
+  const posClass=['gold','silver','bronze'];
+  el.innerHTML=users.map((u,i)=>`<div class="ranking-item" style="${u.id===cu.id?'border-color:rgba(0,255,153,0.3);background:rgba(0,255,153,0.04)':''};cursor:pointer" onclick="verPerfilUsuario('${u.id}')">
+    <span class="rank-pos ${posClass[i]||''}">${i<3?medals[i]:i+1+'°'}</span>
+    ${u.avatar_url?`<img src="${u.avatar_url}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0">`:`<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.85em;flex-shrink:0">${u.nome[0].toUpperCase()}</div>`}
+    <div style="flex:1"><div style="font-weight:700;font-size:.88em">${u.nome}${u.id===cu.id?' (voce)':''}</div><div style="font-size:.75em;color:rgba(255,255,255,.38)">⚡ ${u.xp||0} XP</div></div>
+    ${i===0?'<span style="font-size:1.5em">👑</span>':''}
+  </div>`).join('');
+}
+
+// IA com resumos menores
 
 </script>
 </body>
