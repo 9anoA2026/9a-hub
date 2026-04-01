@@ -1706,7 +1706,448 @@ function voltarDuelo(){document.getElementById('duelo-lobby').style.display='blo
 // ===== PLANO DE ESTUDO =====
 // carregarPlanoEstudo movida abaixo
 
-// ===== INICIALIZAR SECOES ADMIN NOVAS =====
+// ===== RANKING =====
+async function carregarRanking(){
+  const{data}=await sb.from('users').select('id,nome,xp,avatar_url').order('xp',{ascending:false}).limit(20);
+  const el=document.getElementById('lista-ranking');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">🏆</div><p>Nenhum dado</p></div>';return;}
+  const medalhas=['🥇','🥈','🥉'];
+  const posClasses=['gold','silver','bronze'];
+  el.innerHTML=data.map((u,i)=>{
+    const eVoce=u.id===cu.id;
+    return`<div class="ranking-item" style="${eVoce?'border-color:rgba(0,255,153,0.35);background:rgba(0,255,153,0.05)':''}">
+      <div class="rank-pos ${posClasses[i]||''}">${medalhas[i]||i+1}</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.9em;flex-shrink:0">${u.nome[0].toUpperCase()}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.88em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.nome}${eVoce?' <span style="color:#00ff99;font-size:.75em">(voce)</span>':''}</div></div>
+      <div style="color:#00ff99;font-weight:700;font-size:.88em;flex-shrink:0">⚡ ${u.xp||0} XP</div>
+    </div>`;
+  }).join('');
+}
+
+// ===== COPA DO MES =====
+async function carregarCopa(){
+  const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});
+  document.getElementById('copa-mes-label').textContent=mes;
+  const el=document.getElementById('copa-content');
+  try{
+    const inicio=new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString();
+    const{data}=await sb.from('quiz_sessions').select('user_id,score').gte('criado_em',inicio);
+    if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">🏆</div><p>Nenhum simulado este mes ainda</p></div>';return;}
+    const mapa={};
+    data.forEach(s=>{
+      if(!mapa[s.user_id]){mapa[s.user_id]={total:0,count:0};}
+      mapa[s.user_id].total+=s.score;
+      mapa[s.user_id].count++;
+    });
+    const userIds=Object.keys(mapa);
+    const{data:users}=await sb.from('users').select('id,nome').in('id',userIds);
+    const lista=(users||[]).map(u=>({id:u.id,nome:u.nome,pts:mapa[u.id]?.total||0,sims:mapa[u.id]?.count||0})).sort((a,b)=>b.pts-a.pts);
+    const medalhas=['🥇','🥈','🥉'];
+    const posClasses=['gold','silver','bronze'];
+    el.innerHTML=lista.map((u,i)=>{
+      const eVoce=u.id===cu.id;
+      return`<div class="ranking-item" style="${eVoce?'border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.05)':''}">
+        <div class="rank-pos ${posClasses[i]||''}">${medalhas[i]||i+1}</div>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#fbbf24,#f59e0b);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.9em;flex-shrink:0">${u.nome[0].toUpperCase()}</div>
+        <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.88em">${u.nome}${eVoce?' <span style="color:#fbbf24;font-size:.75em">(voce)</span>':''}</div><div style="font-size:.7em;color:rgba(255,255,255,.35)">${u.sims} simulado${u.sims!==1?'s':''}</div></div>
+        <div style="color:#fbbf24;font-weight:700;font-size:.88em;flex-shrink:0">🏆 ${u.pts} pts</div>
+      </div>`;
+    }).join('');
+  }catch(e){el.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao carregar copa</p></div>';console.error(e);}
+}
+
+// ===== PLANO DE ESTUDO =====
+async function carregarPlanoEstudo(){
+  const el=document.getElementById('plano-content');
+  el.innerHTML='<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+  try{
+    const{data:conteudos}=await sb.from('conteudos').select('*').eq('ativo',true).order('materia');
+    if(!conteudos?.length){
+      el.innerHTML='<div class="empty"><div class="icon">📋</div><p>Nenhum conteudo cadastrado ainda.<br><small style="color:rgba(255,255,255,.3)">O admin pode adicionar em Conteudos por Materia.</small></p></div>';
+      return;
+    }
+    const{data:sessoes}=await sb.from('quiz_sessions').select('materia,score,total_questions').eq('user_id',cu.id).order('criado_em',{ascending:false}).limit(50);
+    const desempenho={};
+    (sessoes||[]).forEach(s=>{
+      if(!desempenho[s.materia]){desempenho[s.materia]={acertos:0,total:0};}
+      desempenho[s.materia].acertos+=s.score;
+      desempenho[s.materia].total+=s.total_questions;
+    });
+    const porMateria={};
+    conteudos.forEach(c=>{
+      if(!porMateria[c.materia])porMateria[c.materia]=[];
+      porMateria[c.materia].push(c);
+    });
+    el.innerHTML=Object.entries(porMateria).map(([mat,lista])=>{
+      const d=desempenho[mat];
+      const pct=d&&d.total>0?Math.round((d.acertos/d.total)*100):null;
+      const cor=pct===null?'rgba(255,255,255,.3)':pct>=70?'#00ff99':pct>=50?'#fbbf24':'#f87171';
+      return`<div class="card-item" style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-weight:700;color:#00ff99">${mat}</div>
+          ${pct!==null?`<span class="badge" style="background:rgba(0,0,0,.3);color:${cor};border:1px solid ${cor}">📊 ${pct}% acerto</span>`:'<span class="badge badge-blue">Sem dados</span>'}
+        </div>
+        ${lista.map(c=>`<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)"><div style="font-size:.85em;font-weight:700">${c.assunto}</div>${c.descricao?`<div style="font-size:.75em;color:rgba(255,255,255,.4);margin-top:2px">${c.descricao}</div>`:''}</div>`).join('')}
+        <button class="btn btn-ghost btn-sm" style="margin-top:10px;width:100%" onclick="document.getElementById('sim-materia').value='${mat}';nav('simulado',null)">📝 Estudar ${mat}</button>
+      </div>`;
+    }).join('');
+  }catch(e){el.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao carregar plano</p></div>';console.error(e);}
+}
+
+// ===== CONTEUDOS (ADMIN) =====
+async function carregarConteudos(){
+  const{data}=await sb.from('conteudos').select('*').order('materia');
+  const el=document.getElementById('lista-conteudos');
+  if(!el)return;
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📚</div><p>Nenhum conteudo</p></div>';return;}
+  el.innerHTML=data.map(c=>`<div class="card-item" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:8px">
+    <div style="flex:1"><span class="badge badge-blue" style="margin-bottom:4px;display:inline-block">${c.materia}</span><div style="font-weight:700;font-size:.88em">${c.assunto}</div>${c.descricao?`<div style="font-size:.75em;color:rgba(255,255,255,.4);margin-top:2px">${c.descricao}</div>`:''}</div>
+    <button class="btn btn-danger btn-sm" style="flex-shrink:0" onclick="deletarConteudo('${c.id}')">🗑</button>
+  </div>`).join('');
+}
+async function adicionarConteudo(){
+  if(!isAdmin)return;
+  const materia=document.getElementById('cont-materia').value;
+  const assunto=document.getElementById('cont-assunto').value.trim();
+  if(!materia||!assunto){toast('Preencha materia e assunto','error');return;}
+  const{error}=await sb.from('conteudos').insert({materia,assunto,descricao:document.getElementById('cont-descricao').value.trim()||null});
+  if(error){toast('Erro: '+error.message,'error');return;}
+  document.getElementById('cont-assunto').value='';
+  document.getElementById('cont-descricao').value='';
+  toast('Conteudo adicionado! ✅','success');
+  carregarConteudos();
+}
+async function deletarConteudo(id){
+  if(!isAdmin||!confirm('Remover este conteudo?'))return;
+  await sb.from('conteudos').delete().eq('id',id);
+  toast('Removido','success');
+  carregarConteudos();
+}
+
+// ===== PROVAS =====
+async function carregarProvas(){
+  const{data}=await sb.from('provas').select('*').order('data_prova',{ascending:true});
+  const el=document.getElementById('lista-provas');
+  if(!el)return;
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📋</div><p>Nenhuma prova cadastrada</p></div>';return;}
+  const hoje=new Date().toISOString().split('T')[0];
+  const proximas=data.filter(p=>p.data_prova>=hoje);
+  const passadas=data.filter(p=>p.data_prova<hoje);
+  let html='';
+  if(proximas.length){
+    html+=proximas.map(p=>`<div class="card-item" style="border-left:3px solid #00ff99;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><span class="badge badge-green" style="margin-bottom:4px;display:inline-block">${p.materia}</span>
+        <div style="font-weight:700;font-size:.9em">📅 ${new Date(p.data_prova+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})}</div>
+        ${p.professor?`<div style="font-size:.75em;color:rgba(255,255,255,.4);margin-top:2px">Prof. ${p.professor}</div>`:''}</div>
+        ${isAdmin?`<button class="btn btn-danger btn-sm" onclick="deletarProva('${p.id}')">🗑</button>`:''}
+      </div>
+      ${p.imagem_url?`<img src="${p.imagem_url}" style="width:100%;border-radius:8px;margin-top:8px;max-height:200px;object-fit:cover" loading="lazy">`:''}
+    </div>`).join('');
+    document.getElementById('prova-simulado-btn').style.display='block';
+  }else{
+    html+='<div class="empty"><div class="icon">✅</div><p>Nenhuma prova proxima</p></div>';
+  }
+  if(passadas.length){
+    html+=`<div style="font-size:.75em;color:rgba(255,255,255,.3);margin:14px 0 8px;text-transform:uppercase;letter-spacing:1px">Passadas</div>`;
+    html+=passadas.slice().reverse().map(p=>`<div class="card-item" style="opacity:.45;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+      <div><span class="badge badge-blue">${p.materia}</span><div style="font-size:.8em;margin-top:3px">${new Date(p.data_prova+'T12:00:00').toLocaleDateString('pt-BR')}</div></div>
+      ${isAdmin?`<button class="btn btn-danger btn-sm" onclick="deletarProva('${p.id}')">🗑</button>`:''}
+    </div>`).join('');
+  }
+  el.innerHTML=html;
+}
+async function adicionarProva(){
+  if(!isAdmin)return;
+  const materia=document.getElementById('prova-materia').value;
+  const data_prova=document.getElementById('prova-data').value;
+  if(!materia||!data_prova){toast('Preencha materia e data','error');return;}
+  const{error}=await sb.from('provas').insert({materia,data_prova,professor:document.getElementById('prova-professor').value.trim()||null});
+  if(error){toast('Erro: '+error.message,'error');return;}
+  toast('Prova adicionada! ✅','success');
+  document.getElementById('prova-data').value='';
+  document.getElementById('prova-materia').value='';
+  document.getElementById('prova-professor').value='';
+  carregarProvas();
+}
+async function uploadProva(){
+  if(!isAdmin)return;
+  const file=document.getElementById('prova-foto').files[0];
+  if(!file){toast('Selecione uma imagem','error');return;}
+  toast('Enviando...','info');
+  const path='prova_'+Date.now()+'.'+file.name.split('.').pop();
+  const{error}=await sb.storage.from('comprovantes').upload(path,file,{upsert:true});
+  if(error){toast('Erro no upload: '+error.message,'error');return;}
+  const{data:pub}=sb.storage.from('comprovantes').getPublicUrl(path);
+  await sb.from('provas').insert({materia:'Geral',data_prova:new Date().toISOString().split('T')[0],imagem_url:pub.publicUrl});
+  toast('Horario enviado! ✅','success');
+  carregarProvas();
+}
+async function deletarProva(id){
+  if(!isAdmin||!confirm('Remover esta prova?'))return;
+  await sb.from('provas').delete().eq('id',id);
+  toast('Removida','success');
+  carregarProvas();
+}
+async function scanProvasIA(){toast('Funcao em desenvolvimento 🔧','info');}
+function simularParaProva(){
+  const proxima=document.querySelector('#lista-provas .badge-green');
+  if(proxima)document.getElementById('sim-materia').value=proxima.textContent;
+  nav('simulado',null);
+}
+
+// ===== ADMIN USUARIOS =====
+async function carregarUsersAdmin(){
+  const{data}=await sb.from('users').select('*').order('xp',{ascending:false});
+  const el=document.getElementById('lista-users-admin');
+  if(!el)return;
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">👥</div><p>Nenhum usuario</p></div>';return;}
+  el.innerHTML=data.map(u=>`<div class="card-item" style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer" onclick="verPerfilOutro('${u.id}','${(u.nome||'?').replace(/'/g,"\\'")}',${u.xp||0})">
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;flex-shrink:0">${(u.nome||'?')[0].toUpperCase()}</div>
+    <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.88em">${u.nome}</div><div style="font-size:.72em;color:rgba(255,255,255,.4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email||''}</div></div>
+    <div style="font-size:.8em;color:#00ff99;flex-shrink:0">⚡${u.xp||0}</div>
+  </div>`).join('');
+}
+
+// ===== MONITOR =====
+async function carregarMonitor(){
+  try{
+    const hoje=new Date().toISOString().split('T')[0];
+    const[r1,r2,r3,r4]=await Promise.all([
+      sb.from('users').select('id',{count:'exact',head:true}),
+      sb.from('payments').select('id',{count:'exact',head:true}).eq('status','pending'),
+      sb.from('quiz_sessions').select('id',{count:'exact',head:true}).gte('criado_em',hoje),
+      sb.from('messages').select('id',{count:'exact',head:true}).gte('criado_em',hoje),
+    ]);
+    document.getElementById('mon-total-users').textContent=r1.count||0;
+    document.getElementById('mon-pagamentos').textContent=r2.count||0;
+    document.getElementById('mon-simulados').textContent=r3.count||0;
+    document.getElementById('mon-msgs').textContent=r4.count||0;
+    const{data:recentes}=await sb.from('users').select('nome,xp').order('xp',{ascending:false}).limit(10);
+    const el=document.getElementById('monitor-users');
+    if(el)el.innerHTML=(recentes||[]).map(u=>`<div class="card-item" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;margin-bottom:6px"><span style="font-size:.88em">${u.nome}</span><span style="font-size:.78em;color:#00ff99">⚡${u.xp||0} XP</span></div>`).join('');
+  }catch(e){console.error('Monitor err:',e);}
+}
+
+// ===== LOGS =====
+async function carregarLogs(tabela){
+  const{data}=await sb.from(tabela).select('*').order('criado_em',{ascending:false}).limit(50);
+  const el=document.getElementById('logs-content');
+  if(!el)return;
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📊</div><p>Nenhum log</p></div>';return;}
+  el.innerHTML=data.map(l=>`<div class="card-item" style="margin-bottom:6px;padding:10px 12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span class="badge badge-blue">${l.acao}</span>
+      <span style="font-size:.68em;color:rgba(255,255,255,.3)">${new Date(l.criado_em).toLocaleString('pt-BR')}</span>
+    </div>
+    ${l.dados?`<div style="font-size:.72em;color:rgba(255,255,255,.35);word-break:break-all">${typeof l.dados==='string'?l.dados:JSON.stringify(l.dados)}</div>`:''}
+  </div>`).join('');
+}
+
+// ===== PAG STATUS =====
+async function carregarPagStatus(filtro){
+  let query=sb.from('payments').select('*,users(nome)').order('criado_em',{ascending:false});
+  if(filtro!=='todos')query=query.eq('status',filtro);
+  const{data}=await query;
+  const el=document.getElementById('lista-pag-status');
+  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">💰</div><p>Nenhum registro</p></div>';return;}
+  const c={approved:['badge-green','Pago'],pending:['badge-yellow','Pendente'],rejected:['badge-red','Reprovado']};
+  el.innerHTML=data.map(p=>`<div class="card-item" style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+    <div><div style="font-weight:700;font-size:.88em">${p.users?.nome||p.nome||'?'}</div><div style="font-size:.72em;color:rgba(255,255,255,.4)">${p.month||''} ${p.year||''}</div></div>
+    <span class="badge ${c[p.status]?.[0]||'badge-yellow'}">${c[p.status]?.[1]||'Pendente'}</span>
+  </div>`).join('');
+}
+
+// ===== MENSALIDADE TODOS =====
+async function carregarMensalidadeTodos(filtro){
+  const{data:users}=await sb.from('users').select('id,nome').order('nome');
+  const ano=new Date().getFullYear();
+  const{data:pags}=await sb.from('payments').select('*').eq('year',ano);
+  const el=document.getElementById('lista-mensalidade-todos');
+  if(!el||!users?.length){if(el)el.innerHTML='<div class="empty"><div class="icon">👥</div><p>Nenhum usuario</p></div>';return;}
+  const mapa={};(pags||[]).forEach(p=>mapa[p.user_id]=p);
+  const c={approved:['badge-green','Pago'],pending:['badge-yellow','Pendente'],rejected:['badge-red','Reprovado']};
+  const lista=users.map(u=>({nome:u.nome,id:u.id,pag:mapa[u.id]})).filter(u=>{
+    if(filtro==='todos')return true;
+    if(filtro==='pago')return u.pag?.status==='approved';
+    if(filtro==='pendente')return u.pag?.status==='pending';
+    if(filtro==='nao_pago')return !u.pag||u.pag.status==='rejected';
+    return true;
+  });
+  el.innerHTML=lista.map(u=>{
+    const status=u.pag?.status||'nao_pago';
+    const[cls,txt]=c[status]||['badge-red','Nao pagou'];
+    return`<div class="card-item" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-weight:700;font-size:.88em">${u.nome}</div><span class="badge ${cls}">${txt}</span></div>`;
+  }).join('')||'<div class="empty"><div class="icon">✅</div><p>Nenhum resultado</p></div>';
+}
+
+// ===== PERFIL OUTRO USUARIO =====
+let perfilOutroId=null;
+async function verPerfilOutro(id,nome,xp){
+  perfilOutroId=id;
+  const{data:ud}=await sb.from('users').select('descricao,avatar_url').eq('id',id).maybeSingle();
+  document.getElementById('perfil-outro-titulo').innerHTML=`Perfil <span class="modal-close" onclick="fecharModal('modal-perfil-outro')">✕</span>`;
+  document.getElementById('perfil-outro-nome').textContent=nome;
+  document.getElementById('perfil-outro-xp').textContent=xp;
+  document.getElementById('perfil-outro-desc').textContent=ud?.descricao||'';
+  const av=document.getElementById('perfil-outro-avatar');
+  if(ud?.avatar_url){av.innerHTML=`<img src="${ud.avatar_url}" style="width:64px;height:64px;border-radius:50%;object-fit:cover">`;}
+  else{av.textContent=(nome[0]||'?').toUpperCase();}
+  document.getElementById('perfil-outro-status').textContent='';
+  const acoes=document.getElementById('perfil-outro-acoes-admin');
+  if(acoes)acoes.style.display=isAdmin?'block':'none';
+  abrirModal('modal-perfil-outro');
+}
+async function expulsarUser(){
+  if(!isAdmin||!perfilOutroId)return;
+  if(!confirm('Remover este usuario permanentemente?'))return;
+  await sb.from('users').delete().eq('id',perfilOutroId);
+  toast('Usuario removido','success');
+  fecharModal('modal-perfil-outro');
+  carregarUsersAdmin();
+}
+async function banirUserPerfil(){toast('Funcao em desenvolvimento 🔧','info');}
+async function castigarUser(){
+  if(!isAdmin||!perfilOutroId)return;
+  const{data}=await sb.from('users').select('xp').eq('id',perfilOutroId).single();
+  const novoXP=Math.max(0,(data?.xp||0)-15);
+  await sb.from('users').update({xp:novoXP}).eq('id',perfilOutroId);
+  toast('Castigo aplicado: -15 XP','success');
+  fecharModal('modal-perfil-outro');
+  carregarUsersAdmin();
+}
+async function resetarXPUser(){
+  if(!isAdmin||!perfilOutroId||!confirm('Resetar XP deste usuario para 0?'))return;
+  await sb.from('users').update({xp:0}).eq('id',perfilOutroId);
+  toast('XP resetado','success');
+  fecharModal('modal-perfil-outro');
+  carregarUsersAdmin();
+}
+
+// ===== PERFIL PROPRIO =====
+async function abrirPerfil(){
+  const{data:ud}=await sb.from('users').select('*').eq('id',cu.id).single();
+  document.getElementById('perfil-nome').value=ud?.nome||nomeUser;
+  document.getElementById('perfil-desc').value=ud?.descricao||'';
+  document.getElementById('perfil-email').textContent=cu.email;
+  document.getElementById('perfil-xp').textContent=xpTotal;
+  const bigAv=document.getElementById('perfil-avatar-big');
+  if(ud?.avatar_url){bigAv.innerHTML=`<img src="${ud.avatar_url}" style="width:72px;height:72px;border-radius:50%;object-fit:cover">`;}
+  else{bigAv.textContent=(nomeUser[0]||'?').toUpperCase();}
+  if(isAdmin){
+    const{data:sols}=await sb.from('nome_requests').select('*,users(nome)').eq('status','pending').limit(10).catch(()=>({data:[]}));
+    const el=document.getElementById('lista-solicitacoes');
+    if(el)el.innerHTML=sols?.length?sols.map(s=>`<div class="card-item" style="margin-bottom:8px">
+      <div style="font-size:.82em">De: <b>${s.users?.nome||'?'}</b></div>
+      <div style="font-size:.82em">Para: <b style="color:#00ff99">${s.novo_nome}</b></div>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button class="btn btn-success btn-sm" onclick="aprovarNome('${s.id}','${s.user_id}','${s.novo_nome.replace(/'/g,"\\'")}')">✅ Aprovar</button>
+        <button class="btn btn-danger btn-sm" onclick="recusarNome('${s.id}')">❌ Recusar</button>
+      </div></div>`).join(''):'<div style="font-size:.8em;color:rgba(255,255,255,.3)">Nenhuma solicitacao pendente</div>';
+  }
+  abrirModal('modal-perfil');
+}
+async function salvarPerfil(){
+  const desc=document.getElementById('perfil-desc').value.trim();
+  const{error}=await sb.from('users').update({descricao:desc}).eq('id',cu.id);
+  if(error){toast('Erro ao salvar','error');return;}
+  fecharModal('modal-perfil');
+  toast('Perfil salvo! ✅','success');
+}
+async function salvarNomePerfil(){
+  const novoNome=document.getElementById('perfil-nome').value.trim();
+  if(!novoNome){toast('Informe o nome','error');return;}
+  if(isAdmin){
+    await sb.from('users').update({nome:novoNome}).eq('id',cu.id);
+    nomeUser=novoNome.trim().split(' ').slice(0,2).join(' ');
+    document.getElementById('sidebarName').textContent=nomeUser;
+    toast('Nome alterado!','success');
+  }else{
+    document.getElementById('nome-aviso').style.display='block';
+    await sb.from('nome_requests').insert({user_id:cu.id,novo_nome:novoNome,status:'pending'}).catch(()=>{});
+    toast('Solicitacao enviada ao admin','success');
+  }
+}
+async function aprovarNome(solId,userId,novoNome){
+  await sb.from('users').update({nome:novoNome}).eq('id',userId);
+  await sb.from('nome_requests').update({status:'approved'}).eq('id',solId);
+  toast('Nome aprovado! ✅','success');
+  abrirPerfil();
+}
+async function recusarNome(solId){
+  await sb.from('nome_requests').update({status:'rejected'}).eq('id',solId);
+  toast('Solicitacao recusada','success');
+  abrirPerfil();
+}
+async function uploadFotoPerfil(input){
+  const file=input.files[0];if(!file)return;
+  toast('Enviando foto...','info');
+  const path='avatar_'+cu.id+'.'+file.name.split('.').pop();
+  const{error}=await sb.storage.from('comprovantes').upload(path,file,{upsert:true});
+  if(error){toast('Erro no upload: '+error.message,'error');return;}
+  const{data:pub}=sb.storage.from('comprovantes').getPublicUrl(path);
+  await sb.from('users').update({avatar_url:pub.publicUrl}).eq('id',cu.id);
+  const img=`<img src="${pub.publicUrl}" style="width:XPXPX;height:XPXPX;border-radius:50%;object-fit:cover">`;
+  const hAv=document.getElementById('headerAvatar');
+  hAv.innerHTML=img.replace(/XPXPX/g,'34');hAv.style.padding='0';
+  document.getElementById('sidebarAvatar').innerHTML=img.replace(/XPXPX/g,'42');
+  document.getElementById('perfil-avatar-big').innerHTML=img.replace(/XPXPX/g,'72');
+  toast('Foto atualizada! ✅','success');
+}
+
+// ===== DIALOGO COM IA =====
+async function iniciarDialogoIA(materia){
+  document.getElementById('dialogo-container').style.display='none';
+  const el=document.getElementById('dialogo-ativo');
+  el.style.display='block';
+  el.innerHTML='<div class="empty"><div class="icon">⏳</div><p>Gerando dialogo com IA...</p></div>';
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
+      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:`Crie um dialogo interativo educativo sobre ${materia} para aluno do 9 ano do Brasil. Crie um cenario criativo com um personagem interessante. Responda SOMENTE JSON valido sem nada antes ou depois: {"cenario":"descricao do cenario","personagem":"nome do personagem","avatar":"(um unico emoji)","cenas":[{"fala":"fala do personagem introduzindo o tema","pergunta":"pergunta para o aluno","opcoes":["A) opcao","B) opcao","C) opcao","D) opcao"],"correta":0,"explicacao":"explicacao detalhada","xp":20}]}`}],max_tokens:1500,temperature:0.8})
+    });
+    const d=await res.json();
+    const txt=d.choices?.[0]?.message?.content||'{}';
+    const parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    if(!parsed.cenas?.length)throw new Error('Sem cenas');
+    dialogoAtual=parsed;dialogoCena=0;
+    mostrarCenaDialogo();
+  }catch(e){
+    console.error('Dialogo IA err:',e);
+    el.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao gerar dialogo.<br>Tente novamente.</p></div><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="voltarDialogos()">← Voltar</button>';
+  }
+}
+
+// ===== LIVROS =====
+async function carregarLivros(){
+  const el=document.getElementById('lista-livros');
+  if(!el)return;
+  const{data,error}=await sb.from('livros').select('*').order('titulo');
+  if(error||!data?.length){el.innerHTML='<div class="empty"><div class="icon">📚</div><p>Nenhum livro cadastrado</p></div>';return;}
+  el.innerHTML=data.map(l=>`<div class="card-item" style="margin-bottom:8px">
+    <div style="font-weight:700">${l.titulo}</div>
+    ${l.materia?`<span class="badge badge-blue" style="margin-top:4px;display:inline-block">${l.materia}</span>`:''}
+    ${l.url?`<a href="${l.url}" target="_blank"><button class="btn btn-success btn-sm" style="width:100%;margin-top:8px">📖 Abrir</button></a>`:''}
+  </div>`).join('');
+}
+async function uploadLivro(){
+  if(!isAdmin)return;
+  const titulo=document.getElementById('livro-titulo').value.trim();
+  const materia=document.getElementById('livro-materia').value;
+  const file=document.getElementById('livro-arquivo').files[0];
+  if(!titulo){toast('Informe o titulo','error');return;}
+  if(!file){toast('Selecione um arquivo','error');return;}
+  toast('Enviando...','info');
+  const path='livro_'+Date.now()+'_'+file.name;
+  const{error}=await sb.storage.from('comprovantes').upload(path,file,{upsert:true});
+  if(error){toast('Erro no upload: '+error.message,'error');return;}
+  const{data:pub}=sb.storage.from('comprovantes').getPublicUrl(path);
+  await sb.from('livros').insert({titulo,materia:materia||null,url:pub.publicUrl}).catch(()=>{});
+  toast('Material enviado! ✅','success');
+  document.getElementById('livro-titulo').value='';
+  carregarLivros();
+}
 
 </script>
 </body>
