@@ -242,7 +242,8 @@ select.input{-webkit-appearance:none}
     <div class="nav-item" onclick="nav('ia',this)"><span class="nav-icon">🧠</span>assistente-ia</div>
     <div class="nav-item" onclick="nav('simulado',this)"><span class="nav-icon">📝</span>simulado</div>
     <div class="nav-item" onclick="nav('dialogo',this)"><span class="nav-icon">🎭</span>dialogos</div>
-    <div class="nav-item" onclick="nav('plano',this)"><span class="nav-icon">📋</span>plano-de-estudo</div>
+    <div class="nav-item" onclick="nav('plano',this);carregarPlanoEstudo()"><span class="nav-icon">📋</span>plano-de-estudo</div>
+    <div class="nav-item" onclick="nav('provas',this);carregarProvas()"><span class="nav-icon">🗓️</span>provas</div>
   </div>
 
   <!-- CATEGORIA: SOCIAL -->
@@ -264,6 +265,19 @@ select.input{-webkit-appearance:none}
   </div>
   <div class="cat-canais">
     <div class="nav-item" onclick="nav('copa',this)"><span class="nav-icon">🏆</span>copa-do-mes</div>
+  </div>
+
+  <!-- CATEGORIA IA (SO ADMIN) -->
+  <div class="cat-header admin-only" onclick="toggleCat(this)" style="display:none">
+    <div class="cat-tag"></div>
+    <span class="cat-label">IA (Admin)</span>
+  </div>
+  <div class="cat-canais admin-only" style="display:none">
+    <div class="nav-item" onclick="nav('ia',this)"><span class="nav-icon">🧠</span>chat-ia</div>
+    <div class="nav-item" onclick="nav('conteudos',this);carregarConteudos()"><span class="nav-icon">📖</span>conteudos-materias</div>
+    <div class="nav-item" onclick="nav('provas',this);carregarProvas()"><span class="nav-icon">📋</span>provas</div>
+    <div class="nav-item" onclick="nav('logs',this);carregarLogs('logs_ia')"><span class="nav-icon">📊</span>logs-ia</div>
+    <div class="nav-item" onclick="nav('monitor',this);carregarMonitor()"><span class="nav-icon">📡</span>monitoramento</div>
   </div>
 
   <!-- ADMIN -->
@@ -594,6 +608,55 @@ select.input{-webkit-appearance:none}
   </div>
   <div id="lista-mensalidade-todos"><div class="skeleton"></div><div class="skeleton"></div></div>
 </section>
+
+<!-- CONTEUDOS POR MATERIA -->
+<section class="section admin-only" id="section-conteudos" style="display:none">
+  <div class="section-title">📖 <span class="accent">Conteudos por Materia</span></div>
+  <div class="card-item" style="margin-bottom:12px">
+    <p style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:10px">Adicione os assuntos que estao sendo estudados. A IA vai usar isso nos simulados e dialogos!</p>
+    <select class="input" id="cont-materia">
+      <option value="">Selecione a materia</option>
+      <option>Portugues</option><option>Matematica</option><option>Historia</option>
+      <option>Geografia</option><option>Ingles</option><option>Artes</option><option>Ciencias</option>
+    </select>
+    <input class="input" id="cont-assunto" placeholder="Ex: Frações, Segunda Guerra Mundial, Fotossíntese">
+    <textarea class="input" id="cont-descricao" rows="2" placeholder="Detalhes do conteudo (opcional)"></textarea>
+    <button class="btn btn-primary" style="width:100%" onclick="adicionarConteudo()">➕ Adicionar Conteudo</button>
+  </div>
+  <div class="section-title" style="font-size:1em;margin-top:16px">📚 <span class="accent">Conteudos Ativos</span></div>
+  <div id="lista-conteudos"><div class="skeleton"></div></div>
+</section>
+
+<!-- PROVAS -->
+<section class="section" id="section-provas">
+  <div class="section-title">📋 <span class="accent">Provas</span></div>
+  <div class="admin-only" id="admin-provas" style="display:none">
+    <div class="card-item" style="margin-bottom:12px">
+      <p style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:10px">Envie o horario das provas (foto ou imagem):</p>
+      <input type="file" id="prova-foto" accept="image/*" style="color:rgba(255,255,255,.6);margin-bottom:10px;width:100%;font-size:.85em">
+      <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="uploadProva()">📤 Enviar Horario de Provas</button>
+      <div style="font-size:.8em;color:rgba(255,255,255,.4);margin:8px 0">ou adicionar manualmente:</div>
+      <input class="input" id="prova-data" type="date" placeholder="Data da prova">
+      <select class="input" id="prova-materia">
+        <option value="">Materia</option>
+        <option>Portugues</option><option>Matematica</option><option>Historia</option>
+        <option>Geografia</option><option>Ingles</option><option>Artes</option><option>Ciencias</option>
+      </select>
+      <input class="input" id="prova-professor" placeholder="Professor(a)">
+      <button class="btn btn-success" style="width:100%" onclick="adicionarProva()">✅ Salvar Prova</button>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:.82em;color:rgba(255,255,255,.5);margin-bottom:8px">📸 Ou envie a foto do horario para a IA detectar automaticamente:</div>
+      <input type="file" id="prova-scan" accept="image/*" style="color:rgba(255,255,255,.6);margin-bottom:8px;width:100%;font-size:.85em">
+      <button class="btn btn-primary" style="width:100%" onclick="scanProvasIA()">🤖 IA Detectar Provas</button>
+    </div>
+  </div>
+  <div class="section-title" style="font-size:1em">📅 <span class="accent">Proximas Provas</span></div>
+  <div id="lista-provas"><div class="skeleton"></div></div>
+  <div id="prova-simulado-btn" style="display:none;margin-top:12px">
+    <button class="btn btn-primary" style="width:100%;padding:13px" onclick="simularParaProva()">📝 Estudar para a Proxima Prova</button>
+  </div>
+</section>
 </main>
 
 <!-- MODAIS -->
@@ -785,6 +848,10 @@ window.addEventListener('load',async()=>{
     document.getElementById('section-pagamentos-status').style.display='block';
     document.getElementById('admin-pagamentos').style.display='block';
     document.getElementById('solicitacoes-nome').style.display='block';
+    document.getElementById('section-conteudos').style.display='block';
+    document.getElementById('admin-provas').style.display='block';
+    carregarConteudos();
+    carregarProvas();
     carregarPagamentos();
     carregarUsersAdmin();
     carregarPix();
@@ -807,6 +874,7 @@ window.addEventListener('load',async()=>{
   carregarMissoes();
   carregarCopa();
   carregarPlanoEstudo();
+  carregarProvas();
   carregarMensalidade();
   carregarUsersParaListas();
 });
@@ -960,7 +1028,7 @@ async function abrirEvento(id){
   }
 
   // Regras do evento
-  if(ev.ativar_regras&&regras?.length){
+  if(regras?.length){
     html+=`<div class="card-item" style="margin-bottom:12px;border-left:3px solid #fbbf24">
       <div style="font-size:.82em;font-weight:700;color:#fbbf24;margin-bottom:8px">📏 REGRAS DO EVENTO</div>
       ${regras.map(r=>`<div style="font-size:.82em;color:rgba(255,255,255,.7);padding:3px 0">• ${r.descricao}</div>`).join('')}
@@ -968,7 +1036,7 @@ async function abrirEvento(id){
   }
 
   // Comida
-  if(ev.ativar_comida&&alimentos?.length){
+  if(alimentos?.length){
     html+=`<div class="card-item" style="margin-bottom:12px">
       <div style="font-size:.82em;font-weight:700;color:#00ff99;margin-bottom:10px">🍔 LISTA DE COMIDA</div>`;
     if(minha){
@@ -1210,13 +1278,27 @@ async function carregarPagamentos(){
   </div>`).join('');
 }
 async function atualizarPag(id,status,userId){
-  if(!isAdmin)return;
-  await sb.from('payments').update({status}).eq('id',id);
-  await sb.from('notifications').insert({user_id:userId,title:status==='approved'?'Pagamento aprovado!':'Pagamento recusado',message:status==='approved'?'Seu comprovante foi aprovado! ✅':'Seu comprovante foi recusado. Entre em contato com o admin.',type:'payment'});
-  if(status==='approved'&&Notification.permission==='granted')new Notification('9A Hub',{body:'Pagamento aprovado!'});
-  toast(status==='approved'?'Aprovado!':'Recusado!',status==='approved'?'success':'error');
-  carregarPagamentos();
-  registrarLog('logs_sistema','pagamento_'+status,{payment_id:id});
+  if(!isAdmin){toast('Sem permissao','error');return;}
+  console.log('Atualizando pagamento:',id,'para:',status);
+  const{data,error}=await sb.from('payments').update({status:status}).eq('id',id).select();
+  console.log('Resultado update:',data,error);
+  if(error){toast('Erro ao atualizar: '+error.message,'error');console.error('Update error:',error);return;}
+  if(!data||data.length===0){toast('Registro nao encontrado','error');return;}
+  // Notificar usuario
+  try{
+    await sb.from('notifications').insert({
+      user_id:userId,
+      title:status==='approved'?'Pagamento aprovado! ✅':'Pagamento recusado ❌',
+      message:status==='approved'?'Seu comprovante foi aprovado pelo admin!':'Seu comprovante foi recusado. Envie novamente.',
+      type:'payment'
+    });
+  }catch(e){console.warn('Notif err:',e);}
+  if(status==='approved'&&Notification.permission==='granted'){
+    try{new Notification('9A Hub - Pagamento',{body:'Pagamento aprovado!'});}catch(e){}
+  }
+  toast(status==='approved'?'✅ Aprovado!':'❌ Recusado!',status==='approved'?'success':'error');
+  setTimeout(()=>carregarPagamentos(),500);
+  try{registrarLog('logs_sistema','pagamento_'+status,{payment_id:id,user_id:userId});}catch(e){}
 }
 
 // ===== CHAT =====
@@ -1622,423 +1704,9 @@ function finalizarDuelo(oponenteNome){
 function voltarDuelo(){document.getElementById('duelo-lobby').style.display='block';document.getElementById('duelo-ativo').style.display='none';}
 
 // ===== PLANO DE ESTUDO =====
-async function carregarPlanoEstudo(){
-  const{data:quizzes}=await sb.from('quiz_sessions').select('*').eq('user_id',cu.id).order('criado_em',{ascending:false}).limit(20);
-  const el=document.getElementById('plano-content');
-  if(!quizzes?.length){
-    el.innerHTML=`<div class="card-item" style="text-align:center;padding:20px"><div style="font-size:2em;margin-bottom:8px">📋</div><p style="color:rgba(255,255,255,.5);font-size:.88em">Faca alguns simulados para gerar seu plano personalizado!</p><button class="btn btn-primary" style="margin-top:12px" onclick="nav('simulado',null)">Fazer Simulado</button></div>`;
-    return;
-  }
-  const porMateria={};
-  quizzes.forEach(q=>{
-    if(!porMateria[q.materia])porMateria[q.materia]={total:0,acertos:0,sessoes:0};
-    porMateria[q.materia].total+=q.total_questions;
-    porMateria[q.materia].acertos+=q.score;
-    porMateria[q.materia].sessoes++;
-  });
-  const materias=Object.entries(porMateria).map(([m,d])=>({materia:m,...d,pct:Math.round(d.acertos/d.total*100)})).sort((a,b)=>a.pct-b.pct);
-  el.innerHTML=`
-    <div class="card-item" style="margin-bottom:12px"><div style="font-weight:700;margin-bottom:10px">📊 Seu Desempenho</div>${materias.map(m=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:.82em">${m.materia}</span><span style="font-size:.75em;color:${m.pct>=70?'#00ff99':m.pct>=50?'#fbbf24':'#f87171'}">${m.pct}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${m.pct}%;background:${m.pct>=70?'linear-gradient(90deg,#00ff99,#00ccff)':m.pct>=50?'linear-gradient(90deg,#fbbf24,#f97316)':'linear-gradient(90deg,#f87171,#ef4444)'}"></div></div></div>`).join('')}</div>
-    <div class="section-title" style="font-size:1em">📌 <span class="accent">Prioridades</span></div>
-    ${materias.slice(0,3).map(m=>`<div class="card-item" style="border-left:3px solid ${m.pct<50?'#f87171':'#fbbf24'};margin-bottom:8px"><div style="font-weight:700;font-size:.88em;margin-bottom:3px">${m.materia} — ${m.pct}% de acerto</div><div style="font-size:.78em;color:rgba(255,255,255,.5)">${m.pct<50?'⚠️ Precisa de atencao urgente!':'📈 Pode melhorar mais!'}</div><button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="document.getElementById('sim-materia').value='${m.materia}';nav('simulado',null)">Praticar agora →</button></div>`).join('')}
-  `;
-}
+// carregarPlanoEstudo movida abaixo
 
-// ===== ADMIN USERS =====
-async function carregarUsersAdmin(){
-  const{data}=await sb.from('users').select('*').order('nome');
-  const el=document.getElementById('lista-users-admin');
-  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">👥</div><p>Nenhum usuario</p></div>';return;}
-  el.innerHTML=data.map(u=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
-    <div><div style="font-weight:700;font-size:.88em">${u.nome}</div><div style="font-size:.72em;color:rgba(255,255,255,.38)">${u.email}</div><div style="font-size:.7em;color:#00ff99">⚡ ${u.xp||0} XP</div></div>
-    <div style="display:flex;gap:6px">
-      ${u.is_banned?`<button class="btn btn-success btn-sm" onclick="banirUser('${u.id}',false)">Desbanir</button>`:
-      u.email!==ADMIN_EMAIL?`<button class="btn btn-danger btn-sm" onclick="banirUser('${u.id}',true)">Banir</button>`:'<span class="badge badge-yellow">Admin</span>'}
-    </div>
-  </div>`).join('');
-}
-async function banirUser(id,banir){
-  if(!isAdmin)return;
-  await sb.from('users').update({is_banned:banir}).eq('id',id);
-  toast(banir?'Usuario banido':'Usuario desbanido',banir?'error':'success');
-  carregarUsersAdmin();
-  registrarLog('logs_sistema',banir?'banir_usuario':'desbanir_usuario',{user_id:id});
-}
-
-// ===== LOGS =====
-async function carregarLogs(tabela){
-  const{data,error}=await sb.from(tabela).select('*').order('criado_em',{ascending:false}).limit(20);
-  const el=document.getElementById('logs-content');
-  if(error){el.innerHTML=`<div class="empty"><div class="icon">⚠️</div><p>Tabela ${tabela} nao encontrada</p></div>`;return;}
-  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">📊</div><p>Nenhum log</p></div>';return;}
-  el.innerHTML=data.map(l=>`<div class="card-item" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span class="badge badge-blue">${l.acao||'log'}</span><span style="font-size:.68em;color:rgba(255,255,255,.3)">${new Date(l.criado_em).toLocaleString('pt-BR')}</span></div>${l.dados?`<div style="font-size:.75em;color:rgba(255,255,255,.4);font-family:monospace;word-break:break-all">${typeof l.dados==='string'?l.dados.substring(0,150):JSON.stringify(l.dados).substring(0,150)}</div>`:''}</div>`).join('');
-}
-
-// ===== PERFIL =====
-async function abrirPerfil(){
-  const{data:ud}=await sb.from('users').select('*').eq('id',cu.id).maybeSingle();
-  const nome=ud?.nome||nomeUser;
-  document.getElementById('perfil-nome').value=nome;
-  document.getElementById('perfil-desc').value=ud?.descricao||'';
-  document.getElementById('perfil-email').textContent=cu.email;
-  document.getElementById('perfil-xp').textContent=xpTotal;
-  const avBig=document.getElementById('perfil-avatar-big');
-  if(ud?.avatar_url){avBig.innerHTML=`<img src="${ud.avatar_url}" style="width:72px;height:72px;border-radius:50%;object-fit:cover">`;}
-  else{avBig.textContent=nome[0].toUpperCase();}
-  // Mostrar aviso de nome para nao-admin
-  document.getElementById('nome-aviso').style.display=isAdmin?'none':'block';
-  if(isAdmin)carregarSolicitacoesNome();
-  abrirModal('modal-perfil');
-}
-async function salvarPerfil(){
-  const desc=document.getElementById('perfil-desc').value.trim();
-  await sb.from('users').update({descricao:desc}).eq('id',cu.id);
-  toast('Perfil salvo!','success');
-  fecharModal('modal-perfil');
-}
-async function salvarNomePerfil(){
-  const novoNome=document.getElementById('perfil-nome').value.trim();
-  if(!novoNome){toast('Nome invalido','error');return;}
-  if(isAdmin){
-    // Admin pode trocar direto
-    await sb.from('users').update({nome:novoNome}).eq('id',cu.id);
-    nomeUser=novoNome.split(' ').slice(0,2).join(' ');
-    document.getElementById('sidebarName').textContent=nomeUser;
-    document.getElementById('headerAvatar').textContent=novoNome[0].toUpperCase();
-    document.getElementById('sidebarAvatar').textContent=novoNome[0].toUpperCase();
-    toast('Nome alterado!','success');
-  }else{
-    // Aluno solicita aprovacao
-    await sb.from('solicitacoes_nome').insert({user_id:cu.id,nome_atual:nomeUser,nome_novo:novoNome,status:'pending'});
-    toast('Solicitacao enviada! Aguarde aprovacao do admin.','success');
-  }
-}
-async function uploadFotoPerfil(input){
-  const file=input.files[0];
-  if(!file)return;
-  const path='avatars/'+cu.id+'_'+Date.now()+'.'+file.name.split('.').pop();
-  const{error}=await sb.storage.from('comprovantes').upload(path,file,{upsert:true});
-  if(error){toast('Erro no upload','error');return;}
-  const{data}=sb.storage.from('comprovantes').getPublicUrl(path);
-  await sb.from('users').update({avatar_url:data.publicUrl}).eq('id',cu.id);
-  document.getElementById('perfil-avatar-big').innerHTML=`<img src="${data.publicUrl}" style="width:72px;height:72px;border-radius:50%;object-fit:cover">`;
-  const hAv=document.getElementById('headerAvatar');
-  hAv.innerHTML=`<img src="${data.publicUrl}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`;
-  hAv.style.padding='0';
-  document.getElementById('sidebarAvatar').innerHTML=`<img src="${data.publicUrl}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`;
-  document.getElementById('sidebarAvatar').innerHTML=`<img src="${data.publicUrl}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`;
-  toast('Foto atualizada!','success');
-}
-async function carregarSolicitacoesNome(){
-  const{data}=await sb.from('solicitacoes_nome').select('*,users(nome,email)').eq('status','pending');
-  const el=document.getElementById('lista-solicitacoes');
-  if(!data?.length){el.innerHTML='<div style="font-size:.78em;color:rgba(255,255,255,.3)">Nenhuma solicitacao</div>';return;}
-  el.innerHTML=data.map(s=>`<div class="card-item" style="margin-bottom:8px;padding:10px">
-    <div style="font-size:.8em;margin-bottom:5px"><strong>${s.users?.nome}</strong> quer trocar para <strong style="color:#00ff99">${s.nome_novo}</strong></div>
-    <div style="display:flex;gap:6px">
-      <button class="btn btn-success btn-sm" onclick="aprovarNome('${s.id}','${s.user_id}','${s.nome_novo}')">✅ Aprovar</button>
-      <button class="btn btn-danger btn-sm" onclick="recusarNome('${s.id}')">❌ Recusar</button>
-    </div>
-  </div>`).join('');
-}
-async function aprovarNome(solId,userId,novoNome){
-  await sb.from('users').update({nome:novoNome}).eq('id',userId);
-  await sb.from('solicitacoes_nome').update({status:'approved'}).eq('id',solId);
-  await sb.from('notifications').insert({user_id:userId,title:'Nome aprovado!',message:'Seu nome foi alterado para '+novoNome,type:'info'});
-  toast('Nome aprovado!','success');
-  carregarSolicitacoesNome();
-}
-async function recusarNome(solId){
-  await sb.from('solicitacoes_nome').update({status:'rejected'}).eq('id',solId);
-  toast('Solicitacao recusada','error');
-  carregarSolicitacoesNome();
-}
-
-// ===== LIVROS DIGITAIS =====
-async function uploadLivro(){
-  if(!isAdmin)return;
-  const materia=document.getElementById('livro-materia').value;
-  const titulo=document.getElementById('livro-titulo').value.trim();
-  const file=document.getElementById('livro-arquivo').files[0];
-  if(!materia||!titulo||!file){toast('Preencha todos os campos','error');return;}
-  toast('Processando material...','info');
-  let fileUrl='';
-  try{
-    const path='livros_'+materia+'_'+Date.now()+'.'+file.name.split('.').pop();
-    const{error:upErr}=await sb.storage.from('livros').upload(path,file,{upsert:true});
-    if(upErr){
-      console.warn('Storage livros falhou:',upErr.message);
-      fileUrl='ref:'+file.name;
-    }else{
-      const{data}=sb.storage.from('livros').getPublicUrl(path);
-      fileUrl=data.publicUrl;
-    }
-  }catch(e){fileUrl='ref:'+file.name;}
-  const{error}=await sb.from('livros').insert({materia,descricao:titulo,url:fileUrl});
-  if(error){toast('Erro ao salvar: '+error.message,'error');console.error(error);return;}
-  toast('Material registrado! ✅','success');
-  document.getElementById('livro-titulo').value='';
-  document.getElementById('livro-arquivo').value='';
-  carregarLivros();
-}
-async function carregarLivros(){
-  const{data}=await sb.from('livros').select('*').order('materia');
-  const el=document.getElementById('lista-livros');
-  if(!el)return;
-  const icons={Portugues:'📖',Matematica:'📐',Historia:'🏛️',Geografia:'🌍',Ingles:'🇬🇧',Artes:'🎨',Ciencias:'🔬'};
-  el.innerHTML=data?.length?data.map(l=>`<div class="card-item" style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-    <span style="font-size:1.8em">${icons[l.materia]||'📚'}</span>
-    <div style="flex:1"><div style="font-weight:700;font-size:.88em">${l.materia}</div><div style="font-size:.75em;color:rgba(255,255,255,.4)">${l.descricao}</div></div>
-    ${isAdmin?`<button class="btn btn-danger btn-sm" onclick="deletarLivro('${l.id}')">🗑</button>`:''}
-  </div>`).join(''):'<div class="empty"><div class="icon">📚</div><p>Nenhum material enviado</p></div>';
-}
-async function deletarLivro(id){
-  await sb.from('livros').delete().eq('id',id);
-  toast('Material removido','success');
-  carregarLivros();
-}
-
-// ===== MONITORAMENTO =====
-async function carregarMonitor(){
-  const hoje=new Date().toISOString().split('T')[0];
-  const[users,pagsPend,sims,msgs]=await Promise.all([
-    sb.from('users').select('id,nome,email,xp,criado_em',{count:'exact'}),
-    sb.from('payments').select('id',{count:'exact'}).eq('status','pending'),
-    sb.from('quiz_sessions').select('id',{count:'exact'}).gte('criado_em',hoje),
-    sb.from('messages').select('id',{count:'exact'}).gte('criado_em',hoje),
-  ]);
-  document.getElementById('mon-total-users').textContent=users.count||0;
-  document.getElementById('mon-pagamentos').textContent=pagsPend.count||0;
-  document.getElementById('mon-simulados').textContent=sims.count||0;
-  document.getElementById('mon-msgs').textContent=msgs.count||0;
-
-  const el=document.getElementById('monitor-users');
-  const usersData=users.data||[];
-  el.innerHTML=usersData.sort((a,b)=>b.xp-a.xp).map(u=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;padding:10px 12px">
-    <div><div style="font-weight:700;font-size:.85em">${u.nome}</div><div style="font-size:.7em;color:rgba(255,255,255,.35)">${u.email}</div></div>
-    <div style="text-align:right"><div style="font-size:.78em;color:#00ff99">⚡ ${u.xp||0} XP</div></div>
-  </div>`).join('');
-}
-
-// ===== STATUS PAGAMENTOS =====
-let filtroStatusAtual='todos';
-async function carregarPagStatus(filtro){
-  filtroStatusAtual=filtro;
-  let query=sb.from('payments').select('*,users(nome,email)').order('criado_em',{ascending:false});
-  if(filtro!=='todos')query=query.eq('status',filtro);
-  const{data}=await query;
-  const el=document.getElementById('lista-pag-status');
-  if(!data?.length){el.innerHTML='<div class="empty"><div class="icon">💰</div><p>Nenhum resultado</p></div>';return;}
-  const cfg={approved:['badge-green','✅ Pago'],pending:['badge-yellow','⏳ Pendente'],rejected:['badge-red','❌ Reprovado']};
-  el.innerHTML=data.map(p=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-    <div><div style="font-weight:700;font-size:.88em">${p.users?.nome||p.nome||'?'}</div><div style="font-size:.7em;color:rgba(255,255,255,.35)">${p.month} ${p.year}</div></div>
-    <span class="badge ${cfg[p.status]?.[0]||'badge-yellow'}">${cfg[p.status]?.[1]||'?'}</span>
-  </div>`).join('');
-}
-function filtrarPagStatus(f){carregarPagStatus(f);}
-
-// ===== SIMULADO COM LIVROS =====
-async function buscarContextoLivro(materia){
-  const{data}=await sb.from('livros').select('descricao,url').eq('materia',materia).limit(1).maybeSingle();
-  return data?'Material disponivel: '+data.descricao:'';
-}
-
-// ===== DIALOGO VIA IA =====
-async function iniciarDialogoIA(materia){
-  document.getElementById('dialogo-container').style.display='none';
-  const el=document.getElementById('dialogo-ativo');
-  el.style.display='block';
-  el.innerHTML='<div class="empty"><div class="icon">⏳</div><p>IA criando dialogo...</p></div>';
-  try{
-    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
-      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:`Crie um dialogo interativo educativo sobre ${materia} para alunos do 9 ano. Crie um cenario criativo com um personagem e 2 perguntas de multipla escolha. Responda APENAS JSON valido: {"cenario":"descricao do cenario","personagem":"nome do personagem","avatar":"emoji","cenas":[{"fala":"fala do personagem","pergunta":"pergunta","opcoes":["A) op1","B) op2","C) op3","D) op4"],"correct":0,"explicacao":"explicacao detalhada","xp":20}]}`}],max_tokens:1200,temperature:0.9})
-    });
-    const d=await res.json();
-    const txt=d.choices?.[0]?.message?.content||'{}';
-    const parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
-    dialogoAtual={cenario:parsed.cenario,personagem:parsed.personagem,avatar:parsed.avatar||'🤖',cenas:parsed.cenas};
-    dialogoCena=0;
-    mostrarCenaDialogo();
-    registrarLog('logs_ia','dialogo_gerado',{materia});
-  }catch(e){
-    console.error('Dialogo IA erro:',e);
-    el.innerHTML='<div class="empty"><div class="icon">❌</div><p>Erro ao gerar dialogo. Tente novamente.</p></div><button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="voltarDialogos()">Voltar</button>';
-  }
-}
-
-
-// ===== PERFIL DE OUTRO USUARIO =====
-let perfilOutroAtual = null;
-async function verPerfilUsuario(userId){
-  const{data:ud}=await sb.from('users').select('*').eq('id',userId).single();
-  if(!ud)return;
-  perfilOutroAtual=ud;
-  document.getElementById('perfil-outro-titulo').textContent=ud.nome;
-  document.getElementById('perfil-outro-nome').textContent=ud.nome;
-  document.getElementById('perfil-outro-desc').textContent=ud.descricao||'Sem descricao';
-  document.getElementById('perfil-outro-xp').textContent=ud.xp||0;
-  const av=document.getElementById('perfil-outro-avatar');
-  if(ud.avatar_url){av.innerHTML=`<img src="${ud.avatar_url}" style="width:64px;height:64px;border-radius:50%;object-fit:cover">`;}
-  else{av.textContent=ud.nome[0].toUpperCase();}
-  const statusEl=document.getElementById('perfil-outro-status');
-  statusEl.textContent=ud.is_banned?'🔨 Banido':ud.isadmin?'👑 Admin':'✅ Aluno ativo';
-  statusEl.style.color=ud.is_banned?'#f87171':ud.isadmin?'#fbbf24':'#00ff99';
-  // Mostrar acoes admin
-  const adminAcoes=document.getElementById('perfil-outro-acoes-admin');
-  if(isAdmin&&userId!==cu.id){
-    adminAcoes.style.display='block';
-    document.getElementById('btn-banir').textContent=ud.is_banned?'✅ Desbanir':'🔨 Banir';
-  }else{adminAcoes.style.display='none';}
-  abrirModal('modal-perfil-outro');
-}
-async function expulsarUser(){
-  if(!perfilOutroAtual||!isAdmin)return;
-  // Expulsar = deletar da tabela users (pode criar conta de novo)
-  await sb.from('users').delete().eq('id',perfilOutroAtual.id);
-  toast('Usuario expulso (pode criar conta novamente)','success');
-  fecharModal('modal-perfil-outro');
-  carregarUsersAdmin();
-  registrarLog('logs_sistema','expulsar_usuario',{user_id:perfilOutroAtual.id,nome:perfilOutroAtual.nome});
-}
-async function banirUserPerfil(){
-  if(!perfilOutroAtual||!isAdmin)return;
-  const jaBanido=perfilOutroAtual.is_banned;
-  await sb.from('users').update({is_banned:!jaBanido}).eq('id',perfilOutroAtual.id);
-  toast(jaBanido?'Usuario desbanido!':'Usuario banido permanentemente!',jaBanido?'success':'error');
-  fecharModal('modal-perfil-outro');
-  carregarUsersAdmin();
-  registrarLog('logs_sistema',jaBanido?'desbanir':'banir_permanente',{user_id:perfilOutroAtual.id});
-}
-async function castigarUser(){
-  if(!perfilOutroAtual||!isAdmin)return;
-  const novoXP=Math.max(0,(perfilOutroAtual.xp||0)-15);
-  await sb.from('users').update({xp:novoXP}).eq('id',perfilOutroAtual.id);
-  await sb.from('notifications').insert({user_id:perfilOutroAtual.id,title:'Voce recebeu um castigo!',message:'O admin aplicou uma penalidade de -15 XP.',type:'warning'});
-  toast('Castigo aplicado! -15 XP','success');
-  document.getElementById('perfil-outro-xp').textContent=novoXP;
-  perfilOutroAtual.xp=novoXP;
-  registrarLog('logs_sistema','castigo',{user_id:perfilOutroAtual.id,xp_removido:15});
-}
-async function resetarXPUser(){
-  if(!perfilOutroAtual||!isAdmin)return;
-  if(!confirm('Resetar todo o XP de '+perfilOutroAtual.nome+'?'))return;
-  await sb.from('users').update({xp:0}).eq('id',perfilOutroAtual.id);
-  toast('XP resetado!','success');
-  document.getElementById('perfil-outro-xp').textContent=0;
-  perfilOutroAtual.xp=0;
-  registrarLog('logs_sistema','resetar_xp',{user_id:perfilOutroAtual.id});
-}
-
-// ===== MENSALIDADE TODOS OS ALUNOS =====
-async function carregarMensalidadeTodos(filtro='todos'){
-  const ano=new Date().getFullYear();
-  const{data:users}=await sb.from('users').select('id,nome').order('nome');
-  const{data:pagamentos}=await sb.from('payments').select('*').eq('year',ano);
-  const el=document.getElementById('lista-mensalidade-todos');
-  if(!users?.length){el.innerHTML='<div class="empty"><div class="icon">👥</div><p>Nenhum aluno</p></div>';return;}
-  
-  const pagMap={};
-  (pagamentos||[]).forEach(p=>pagMap[p.user_id]=p);
-  
-  let lista=users.map(u=>({...u,pag:pagMap[u.id]||null}));
-  if(filtro==='pago')lista=lista.filter(u=>u.pag?.status==='approved');
-  else if(filtro==='pendente')lista=lista.filter(u=>u.pag&&u.pag.status!=='approved');
-  else if(filtro==='nao_pago')lista=lista.filter(u=>!u.pag);
-  
-  const cfg={approved:'✅ Pago',pending:'⏳ Aguardando',rejected:'❌ Reprovado'};
-  const cls={approved:'badge-green',pending:'badge-yellow',rejected:'badge-red'};
-  
-  el.innerHTML=lista.map(u=>`<div class="card-item" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-    <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="verPerfilUsuario('${u.id}')">
-      <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.9em;flex-shrink:0">${u.nome[0].toUpperCase()}</div>
-      <div style="font-weight:700;font-size:.88em">${u.nome}</div>
-    </div>
-    <span class="badge ${u.pag?cls[u.pag.status]||'badge-yellow':'badge-red'}">${u.pag?cfg[u.pag.status]||'Enviado':'Nao pagou'}</span>
-  </div>`).join('');
-}
-
-// ===== COPA DO MES - MELHORADA =====
-async function carregarCopa(){
-  const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});
-  document.getElementById('copa-mes-label').textContent=mes;
-  const el=document.getElementById('copa-content');
-  const{data:logs}=await sb.from('logs_perguntas').select('*').order('criado_em',{ascending:false}).limit(10);
-  
-  let questoes=[];
-  if(logs?.length){
-    logs.forEach(l=>{
-      try{
-        const d=typeof l.dados==='string'?JSON.parse(l.dados):l.dados;
-        if(d&&d.questions)questoes=questoes.concat(d.questions);
-      }catch(e){}
-    });
-  }
-  
-  if(!questoes.length){
-    el.innerHTML=`<div class="card-item" style="text-align:center;padding:20px;margin-bottom:12px">
-      <div style="font-size:2em;margin-bottom:6px">🏆</div>
-      <p style="color:rgba(255,255,255,.5);font-size:.85em">A copa do mes ainda nao foi iniciada!</p>
-    </div>${isAdmin?`<button class="btn btn-primary" style="width:100%" onclick="gerarPerguntasCopa()">🤖 Gerar Perguntas da Copa</button>`:'<p style="text-align:center;font-size:.8em;color:rgba(255,255,255,.3)">Aguardando o admin iniciar a copa...</p>'}`;
-    return;
-  }
-  
-  // Mostrar questoes da copa
-  el.innerHTML=`
-    <div class="card-item" style="margin-bottom:12px;border-left:3px solid #fbbf24">
-      <div style="font-size:.8em;color:#fbbf24;font-weight:700;margin-bottom:6px">🏆 ${questoes.length} questoes disponiveis</div>
-      <div style="font-size:.75em;color:rgba(255,255,255,.4)">Compete pelo top ranking!</div>
-    </div>
-    ${isAdmin?`<button class="btn btn-primary btn-sm" style="margin-bottom:12px" onclick="gerarPerguntasCopa()">+ Gerar mais questoes</button>`:''}
-    ${questoes.slice(0,5).map((q,i)=>`<div class="card-item" style="margin-bottom:8px">
-      <div style="font-size:.82em;font-weight:700;margin-bottom:4px">${i+1}. ${q.question||q}</div>
-      ${q.options?q.options.map(op=>`<div style="font-size:.75em;color:rgba(255,255,255,.5);padding:2px 0">${op}</div>`).join(''):''}
-    </div>`).join('')}
-  `;
-}
-
-async function gerarPerguntasCopa(){
-  if(!isAdmin)return;
-  toast('Gerando questoes para a copa...','info');
-  try{
-    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
-      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:'Gere 5 questoes desafiadoras para uma copa escolar do 9 ano, cobrindo materias variadas. Para cada questao inclua 4 opcoes e resposta correta. Formato: APENAS JSON valido, sem texto extra. {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}'}],max_tokens:1500,temperature:0.8})
-    });
-    if(!res.ok)throw new Error('API error '+res.status);
-    const d=await res.json();
-    const txt=d.choices?.[0]?.message?.content||'{}';
-    const parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
-    await sb.from('logs_perguntas').insert({
-      user_id:cu.id,
-      acao:'copa_gerada',
-      dados:JSON.stringify(parsed),
-      pergunta:'Copa do Mes - '+new Date().toLocaleDateString('pt-BR')
-    });
-    toast('Questoes geradas e salvas!','success');
-    carregarCopa();
-  }catch(e){toast('Erro ao gerar questoes: '+e.message,'error');console.error(e);}
-}
-
-// Adicionar visualizacao de perfil nos rankings e chats
-// Atualizar render do ranking para ter onclick
-async function carregarRanking(){
-  const{data:users}=await sb.from('users').select('id,nome,xp,avatar_url').order('xp',{ascending:false});
-  const el=document.getElementById('lista-ranking');
-  if(!users?.length){el.innerHTML='<div class="empty"><div class="icon">🏆</div><p>Sem dados</p></div>';return;}
-  const medals=['🥇','🥈','🥉'];
-  const posClass=['gold','silver','bronze'];
-  el.innerHTML=users.map((u,i)=>`<div class="ranking-item" style="${u.id===cu.id?'border-color:rgba(0,255,153,0.3);background:rgba(0,255,153,0.04)':''};cursor:pointer" onclick="verPerfilUsuario('${u.id}')">
-    <span class="rank-pos ${posClass[i]||''}">${i<3?medals[i]:i+1+'°'}</span>
-    ${u.avatar_url?`<img src="${u.avatar_url}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0">`:`<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.85em;flex-shrink:0">${u.nome[0].toUpperCase()}</div>`}
-    <div style="flex:1"><div style="font-weight:700;font-size:.88em">${u.nome}${u.id===cu.id?' (voce)':''}</div><div style="font-size:.75em;color:rgba(255,255,255,.38)">⚡ ${u.xp||0} XP</div></div>
-    ${i===0?'<span style="font-size:1.5em">👑</span>':''}
-  </div>`).join('');
-}
-
-// IA com resumos menores
+// ===== INICIALIZAR SECOES ADMIN NOVAS =====
 
 </script>
 </body>
