@@ -49,8 +49,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;
 .cat-header.active .cat-tag{height:22px;box-shadow:0 0 14px #00ff99}
 .cat-label{font-size:.7em;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;transition:color 0.2s}
 .cat-header.active .cat-label{color:rgba(255,255,255,0.7)}
-.cat-canais{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1)}
-.cat-canais.open{max-height:500px}
+.cat-canais{max-height:0;overflow:hidden;transition:max-height 0.38s cubic-bezier(0.4,0,0.2,1)}
+.cat-canais.open{max-height:600px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px 9px 28px;color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.15s;font-size:.88em;border-radius:6px;margin:1px 8px;position:relative}
 .nav-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:0;height:60%;background:#00ff99;border-radius:0 3px 3px 0;box-shadow:0 0 8px #00ff99;transition:width 0.2s}
 .nav-item:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.04)}
@@ -195,6 +195,28 @@ select.input{-webkit-appearance:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.success{border-color:rgba(0,255,153,.4);color:#00ff99}
 .toast.error{border-color:rgba(255,80,80,.4);color:#ff8080}
+
+/* SONS E FEEDBACK VISUAL */
+.btn-primary:active,.btn-success:active,.btn-ghost:active,.btn-danger:active{transform:scale(0.93)!important}
+.opcao-btn.correta{animation:pulseGreen 0.4s ease!important}
+.opcao-btn.errada{animation:shakeRed 0.4s ease!important}
+@keyframes pulseGreen{0%{box-shadow:none}50%{box-shadow:0 0 20px rgba(0,255,153,0.7),0 0 40px rgba(0,255,153,0.3)}100%{box-shadow:none}}
+@keyframes shakeRed{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+/* XP FLOAT melhorado */
+.xp-float{position:fixed;font-size:1.5em;font-weight:700;color:#00ff99;text-shadow:0 0 12px #00ff99,0 0 24px rgba(0,255,153,0.5);pointer-events:none;z-index:9999;animation:xpFloat 1.8s cubic-bezier(0.25,0.46,0.45,0.94) forwards}
+@keyframes xpFloat{0%{opacity:1;transform:translateY(0) scale(1)}30%{opacity:1;transform:translateY(-20px) scale(1.2)}100%{opacity:0;transform:translateY(-90px) scale(0.7)}}
+
+/* SIDEBAR USER hover */
+.sidebar-user:hover{background:rgba(0,255,153,0.04)}
+.sidebar-user{transition:background 0.2s;border-radius:8px;margin:4px 8px;padding:12px 10px!important}
+
+/* NIVEL badge */
+.nivel-badge{font-size:.65em;background:linear-gradient(135deg,rgba(0,255,153,0.2),rgba(0,200,255,0.2));border:1px solid rgba(0,255,153,0.3);color:#00ff99;padding:2px 8px;border-radius:10px;margin-top:3px;display:inline-block}
+
+/* NOTIF dot */
+.notif-dot{width:7px;height:7px;background:#f87171;border-radius:50%;position:absolute;top:2px;right:2px;box-shadow:0 0 6px #f87171}
+
 </style>
 </head>
 <body>
@@ -211,7 +233,7 @@ select.input{-webkit-appearance:none}
 
 <div class="overlay" id="overlay" onclick="closeMenu()"></div>
 <nav class="sidebar" id="sidebar">
-  <div class="sidebar-user">
+  <div class="sidebar-user" onclick="abrirPerfil()" style="cursor:pointer">
     <div class="sidebar-avatar" id="sidebarAvatar">?</div>
     <div>
       <div class="sidebar-name" id="sidebarName">...</div>
@@ -246,26 +268,7 @@ select.input{-webkit-appearance:none}
     <div class="nav-item" onclick="nav('provas',this);carregarProvas()"><span class="nav-icon">🗓️</span>provas</div>
   </div>
 
-  <!-- CATEGORIA: SOCIAL -->
-  <div class="cat-header" onclick="toggleCat(this)">
-    <div class="cat-tag"></div>
-    <span class="cat-label">Social</span>
-  </div>
-  <div class="cat-canais">
-    <div class="nav-item" onclick="nav('chat',this)"><span class="nav-icon">💬</span>chat-privado</div>
-    <div class="nav-item" onclick="nav('ranking',this)"><span class="nav-icon">🏆</span>ranking</div>
-    <div class="nav-item" onclick="nav('duelo',this)"><span class="nav-icon">⚔️</span>duelo-1v1</div>
-    <div class="nav-item" onclick="nav('missoes',this)"><span class="nav-icon">🎯</span>missoes</div>
-  </div>
 
-  <!-- CATEGORIA: COPA -->
-  <div class="cat-header" onclick="toggleCat(this)">
-    <div class="cat-tag"></div>
-    <span class="cat-label">Competicao</span>
-  </div>
-  <div class="cat-canais">
-    <div class="nav-item" onclick="nav('copa',this)"><span class="nav-icon">🏆</span>copa-do-mes</div>
-  </div>
 
   <!-- CATEGORIA IA (SO ADMIN) -->
   <div class="cat-header admin-only" onclick="toggleCat(this)" style="display:none">
@@ -294,6 +297,38 @@ select.input{-webkit-appearance:none}
     <div class="nav-item" onclick="nav('mensalidade-todos',this);carregarMensalidadeTodos('todos')"><span class="nav-icon">💰</span>mensalidade-alunos</div>
   </div>
 
+  <!-- CATEGORIA: JOGOS -->
+  <div class="cat-header" onclick="toggleCat(this)">
+    <div class="cat-tag"></div>
+    <span class="cat-label">Jogos</span>
+  </div>
+  <div class="cat-canais">
+    <div class="nav-item" onclick="nav('simulado',this)"><span class="nav-icon">📝</span>simulado</div>
+    <div class="nav-item" onclick="nav('duelo',this)"><span class="nav-icon">⚔️</span>duelo-1v1</div>
+    <div class="nav-item" onclick="nav('copa',this)"><span class="nav-icon">🏆</span>copa-do-mes</div>
+    <div class="nav-item" onclick="nav('ranking',this)"><span class="nav-icon">📊</span>ranking</div>
+  </div>
+
+  <!-- CATEGORIA: MISSOES -->
+  <div class="cat-header" onclick="toggleCat(this)">
+    <div class="cat-tag"></div>
+    <span class="cat-label">Missoes</span>
+  </div>
+  <div class="cat-canais">
+    <div class="nav-item" onclick="nav('missoes',this);filtrarMissoes('diaria')"><span class="nav-icon">🎯</span>missoes-diarias</div>
+    <div class="nav-item" onclick="nav('missoes',this);filtrarMissoes('semanal')"><span class="nav-icon">📅</span>missoes-semanais</div>
+  </div>
+
+  <!-- CATEGORIA: PERFIL -->
+  <div class="cat-header" onclick="toggleCat(this)">
+    <div class="cat-tag"></div>
+    <span class="cat-label">Perfil</span>
+  </div>
+  <div class="cat-canais">
+    <div class="nav-item" onclick="abrirPerfil();closeMenu()"><span class="nav-icon">👤</span>meu-perfil</div>
+    <div class="nav-item" onclick="nav('chat',this)"><span class="nav-icon">💬</span>chat-privado</div>
+  </div>
+
   <div class="nav-sep"></div>
   <div class="logout-btn" onclick="logout()"><span>🚪</span> Sair da conta</div>
 </nav>
@@ -302,11 +337,12 @@ select.input{-webkit-appearance:none}
 
 <!-- DASHBOARD -->
 <section class="section active" id="section-dashboard">
-  <div class="banner">
-    <div class="banner-icon">🎓</div>
-    <div class="banner-text">
-      <h2 id="greetingText" style="font-size:1.1em;font-weight:700">Ola!</h2>
-      <p id="greetingDate" style="font-size:.75em;color:rgba(255,255,255,0.4);margin-top:3px"></p>
+  <div class="banner" style="cursor:pointer" onclick="abrirPerfil()">
+    <div id="dashAvatar" style="width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#00ff99,#00ccff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:1.5em;flex-shrink:0;box-shadow:0 0 16px rgba(0,255,153,0.35)">🎓</div>
+    <div class="banner-text" style="flex:1;min-width:0">
+      <h2 id="greetingText" style="font-size:1.05em;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Ola!</h2>
+      <p id="greetingDate" style="font-size:.72em;color:rgba(255,255,255,0.4);margin-top:3px"></p>
+      <div id="dashNivel" style="margin-top:5px"></div>
     </div>
   </div>
   <div id="dash-mensalidade" style="margin-bottom:14px"></div>
@@ -822,15 +858,24 @@ window.addEventListener('load',async()=>{
   const avatarUrl=ud?.avatar_url||null;
 
   if(avatarUrl){
-    document.getElementById('headerAvatar').innerHTML=`<img src="${avatarUrl}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`;
-    document.getElementById('sidebarAvatar').innerHTML=`<img src="${avatarUrl}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`;
+    const imgHtml=(s)=>`<img src="${avatarUrl}" style="width:${s}px;height:${s}px;border-radius:50%;object-fit:cover">`;
+    document.getElementById('headerAvatar').innerHTML=imgHtml(34);
+    document.getElementById('headerAvatar').style.padding='0';
+    document.getElementById('sidebarAvatar').innerHTML=imgHtml(42);
+    document.getElementById('dashAvatar').innerHTML=imgHtml(54);
+    document.getElementById('dashAvatar').style.padding='0';
   }else{
     document.getElementById('headerAvatar').textContent=ini;
     document.getElementById('sidebarAvatar').textContent=ini;
+    document.getElementById('dashAvatar').textContent=ini;
   }
   document.getElementById('sidebarName').textContent=nomeUser;
   document.getElementById('sidebarRole').textContent=isAdmin?'👑 Admin':'Aluno';
   atualizarXP(0);
+  // Calcular nivel
+  const nivel=calcularNivel(xpTotal);
+  const nivelEl=document.getElementById('dashNivel');
+  if(nivelEl)nivelEl.innerHTML=`<span class="nivel-badge">⭐ Nível ${nivel.nivel} — ${nivel.nome}</span>`;
 
   // Carregar foto do perfil se existir
   if(ud?.avatar_url){
@@ -838,6 +883,8 @@ window.addEventListener('load',async()=>{
     hAv.innerHTML=`<img src="${ud.avatar_url}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`;
     hAv.style.padding='0';
     document.getElementById('sidebarAvatar').innerHTML=`<img src="${ud.avatar_url}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`;
+    const dAv=document.getElementById('dashAvatar');
+    if(dAv){dAv.innerHTML=`<img src="${ud.avatar_url}" style="width:54px;height:54px;border-radius:50%;object-fit:cover">`;dAv.style.padding='0';}
   }
   if(isAdmin){
     document.querySelectorAll('.admin-only').forEach(el=>el.style.removeProperty('display'));
@@ -918,11 +965,24 @@ function closeMenu(){
   document.body.style.overflow='';
 }
 function toggleCat(header){
-  const canais=header.nextElementSibling;
+  // Pega o próximo elemento que seja cat-canais
+  let canais=header.nextElementSibling;
+  while(canais&&!canais.classList.contains('cat-canais'))canais=canais.nextElementSibling;
+  if(!canais)return;
   const isOpen=canais.classList.contains('open');
-  document.querySelectorAll('.cat-canais').forEach(c=>c.classList.remove('open'));
+  // Fecha todas (mas preserva display de admin-only)
+  document.querySelectorAll('.cat-canais').forEach(c=>{
+    c.classList.remove('open');
+    c.style.maxHeight='0';
+  });
   document.querySelectorAll('.cat-header').forEach(h=>h.classList.remove('active'));
-  if(!isOpen){canais.classList.add('open');header.classList.add('active');}
+  if(!isOpen){
+    canais.classList.add('open');
+    canais.style.maxHeight=canais.scrollHeight+'px';
+    header.classList.add('active');
+    // Som de abertura
+    try{playSound('click');}catch(e){}
+  }
 }
 function nav(name,el){
   const atual=document.querySelector('.section.active');
@@ -1376,9 +1436,9 @@ async function enviarIA(){
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body:JSON.stringify({
-        model:'llama-3.3-70b-versatile',
+        model:'llama-3.1-70b-versatile',
         messages:[
-          {role:'system',content:'Voce e a IA assistente do 9A Hub, app escolar para alunos do 9 ano. Responda SEMPRE em portugues brasileiro. NUNCA resolva exercicios diretamente. Explique o RACIOCINIO passo a passo. Seja didatico e motivador. IMPORTANTE: Mantenha respostas CURTAS e OBJETIVAS (maximo 3-4 paragrafos curtos). Use bullet points quando possivel. Nao escreva textos enormes. Use emojis com moderacao para deixar mais amigavel.'},
+          {role:'system',content:'Voce e a IA professora do 9A Hub para alunos do 9 ano. Responda SEMPRE em portugues. Ao explicar contas: mostre PASSO A PASSO com numeros. Nunca de so a resposta — ensine a raciocinar. Seja animado e motivador. Respostas curtas e objetivas (max 4 paragrafos). Use bullet points. Emojis moderados.'},
           ...iaHistory.slice(-8)
         ],
         max_tokens:800,temperature:0.7
@@ -1422,7 +1482,7 @@ async function iniciarSimulado(){
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
       body:JSON.stringify({
-        model:'llama-3.3-70b-versatile',
+        model:'llama-3.1-70b-versatile',
         messages:[{role:'user',content:`Voce e um professor experiente do 9 ano do ensino fundamental brasileiro. Crie EXATAMENTE 5 perguntas de multipla escolha sobre: ${materia} - topico: ${assunto}. 
 
 REGRAS OBRIGATORIAS:
@@ -1653,7 +1713,7 @@ async function iniciarDuelo(){
     const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
-      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:`Crie 5 perguntas rapidas de multipla escolha sobre ${materia} para alunos do 9 ano. Responda SOMENTE JSON: {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}`}],max_tokens:1500,temperature:0.7})
+      body:JSON.stringify({model:'llama-3.1-70b-versatile',messages:[{role:'user',content:`Crie 5 perguntas rapidas de multipla escolha sobre ${materia} para alunos do 9 ano. Responda SOMENTE JSON: {"questions":[{"question":"...","options":["A)...","B)...","C)...","D)..."],"correct":0,"explanation":"..."}]}`}],max_tokens:1500,temperature:0.7})
     });
     const d=await res.json();
     const txt=d.choices?.[0]?.message?.content||'{}';
@@ -2087,11 +2147,13 @@ async function uploadFotoPerfil(input){
   if(error){toast('Erro no upload: '+error.message,'error');return;}
   const{data:pub}=sb.storage.from('comprovantes').getPublicUrl(path);
   await sb.from('users').update({avatar_url:pub.publicUrl}).eq('id',cu.id);
-  const img=`<img src="${pub.publicUrl}" style="width:XPXPX;height:XPXPX;border-radius:50%;object-fit:cover">`;
+  const mkImg=(s)=>`<img src="${pub.publicUrl}" style="width:${s}px;height:${s}px;border-radius:50%;object-fit:cover">`;
   const hAv=document.getElementById('headerAvatar');
-  hAv.innerHTML=img.replace(/XPXPX/g,'34');hAv.style.padding='0';
-  document.getElementById('sidebarAvatar').innerHTML=img.replace(/XPXPX/g,'42');
-  document.getElementById('perfil-avatar-big').innerHTML=img.replace(/XPXPX/g,'72');
+  hAv.innerHTML=mkImg(34);hAv.style.padding='0';
+  document.getElementById('sidebarAvatar').innerHTML=mkImg(42);
+  document.getElementById('perfil-avatar-big').innerHTML=mkImg(72);
+  const dAv=document.getElementById('dashAvatar');
+  if(dAv){dAv.innerHTML=mkImg(54);dAv.style.padding='0';}
   toast('Foto atualizada! ✅','success');
 }
 
@@ -2105,7 +2167,7 @@ async function iniciarDialogoIA(materia){
     const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
-      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:`Crie um dialogo interativo educativo sobre ${materia} para aluno do 9 ano do Brasil. Crie um cenario criativo com um personagem interessante. Responda SOMENTE JSON valido sem nada antes ou depois: {"cenario":"descricao do cenario","personagem":"nome do personagem","avatar":"(um unico emoji)","cenas":[{"fala":"fala do personagem introduzindo o tema","pergunta":"pergunta para o aluno","opcoes":["A) opcao","B) opcao","C) opcao","D) opcao"],"correta":0,"explicacao":"explicacao detalhada","xp":20}]}`}],max_tokens:1500,temperature:0.8})
+      body:JSON.stringify({model:'llama-3.1-70b-versatile',messages:[{role:'user',content:`Crie um dialogo interativo educativo sobre ${materia} para aluno do 9 ano do Brasil. Crie um cenario criativo com um personagem interessante. Responda SOMENTE JSON valido sem nada antes ou depois: {"cenario":"descricao do cenario","personagem":"nome do personagem","avatar":"(um unico emoji)","cenas":[{"fala":"fala do personagem introduzindo o tema","pergunta":"pergunta para o aluno","opcoes":["A) opcao","B) opcao","C) opcao","D) opcao"],"correta":0,"explicacao":"explicacao detalhada","xp":20}]}`}],max_tokens:1500,temperature:0.8})
     });
     const d=await res.json();
     const txt=d.choices?.[0]?.message?.content||'{}';
@@ -2147,6 +2209,107 @@ async function uploadLivro(){
   toast('Material enviado! ✅','success');
   document.getElementById('livro-titulo').value='';
   carregarLivros();
+}
+
+// ===== SISTEMA DE SOM =====
+const AudioCtx=window.AudioContext||window.webkitAudioContext;
+let audioCtx=null;
+function getAudio(){if(!audioCtx)audioCtx=new AudioCtx();return audioCtx;}
+function playSound(tipo){
+  try{
+    const ctx=getAudio();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    const configs={
+      click:{freq:800,dur:0.06,type:'sine',vol:0.1},
+      acerto:{freq:880,dur:0.18,type:'sine',vol:0.15},
+      erro:{freq:220,dur:0.25,type:'sawtooth',vol:0.1},
+      xp:{freq:1047,dur:0.3,type:'sine',vol:0.12},
+      nivel:{freq:1320,dur:0.5,type:'sine',vol:0.18}
+    };
+    const c=configs[tipo]||configs.click;
+    osc.type=c.type;
+    osc.frequency.setValueAtTime(c.freq,ctx.currentTime);
+    if(tipo==='acerto')osc.frequency.exponentialRampToValueAtTime(1320,ctx.currentTime+c.dur);
+    if(tipo==='xp')osc.frequency.exponentialRampToValueAtTime(1760,ctx.currentTime+c.dur);
+    gain.gain.setValueAtTime(c.vol,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+c.dur);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime+c.dur);
+  }catch(e){}
+}
+
+// ===== SISTEMA DE NIVEL =====
+function calcularNivel(xp){
+  const niveis=[
+    {min:0,nivel:1,nome:'Calouro'},
+    {min:100,nivel:2,nome:'Estudante'},
+    {min:300,nivel:3,nome:'Dedicado'},
+    {min:600,nivel:4,nome:'Aplicado'},
+    {min:1000,nivel:5,nome:'Inteligente'},
+    {min:1500,nivel:6,nome:'Talento'},
+    {min:2200,nivel:7,nome:'Brilhante'},
+    {min:3000,nivel:8,nome:'Genio'},
+    {min:4000,nivel:9,nome:'Lenda'},
+    {min:5500,nivel:10,nome:'Professor'}
+  ];
+  let atual=niveis[0];
+  for(const n of niveis){if(xp>=n.min)atual=n;}
+  const prox=niveis.find(n=>n.min>xp);
+  const pct=prox?Math.round(((xp-atual.min)/(prox.min-atual.min))*100):100;
+  return{...atual,proximoXP:prox?.min||xp,pct};
+}
+
+// ===== FUNÇÃO BASE IA (usada por todos os módulos) =====
+async function chamarIA(mensagens,maxTokens=900){
+  const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ},
+    body:JSON.stringify({model:'llama-3.1-70b-versatile',messages:mensagens,max_tokens:maxTokens,temperature:0.7})
+  });
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Erro API');}
+  const d=await res.json();
+  return d.choices?.[0]?.message?.content||'';
+}
+
+// ===== FEEDBACK VISUAL MELHORADO =====
+// Sobrescrever responder para adicionar som
+const _responderOriginal=typeof responder!=='undefined'?responder:null;
+function responder(idx){
+  const p=simPerguntas[simIdx];
+  clearInterval(simTimer);
+  const btns=document.querySelectorAll('.opcao-btn');
+  btns.forEach((b,i)=>{
+    if(i===p.correct)b.classList.add('correta');
+    else if(i===idx&&idx!==p.correct)b.classList.add('errada');
+    b.disabled=true;
+  });
+  simRespostas.push(idx);
+  const acertou=idx===p.correct;
+  if(acertou){atualizarXP(15);btns[idx]?.classList.add('acerto-glow');playSound('acerto');}
+  else{btns[idx]?.classList.add('erro-shake');playSound('erro');}
+  setTimeout(()=>{simIdx++;mostrarPergunta();},1400);
+}
+
+// Sobrescrever atualizarXP para som
+const _atualizarXPOrig=atualizarXP;
+function atualizarXP(ganhou){
+  const xpAntes=xpTotal;
+  _atualizarXPOrig(ganhou);
+  if(ganhou>0){
+    playSound('xp');
+    // Verificar level up
+    const nivelAntes=calcularNivel(xpAntes).nivel;
+    const nivelDepois=calcularNivel(xpTotal).nivel;
+    if(nivelDepois>nivelAntes){
+      playSound('nivel');
+      const n=calcularNivel(xpTotal);
+      toast('🎉 LEVEL UP! Nível '+n.nivel+' — '+n.nome,'success');
+      const nivelEl=document.getElementById('dashNivel');
+      if(nivelEl)nivelEl.innerHTML=`<span class="nivel-badge">⭐ Nível ${n.nivel} — ${n.nome}</span>`;
+    }
+  }
 }
 
 </script>
