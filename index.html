@@ -555,6 +555,8 @@ select.input{-webkit-appearance:none}
   <div class="chat-wrap">
     <div class="chat-msgs" id="chat-msgs"></div>
     <div class="chat-in">
+      <button class="send-btn" style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-size:.85em;width:34px;height:34px" onclick="enviarFotoChat()">📷</button>
+      <button class="send-btn" style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-size:.85em;width:34px;height:34px" id="btn-audio-chat" onclick="gravarAudioChat()">🎤</button>
       <textarea class="chat-ta" id="chat-in" placeholder="Mensagem..." rows="1" onkeydown="chatKey(event)"></textarea>
       <button class="send-btn" onclick="enviarMsg()">➤</button>
     </div>
@@ -759,7 +761,7 @@ select.input{-webkit-appearance:none}
 <script>
 const SB_URL='https://hhiynhqsmikecreqnqbt.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaXluaHFzbWlrZWNyZXFucWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NjkzNDcsImV4cCI6MjA5MDI0NTM0N30.nYIPDDuK8PxtYsZi96wAMUqt1Sawh5t5iu-ubwl5h9Y';
-const GROQ='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';
+const GROQ='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';
 const ADMIN='miqueiasasaf890@gmail.com';
 const MODEL='llama-3.3-70b-versatile';
 
@@ -868,7 +870,7 @@ async function verificarStreakDiario(){
     streakDias++;
     await sb.from('users').update({streak:streakDias}).eq('id',cu.id);
     if(streakDias>1){
-      mostrarStreakFire(streakDias);
+      mostrarStreakFire(streakDias);setTimeout(()=>tocarSom('streak'),300);
       atualizarXP(streakDias*2);
     }
   }else if(ultimo&&ultimo!==ontem){
@@ -910,7 +912,7 @@ function atualizarXP(ganhou,x,y){
   if(ganhou<=0)return;
   xpTotal+=ganhou;
   atualizarXPUI();
-  mostrarXPFloat('+'+ganhou+' XP',x,y);
+  mostrarXPFloat('+'+ganhou+' XP',x,y);tocarSom('xp');
   sb.from('users').update({xp:xpTotal}).eq('id',cu.id).then(()=>{});
   try{logAction('logs_usuario','xp',{xp:ganhou});}catch(e){}
 }
@@ -1071,43 +1073,76 @@ async function abrirEvento(id){
   ]);
   if(!ev)return;
   const itensSel=(esc||[]).map(c=>c.item);
-  let html=`<div class="card" style="margin-bottom:11px">
-    <h2 style="font-size:1.1em;margin-bottom:5px">${ev.titulo}</h2>
-    <p style="font-size:.82em;color:rgba(255,255,255,.45);margin-bottom:7px">${ev.descricao||''}</p>
-    ${ev.data?`<div style="font-size:.77em;color:#00ff99;margin-bottom:3px">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}</div>`:''}
-    ${ev.local?`<div style="font-size:.77em;color:rgba(255,255,255,.35)">📍 ${ev.local}</div>`:''}
-    ${ev.custo>0?`<div style="font-size:.77em;color:#fbbf24">💰 R$ ${parseFloat(ev.custo).toFixed(2)}</div>`:''}
-    <div style="margin-top:11px">${confei?'<span class="badge bg">✅ Presenca confirmada</span>':`<button class="btn btn-primary btn-sm" onclick="confirmarPresenca('${id}')">✅ Confirmar Presenca</button>`}</div>
+
+  // Banner do evento
+  let html=`<div class="card" style="margin-bottom:11px;background:linear-gradient(135deg,rgba(0,255,153,0.07),rgba(0,200,255,0.07));border-color:rgba(0,255,153,0.2)">
+    <h2 style="font-size:1.15em;margin-bottom:6px;color:#00ff99">${ev.titulo}</h2>
+    <p style="font-size:.83em;color:rgba(255,255,255,.55);margin-bottom:9px;line-height:1.5">${ev.descricao||''}</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:11px">
+      ${ev.data?`<div style="background:rgba(0,255,153,0.1);border:1px solid rgba(0,255,153,0.2);border-radius:8px;padding:5px 10px;font-size:.75em;color:#00ff99">📆 ${new Date(ev.data).toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}</div>`:''}
+      ${ev.local?`<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:5px 10px;font-size:.75em;color:rgba(255,255,255,.6)">📍 ${ev.local}</div>`:''}
+      ${ev.custo>0?`<div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:5px 10px;font-size:.75em;color:#fbbf24">💰 R$ ${parseFloat(ev.custo).toFixed(2)}</div>`:''}
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:.78em;color:rgba(255,255,255,.35)">👥 ${(confs||[]).length} confirmados</div>
+      ${confei?'<span class="badge bg">✅ Voce confirmou presenca</span>':`<button class="btn btn-primary btn-sm" onclick="confirmarPresenca('${id}')">✅ Confirmar Presenca</button>`}
+    </div>
   </div>`;
 
+  // Lista de confirmados
   if(confs?.length){
-    html+=`<div class="card" style="margin-bottom:11px"><div style="font-size:.78em;font-weight:700;color:rgba(255,255,255,.45);margin-bottom:7px">👥 CONFIRMADOS (${confs.length})</div>${confs.map(c=>`<div style="font-size:.8em;color:rgba(255,255,255,.65);padding:2px 0">• ${c.users?.nome||'?'}</div>`).join('')}</div>`;
+    html+=`<div class="card" style="margin-bottom:11px">
+      <div style="font-size:.78em;font-weight:700;color:rgba(255,255,255,.45);margin-bottom:7px;text-transform:uppercase;letter-spacing:1px">👥 CONFIRMADOS (${confs.length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${confs.map(c=>`<div style="background:rgba(0,255,153,0.08);border:1px solid rgba(0,255,153,0.15);border-radius:20px;padding:3px 10px;font-size:.78em;color:rgba(255,255,255,.7)">• ${c.users?.nome||'?'}</div>`).join('')}</div>
+    </div>`;
   }
 
+  // Regras do evento (SEMPRE MOSTRAR se tiver)
   if(regs?.length){
-    html+=`<div class="card" style="margin-bottom:11px;border-left:3px solid #fbbf24"><div style="font-size:.8em;font-weight:700;color:#fbbf24;margin-bottom:7px">📏 REGRAS</div>${regs.map(r=>`<div style="font-size:.8em;color:rgba(255,255,255,.65);padding:2px 0">• ${r.descricao}</div>`).join('')}</div>`;
+    html+=`<div class="card" style="margin-bottom:11px;border-left:3px solid #fbbf24">
+      <div style="font-size:.78em;font-weight:700;color:#fbbf24;margin-bottom:9px;text-transform:uppercase;letter-spacing:1px">📏 REGRAS DO EVENTO</div>
+      ${regs.map(r=>`<div style="display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:#fbbf24;flex-shrink:0">•</span><span style="font-size:.82em;color:rgba(255,255,255,.7);line-height:1.5">${r.descricao}</span></div>`).join('')}
+    </div>`;
   }
 
+  // Comida (SEMPRE MOSTRAR se tiver)
   if(alims?.length){
-    html+=`<div class="card" style="margin-bottom:11px"><div style="font-size:.8em;font-weight:700;color:#00ff99;margin-bottom:9px">🍔 LISTA DE COMIDA</div>`;
-    if(minha){html+=`<span class="badge bg">✅ Voce escolheu: ${minha.item}</span>`;}
-    else{html+=alims.map(a=>{
-      const qtd=itensSel.filter(i=>i===a.nome_item).length;
-      const lim=a.limite||1;
-      const cheio=qtd>=lim;
-      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)">
-        <div><span style="font-size:.84em">${a.nome_item}</span><span style="font-size:.68em;color:rgba(255,255,255,.3);margin-left:7px">${qtd}/${lim}</span></div>
-        ${cheio?`<span class="badge br">Esgotado</span>`:`<button class="btn btn-success btn-sm" onclick="escolherComida('${id}','${a.nome_item}')">Escolher</button>`}
+    html+=`<div class="card" style="margin-bottom:11px">
+      <div style="font-size:.78em;font-weight:700;color:#00ff99;margin-bottom:11px;text-transform:uppercase;letter-spacing:1px">🍔 LISTA DE COMIDA</div>`;
+    if(minha){
+      html+=`<div style="background:rgba(0,255,153,0.08);border:1px solid rgba(0,255,153,0.2);border-radius:10px;padding:10px 13px;margin-bottom:8px"><span style="color:#00ff99;font-weight:700">✅ Voce escolheu: ${minha.item}</span></div>`;
+    }else{
+      html+=alims.map(a=>{
+        const qtd=itensSel.filter(i=>i===a.nome_item).length;
+        const lim=a.limite||99;
+        const cheio=lim<99&&qtd>=lim;
+        const restam=lim<99?lim-qtd:null;
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <div>
+            <span style="font-size:.86em;font-weight:500">${a.nome_item}</span>
+            ${restam!==null?`<span style="font-size:.68em;color:rgba(255,255,255,.32);margin-left:8px">${cheio?'Esgotado':restam+' restantes'}</span>`:''}
+          </div>
+          ${cheio?`<span class="badge br">Esgotado</span>`:`<button class="btn btn-success btn-sm" onclick="escolherComida('${id}','${a.nome_item}')">+ Escolher</button>`}
+        </div>`;
+      }).join('');
+    }
+    // Lista de pedidos (admin vê, alunos veem os proprios)
+    if(esc?.length){
+      html+=`<div style="margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.06)">
+        <div style="font-size:.7em;color:rgba(255,255,255,.3);margin-bottom:5px;text-transform:uppercase">Pedidos feitos (${esc.length}):</div>
+        ${isAdmin?esc.map(e=>`<div style="font-size:.78em;color:rgba(255,255,255,.55);padding:2px 0">${e.nome_aluno}: ${e.item}</div>`).join(''):
+        esc.slice(0,3).map(e=>`<div style="font-size:.78em;color:rgba(255,255,255,.55);padding:2px 0">${e.nome_aluno}: ${e.item}</div>`).join('')+'..'}
       </div>`;
-    }).join('');}
-    if(isAdmin&&esc?.length){html+=`<div style="margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.05)"><div style="font-size:.7em;color:rgba(255,255,255,.3);margin-bottom:5px">PEDIDOS:</div>${esc.map(c=>`<div style="font-size:.77em;color:rgba(255,255,255,.55);">${c.nome_aluno}: ${c.item}</div>`).join('')}</div>`;}
-    html+='</div>';
+    }
+    html+=`</div>`;
   }
+
+  // Admin: deletar
+  if(isAdmin){html+=`<button class="btn btn-danger btn-sm" style="width:100%;margin-top:4px" onclick="deletarEvento('${id}')">🗑 Apagar Evento</button>`;}
 
   document.getElementById('ev-det').innerHTML=html;
   nav('evento-det',null);
 }
-
 async function confirmarPresenca(evId){
   await sb.from('event_attendees').upsert({event_id:evId,user_id:cu.id},{onConflict:'event_id,user_id'});
   atualizarXP(10);toast('Presenca confirmada! +10 XP','success');abrirEvento(evId);
@@ -1382,7 +1417,7 @@ function responderSim(idx){
     const xpG=15+(comboCount>2?comboCount*3:0);
     atualizarXP(xpG);
     if(comboCount>2)mostrarCombo(comboCount);
-  }else{comboCount=0;}
+  }else{tocarSom('erro');comboCount=0;}
   setTimeout(()=>{simIdx++;mostrarQ();},1100);
 }
 async function finalizarSim(){
@@ -1801,6 +1836,75 @@ async function carregarSolNome(){
 }
 async function aprovarNome(sid,uid,nome){await sb.from('users').update({nome}).eq('id',uid);await sb.from('solicitacoes_nome').update({status:'approved'}).eq('id',sid);toast('Nome aprovado!','success');carregarSolNome();}
 async function recusarNome(sid){await sb.from('solicitacoes_nome').update({status:'rejected'}).eq('id',sid);toast('Recusado','error');carregarSolNome();}
+
+// ===== SONS (Web Audio API) =====
+let audioCtx=null;
+function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();}
+function tocarSom(tipo){
+  try{
+    initAudio();
+    const o=audioCtx.createOscillator();
+    const g=audioCtx.createGain();
+    o.connect(g);g.connect(audioCtx.destination);
+    if(tipo==='click'){o.frequency.setValueAtTime(800,audioCtx.currentTime);g.gain.setValueAtTime(0.08,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.08);o.start();o.stop(audioCtx.currentTime+0.08);}
+    else if(tipo==='acerto'){o.type='sine';o.frequency.setValueAtTime(523,audioCtx.currentTime);o.frequency.setValueAtTime(659,audioCtx.currentTime+0.1);o.frequency.setValueAtTime(784,audioCtx.currentTime+0.2);g.gain.setValueAtTime(0.15,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.4);o.start();o.stop(audioCtx.currentTime+0.4);}
+    else if(tipo==='erro'){o.type='sawtooth';o.frequency.setValueAtTime(200,audioCtx.currentTime);g.gain.setValueAtTime(0.1,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.25);o.start();o.stop(audioCtx.currentTime+0.25);}
+    else if(tipo==='xp'){o.type='sine';o.frequency.setValueAtTime(440,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(880,audioCtx.currentTime+0.2);g.gain.setValueAtTime(0.12,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.25);o.start();o.stop(audioCtx.currentTime+0.25);}
+    else if(tipo==='streak'){o.type='sine';[523,659,784,1047].forEach((f,i)=>{o.frequency.setValueAtTime(f,audioCtx.currentTime+i*0.08);});g.gain.setValueAtTime(0.15,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.5);o.start();o.stop(audioCtx.currentTime+0.5);}
+  }catch(e){}
+}
+// Interceptar cliques para som
+document.addEventListener('click',e=>{if(e.target.classList.contains('btn')||e.target.classList.contains('nav-item')||e.target.classList.contains('opcao')){tocarSom('click');}},true);
+
+// ===== CHAT COM MIDIA (foto e audio) =====
+async function enviarFotoChat(){
+  const input=document.createElement('input');input.type='file';input.accept='image/*';
+  input.onchange=async()=>{
+    const file=input.files[0];if(!file||!chatAtual)return;
+    toast('Enviando foto...','info');
+    const toB64=f=>new Promise((r,j)=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=j;fr.readAsDataURL(f);});
+    let imgUrl=await toB64(file);
+    try{
+      const p='chat_'+cu.id+'_'+Date.now()+'.'+file.name.split('.').pop();
+      const{error}=await sb.storage.from('comprovantes').upload(p,file,{upsert:true});
+      if(!error){const{data}=sb.storage.from('comprovantes').getPublicUrl(p);imgUrl=data.publicUrl;}
+    }catch(e){}
+    addChatMsg('user',`<img src="${imgUrl}" style="max-width:200px;border-radius:8px;cursor:pointer" onclick="window.open('${imgUrl}','_blank')">`);
+    await sb.from('messages').insert({sender_id:cu.id,receiver_id:chatAtual.id,content:'[foto]',media_url:imgUrl,media_type:'image'});
+    toast('Foto enviada!','success');
+  };
+  input.click();
+}
+async function gravarAudioChat(){
+  if(!navigator.mediaDevices){toast('Audio nao suportado neste navegador','error');return;}
+  const btn=document.getElementById('btn-audio-chat');
+  if(btn.dataset.gravando==='true'){
+    // Parar gravacao
+    if(window._mediaRecorder){window._mediaRecorder.stop();}
+    btn.dataset.gravando='false';btn.textContent='🎤';btn.style.color='';
+    return;
+  }
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const mr=new MediaRecorder(stream);window._mediaRecorder=mr;
+    const chunks=[];
+    mr.ondataavailable=e=>chunks.push(e.data);
+    mr.onstop=async()=>{
+      stream.getTracks().forEach(t=>t.stop());
+      const blob=new Blob(chunks,{type:'audio/webm'});
+      toast('Enviando audio...','info');
+      const toB64=f=>new Promise((r,j)=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=j;fr.readAsDataURL(f);});
+      const b64=await toB64(blob);
+      addChatMsg('user','<audio controls style="max-width:200px"><source src="'+b64+'" type="audio/webm"></audio>');
+      await sb.from('messages').insert({sender_id:cu.id,receiver_id:chatAtual.id,content:'[audio]',media_url:b64.substring(0,50),media_type:'audio'});
+      toast('Audio enviado!','success');
+    };
+    mr.start();
+    btn.dataset.gravando='true';btn.textContent='⏹';btn.style.color='#f87171';
+    toast('Gravando... toque novamente para parar','info');
+  }catch(e){toast('Erro ao acessar microfone','error');}
+}
+
 </script>
 </body>
 </html>
